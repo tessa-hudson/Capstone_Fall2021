@@ -18,11 +18,13 @@ With an application to assist them, we hope we can allow these counselors an ea
 - Each feature, bug, or suggestion will be listed as an issue
 - Issues will then be added to cards in the sprint (project) that they will be addressed in
 - The cards should automatically update when a branch has been linked to that issue, when a pull request has been submitted for review, and when the request has been reviewed and successfully merged
+- Note cards will be added to each Sprint for non-code related things such as design tasks
+- Once a sprint is over, any incomplete items should be added to the next sprint and given first priority
 
 ### Branches and Pull Requests
 - All code must be written on a branch, **_Not on_** `main`
-- Team members should create branches based on issues in the current sprint
-- Branch names for each team member follow the format `firstname/featurename`
+- Team members should create branches based on issues in the current sprint and assign the corresponding issue to themselves
+- Branch names for each team member follow the format `firstname/issuename`
 - Before merging a branch into main, a pull request should be made and reviewed by at least 2 other team members
 
 ### Testing and Documentation
