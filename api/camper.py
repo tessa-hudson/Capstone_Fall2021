@@ -52,7 +52,5 @@ class CamperList(Resource):
 api.add_resource(CamperList, '/campers')
 api.add_resource(Camper, '/campers/<camper_id>')
 
-
 if __name__ == '__main__':
-#take this out for production
-    #app.run(debug=True)
+    app.run(debug=False)
