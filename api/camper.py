@@ -1,11 +1,8 @@
 from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource
 
-app = Flask(__name__)
-api = Api(app)
-
 CAMPERS = {
-    1: {'name': 'name1'},
+    1: {'name': 'name2'},
     2: {'name': 'new name'},
     3: {'name': 'example'},
 }
@@ -45,12 +42,3 @@ class CamperList(Resource):
         camper_id = int(max(CAMPERS.keys())) + 1
         CAMPERS[camper_id] = {'name': args['name']}
         return CAMPERS[camper_id], 201
-
-##
-## Actually setup the Api resource routing here
-##
-api.add_resource(CamperList, '/campers')
-api.add_resource(Camper, '/campers/<camper_id>')
-
-if __name__ == '__main__':
-    app.run(debug=False)
