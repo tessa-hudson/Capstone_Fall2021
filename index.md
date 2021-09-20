@@ -13,5 +13,5 @@ With an application to assist them, we hope we can allow these counselors an ea
 - Point tracking via camper and/or group
 - Attendance Tracking
 
-##Meet the Devs
+## Meet the Devs
 [Tessa]: https://tessa-hudson.github.io/Capstone_Fall2021/tessa
