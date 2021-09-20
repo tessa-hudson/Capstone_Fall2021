@@ -14,4 +14,4 @@ With an application to assist them, we hope we can allow these counselors an ea
 - Attendance Tracking
 
 ## Meet the Devs
-[Tessa]: https://tessa-hudson.github.io/Capstone_Fall2021/tessa
+- [Tessa](https://tessa-hudson.github.io/Capstone_Fall2021/tessa)
