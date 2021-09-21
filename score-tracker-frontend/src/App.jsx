@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Route, Switch, NavLink} from "react-router-dom"
 import './App.css'
-import AddCamperForm from './AddCamperForm'
-import AddGroupForm from './AddGroupForm'
-import HomePage from './HomePage'
+import AddCamperForm from './Components/Forms/AddCamperForm'
+import AddGroupForm from './Components/Forms/AddGroupForm'
+import HomePage from './Components/HomePage'
 
 function App() {
   const [count, setCount] = useState(0)

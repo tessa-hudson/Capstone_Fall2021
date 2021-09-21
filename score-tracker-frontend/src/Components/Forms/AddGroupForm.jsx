@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import './AddGroupForm.css'
+import '../../Styles/AddGroupForm.css'
 
 class AddGroupForm extends Component {
     constructor(props) {
