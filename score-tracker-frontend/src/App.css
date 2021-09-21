@@ -1,0 +1,16 @@
+.active-link {
+  color: red;
+}
+.App-nav {
+  width: 50%;
+  display: flex;
+  margin: 1rem auto;
+  justify-content: space-around;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+a:hover {
+  color: grey;
+}
