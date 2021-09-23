@@ -1,0 +1,1 @@
+Zach is a senior studying computer science at The Univeristy of Alabama. He is currently working as a software engineer at The Nine where he is currently working on a job listing board for truck drivers in Canada. Zach has experience working with React, Javascript, HTMl, CSS, C#, C++, and Python
