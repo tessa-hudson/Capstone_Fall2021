@@ -15,3 +15,4 @@ With an application to assist them, we hope we can allow these counselors an ea
 
 ## Meet the Devs
 - [Tessa](https://tessa-hudson.github.io/Capstone_Fall2021/tessa)
+- [Tyler](https://tessa-hudson.github.io/Capstone_Fall2021/tyler)
