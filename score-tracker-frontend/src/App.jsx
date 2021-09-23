@@ -10,11 +10,13 @@ function App() {
 
   return (
     <div className="App">
-      <nav className="App-nav">
-        <NavLink exact activeClassName="active-link" to="/">Home</NavLink>
-        <NavLink exact activeClassName="active-link" to="addCamper">Add Camper</NavLink>
-        <NavLink exact activeClassName="active-link" to="addGroup">Add Group</NavLink>
-      </nav>
+      <div className="Nav">
+        <nav className="App-nav">
+          <NavLink exact activeClassName="active-link" to="/">Home</NavLink>
+          <NavLink exact activeClassName="active-link" to="addCamper">Add Camper</NavLink>
+          <NavLink exact activeClassName="active-link" to="addGroup">Add Group</NavLink>
+        </nav>
+      </div>
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/addCamper" component={AddCamperForm} />

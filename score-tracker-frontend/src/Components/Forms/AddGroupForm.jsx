@@ -16,7 +16,9 @@ class AddGroupForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        console.log(`Group Name: ${this.state.groupName}`)
+        const obj = {name: this.state.groupName}
+        const json = JSON.stringify(obj);
+        console.log(json);
     }
 
     render() {

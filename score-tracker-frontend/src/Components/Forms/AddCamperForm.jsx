@@ -22,7 +22,9 @@ class AddCamperForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        console.log(`First: ${this.state.firstName}, Last: ${this.state.lastNameInitial}`)
+        const obj = {first: this.state.firstName, last: this.state.lastNameInitial}
+        const json = JSON.stringify(obj);
+        console.log(json);
     }
 
     render() {

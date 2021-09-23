@@ -1,10 +1,15 @@
+.Nav {
+  background-color: red;
+  padding: 20px 0px;
+}
+
 .active-link {
-  color: red;
+  color: yellow;
 }
 .App-nav {
   width: 50%;
   display: flex;
-  margin: 1rem auto;
+  margin: 0 auto;
   justify-content: space-around;
 }
 a {
