@@ -1,5 +1,7 @@
 # Score Tracker for Camp Clot Not
 
+[Visit Our Website](https://tessa-hudson.github.io/Capstone_Fall2021/)
+
 ## Motivation
 Camp Clot Not is a camp hosted by HBDA that allows children ranging from 6-18 years old who suffer from various bleeding disorders to enjoy a camp experience they normally would not be able to enjoy.
 
@@ -26,6 +28,16 @@ With an application to assist them, we hope we can allow these counselors an ea
 - Team members should create branches based on issues in the current sprint and assign the corresponding issue to themselves
 - Branch names for each team member follow the format `firstname/issuename`
 - Before merging a branch into main, a pull request should be made and reviewed by at least 2 other team members
+
+## Starting the Servers
+- To start the backend server, run the following commands
+  ```
+  . venv/bin/activate
+  cd api
+  python router.py
+  
+  ```
+- To start the front end cd into `/score-tracker-frontend` and enter the command `yarn dev`
 
 ### Testing and Documentation
 - in progress
