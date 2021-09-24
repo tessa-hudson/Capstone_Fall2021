@@ -1,4 +1,5 @@
 from flask import request
+from flask.wrappers import Response
 from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
 
@@ -60,14 +61,17 @@ class AttendeeListResource(Resource):
             return {"attendees": result}
 
     def post(self):
+        print(request)
         data = request.get_json()
         if not data:
             return {"message": "No input data provided"}, 400
         try:
             new_attendee = attendee_schema.load(data)
+            print(data)
             new_attendee.id = len(attendees) + 1
             attendees.append(new_attendee)
         except ValidationError as err:
+            print(data)
             return err.messages, 422
         print(attendees)
         return attendee_schema.dump(new_attendee), 201
