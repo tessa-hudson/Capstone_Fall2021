@@ -6,4 +6,5 @@
   python router.py
   
   ```
-- To start the front end cd into `/score-tracker-frontend` and enter the command `yarn dev`
+- To start the front end cd into `/score-tracker-frontend` and enter the
+command `yarn dev`
