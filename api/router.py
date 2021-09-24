@@ -1,5 +1,5 @@
 from flask import Flask
-from camper import *
+from attendee import *
 
 app = Flask(__name__)
 api = Api(app)
