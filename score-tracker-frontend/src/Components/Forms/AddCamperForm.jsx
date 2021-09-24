@@ -29,15 +29,13 @@ class AddCamperForm extends Component {
         fetch('http://localhost:5000/attendees', {
         method: 'POST',
         mode: 'cors',
-        cache:'no-cache',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Accept': '*/*'
         },
-        body: JSON.stringify(json),
+        body: json,
         })
-        .then(response => console.log(response))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
