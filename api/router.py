@@ -1,3 +1,4 @@
+from group import GroupListResource, GroupResource
 from flask import Flask
 from flask_cors import CORS
 from attendee import *
@@ -11,6 +12,8 @@ api = Api(app)
 ##
 api.add_resource(AttendeeListResource, '/attendees')
 api.add_resource(AttendeeResource, '/attendees/<id>')
+api.add_resource(GroupListResource, "/groups")
+api.add_resource(GroupResource, "/groups/<id>")
 
 
 if __name__ == '__main__':
