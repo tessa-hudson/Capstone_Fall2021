@@ -67,9 +67,11 @@ class AttendeeListResource(Resource):
             return {"message": "No input data provided"}, 400
         try:
             new_attendee = attendee_schema.load(data)
+            print(data)
             new_attendee.id = len(attendees) + 1
             attendees.append(new_attendee)
         except ValidationError as err:
+            print(data)
             return err.messages, 422
         print(attendees)
         return attendee_schema.dump(new_attendee), 201
