@@ -40,13 +40,13 @@ attendees = [
 
 # list comprehension used in get_attendee()
 def search(id):
-    return [a for a in attendees if a.id == id]
+    return [a for a in attendees if str(a.id) == id]
 
 # WILL BE REPLACED WITH DB FUNCTIONS
 # Returns the attendee with the given id if one exists
 # aborts with 404 status otherwise       
 def get_attendee(id):
-    comp = search(int(id))
+    comp = search(id)
     if not comp:
         abort(404, message="Camper {} doesn't exist".format(id))
     else:

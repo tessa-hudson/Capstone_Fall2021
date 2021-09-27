@@ -38,13 +38,13 @@ groups = [
 
 # list comprehension used in get_group()
 def search(id):
-    return [g for g in groups if g.id == id]
+    return [g for g in groups if str(g.id) == id]
  
 # WILL BE REPLACED WITH DB FUNCTIONS
 # Returns the group with the given id if one exists
 # aborts with 404 status otherwise
 def get_group(id):
-    comp = search(int(id))
+    comp = search(id)
     if not comp:
         abort(404, message="Group {} doesn't exist".format(id))
     else:
