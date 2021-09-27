@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Button, TextField } from '@mui/material'
 import '../../Styles/AddCamperForm.css'
 
 class AddCamperForm extends Component {
@@ -50,19 +51,29 @@ class AddCamperForm extends Component {
             <div className="AddCamper">
                 <h3>Use this form to add a camper!</h3>
                 <form onSubmit={this.handleSubmit}>
-                    <label>
-                        First Name:
-                        <br />
-                        <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange} />
-                    </label>
+                    <TextField 
+                        id="firstName" 
+                        name="firstName"
+                        label="First Name" 
+                        variant="outlined" 
+                        value={this.state.firstName} 
+                        onChange={this.handleChange} 
+                        margin="normal"
+                    />
                     <br />
-                    <label>
-                        First Initial of Last Name:
-                        <br />
-                        <input type="text" name="lastNameInitial" value={this.state.lastNameInitial} onChange={this.handleChange} />
-                    </label>
+                    <TextField 
+                        id="lastInitial" 
+                        name="lastNameInitial"
+                        label="Last Initial" 
+                        variant="outlined" 
+                        value={this.state.lastNameInitial} 
+                        onChange={this.handleChange} 
+                        margin="normal"
+                    />
                     <br />
-                    <input type="submit" value="Submit" />
+                    <Button type="submit" value="Submit" variant="contained"> 
+                        Submit
+                    </Button>
                 </form>
             </div>
         )
