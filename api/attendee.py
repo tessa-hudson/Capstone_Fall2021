@@ -1,8 +1,9 @@
+import uuid
 from flask import request
-from flask.wrappers import Response
-from marshmallow import Schema, fields, post_load, ValidationError
+from marshmallow import Schema, fields, post_load, ValidationError, validate
 from flask_restful import abort, Resource, Api
 
+# Attendee class
 class Attendee():
     def __init__(self, firstname, last_initial, id = -1):
         self.id = id
@@ -12,27 +13,38 @@ class Attendee():
     def __repr__(self):
         return "<Attendee(id={self.id}, firstname={self.firstname!r}, last_initial={self.last_initial!r})>".format(self=self)
 
+# Marshmallow Schema for Attendee
 class AttendeeSchema(Schema):
-    id = fields.Int() #change to UUID eventually
-    firstname = fields.Str(required=True)
-    last_initial = fields.Str(required=True)
+    id = fields.UUID() # generated when POST request is recieved
+    firstname = fields.Str(required=True) # must be included in POST request
+    last_initial = fields.Str(required=True, validate=validate.Length(equal=1)) # must be included in POST request with exactly 1 character
 
+    # Once POST request has been validated deserialized, make a new Attendee with data
     @post_load
     def make_attendee(self, data, **kwargs):
         return Attendee(**data)
 
+# Schema to use when loading/dumping a single attendee
 attendee_schema = AttendeeSchema()
+
+# Schema to use when loading/dumping a multiple attendees
 attendees_schema = AttendeeSchema(many=True)
 
+# WILL BE REPLACED WITH DATA FROM DB
+#list of example attendees
 attendees = [
-    Attendee("fname", "li", 1),
-    Attendee("fname2", "li2", 2),
-    Attendee("fname3", "li3", 3)
+    Attendee("fname", "li", uuid.uuid4()),
+    Attendee("fname2", "li2", uuid.uuid4()),
+    Attendee("fname3", "li3", uuid.uuid4())
 ]
 
+# list comprehension used in get_attendee()
 def search(id):
     return [a for a in attendees if a.id == id]
-        
+
+# WILL BE REPLACED WITH DB FUNCTIONS
+# Returns the attendee with the given id if one exists
+# aborts with 404 status otherwise       
 def get_attendee(id):
     comp = search(int(id))
     if not comp:
@@ -40,7 +52,7 @@ def get_attendee(id):
     else:
         return comp[0]
 
-# shows a single attendee and lets you delete an attendee
+# Shows a single attendee and lets you delete an attendee
 class AttendeeResource(Resource):
 
     def get(self, id):
@@ -53,7 +65,7 @@ class AttendeeResource(Resource):
         attendees.remove(attendee)
         return '', 204
 
-# shows a list of all campers and lets you POST to add new attendees
+# Shows a list of all attendees and lets you POST to add new attendees
 class AttendeeListResource(Resource):
     
     def get(self):
@@ -68,7 +80,7 @@ class AttendeeListResource(Resource):
         try:
             new_attendee = attendee_schema.load(data)
             print(data)
-            new_attendee.id = len(attendees) + 1
+            new_attendee.id = uuid.uuid4()
             attendees.append(new_attendee)
         except ValidationError as err:
             print(data)
