@@ -7,8 +7,8 @@ import pandas as pd
 class ServerConn:
     server = 'hbda.database.windows.net'
     database = 'hbda_tracking'
-    username = 'tntryon'
-    password = 'Tryon123!'
+    username = 'cethorne'
+    password = 'Thorne123!'
 
     def __init__(self):
         try:
@@ -87,3 +87,5 @@ class ServerConn:
 
     #def delete_user():
     #End of Users fn
+
+conn = ServerConn()
