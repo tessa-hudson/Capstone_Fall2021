@@ -7,18 +7,25 @@ import pandas as pd
 class ServerConn:
     server = 'hbda.database.windows.net'
     database = 'hbda_tracking'
-    username = 'cethorne'
-    password = 'Thorne123!'
+    username = 'tntryon'
+    password = 'Tryon123!'
 
     def __init__(self):
-        self.conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+ self.password)
-        self.cursor = self.conn.cursor()
+        try:
+            self.conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+ self.password)
+            self.cursor = self.conn.cursor()
+        except:
+            try:
+                self.conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+ self.password)
+                self.cursor = self.conn.cursor()
+            except pyodbc.OperationalError as err:
+                print(err)
     
     def query(self, q):
         return pd.read_sql(q, self.conn)
     
     #Attendee fn
-    def get_attend(self):
+    def get_attendees(self):
         df = pd.read_sql("SELECT * FROM attendee", self.conn)
         return df.to_dict(orient = 'index')
     
@@ -36,7 +43,7 @@ class ServerConn:
     
     #End of Attendee fn
     #Event fn
-    def get_event(self):
+    def get_events(self):
         df = pd.read_sql("SELECT * FROM event", self.conn)
         return df.to_dict(orient = 'index')
 

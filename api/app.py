@@ -2,10 +2,12 @@ from group import GroupListResource, GroupResource
 from flask import Flask
 from flask_cors import CORS
 from attendee import *
+from connection import ServerConn
 
 app = Flask(__name__)
 CORS(app)
 api = Api(app)
+conn = ServerConn()
 
 ##
 ## Actually setup the Api resource routing here

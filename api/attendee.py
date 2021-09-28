@@ -2,6 +2,7 @@ import uuid
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 from flask_restful import abort, Resource, Api
+from app import conn
 
 # Attendee class
 class Attendee():
@@ -69,8 +70,9 @@ class AttendeeResource(Resource):
 class AttendeeListResource(Resource):
     
     def get(self):
-            result = attendees_schema.dump(attendees)
-            return {"attendees": result}
+        attendees = conn.get_attendees()
+        result = attendees_schema.dump(attendees)
+        return {"attendees": result}
 
     def post(self):
         print(request)
