@@ -71,6 +71,7 @@ class AttendeeListResource(Resource):
     
     def get(self):
         attendees = conn.get_attendees()
+        print(attendees)
         result = attendees_schema.dump(attendees)
         return {"attendees": result}
 
@@ -83,7 +84,7 @@ class AttendeeListResource(Resource):
             new_attendee = attendee_schema.load(data)
             print(data)
             new_attendee.id = uuid.uuid4()
-            attendees.append(new_attendee)
+            conn.add_attendee(new_attendee.id, new_attendee.firstname, new_attendee.last_initial)
         except ValidationError as err:
             print(data)
             return err.messages, 422
