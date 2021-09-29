@@ -2,6 +2,7 @@ import uuid
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 from flask_restful import abort, Resource, Api
+from connection import ServerConn
 
 # Attendee class
 class Attendee():

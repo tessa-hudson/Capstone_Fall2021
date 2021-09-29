@@ -7,6 +7,9 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+sc = ServerConn()
+df = sc.get_pointlog()
+print(df)
 ##
 ## Actually setup the Api resource routing here
 ##

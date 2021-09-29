@@ -16,6 +16,10 @@ class ServerConn:
     
     def query(self, q):
         return pd.read_sql(q, self.conn)
+
+    def close_conn(self):
+        self.cursor.close()
+        self.conn.close()
     
     #Attendee fn
     def get_attend(self):
@@ -35,6 +39,7 @@ class ServerConn:
         self.conn.commit()
     
     #End of Attendee fn
+
     #Event fn
     def get_event(self):
         df = pd.read_sql("SELECT * FROM event", self.conn)
@@ -72,11 +77,48 @@ class ServerConn:
     #End of Groups fn
 
     #Users fn
+    def get_user(self):
+        df = pd.read_sql("SELECT * FROM users", self.conn)
+        return df.to_dict(orient = 'index')
+
     def add_user(self, temp_event_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id):
         qt = "INSERT INTO dbo.users ([user_id],[login_name],[user_password],[email],[firstname],[lastname], [access_id]) VALUES (?, ?, ?, ?, ?, ?, ?)"
         data = (temp_event_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id)
         self.cursor.execute(qt, data)
         self.conn.commit()
 
-    #def delete_user():
+    def delete_user(self, temp_id):
+        qt = "DELETE FROM dbo.users WHERE user_id in (?)"
+        self.cursor.execute(qt, temp_id)
+        self.conn.commit()
     #End of Users fn
+
+    #Access fn
+    def get_access(self):
+        df = pd.read_sql("SELECT * FROM access", self.conn)
+        return df.to_dict(orient = 'index')
+    #End of Access fn
+
+    #Pointlog fn
+    def get_pointlog(self):
+        df = pd.read_sql("SELECT * FROM pointlog", self.conn)
+        return df.to_dict(orient = 'index')
+
+    def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status):
+        qt = "INSERT INTO dbo.users ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[date], [point_change], [comment], [status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        data = (temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status)
+        self.cursor.execute(qt, data)
+        self.conn.commit()
+    
+    def delete_pointlog(self, temp_id):
+        qt = "DELETE FROM dbo.pointlog WHERE pointlog_id in (?)"
+        self.cursor.execute(qt, temp_id)
+        self.conn.commit()
+
+    #End of Pointlog fn
+
+    #Attendee_Points fn
+    def get_attendee_points(self):
+        df = pd.read_sql("SELECT * FROM attendee_points", self.conn)
+        return df.to_dict(orient = 'index')
+    #End of Attendee_Points fn
