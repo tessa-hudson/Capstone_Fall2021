@@ -3,7 +3,6 @@ import pyodbc
 import pandas as pd
 
 
-
 class ServerConn:
     server = 'hbda.database.windows.net'
     database = 'hbda_tracking'
@@ -33,6 +32,7 @@ class ServerConn:
         self.conn.commit()
     
     #Deleting by just id or by other fields?
+    #Just id
     def delete_attendee(self, temp_id):
         qt = "DELETE FROM dbo.attendee WHERE attendee_id in (?)"
         self.cursor.execute(qt, temp_id)
@@ -97,6 +97,17 @@ class ServerConn:
     def get_access(self):
         df = pd.read_sql("SELECT * FROM access", self.conn)
         return df.to_dict(orient = 'index')
+
+    def add_access(self, temp_id, temp_desc, temp_admin_access):
+        qt = "INSERT INTO dbo.access ([access_id],[access_desc],[admin_access]) VALUES (?, ?, ?)"
+        data = (temp_id, temp_desc, temp_admin_access)
+        self.cursor.execute(qt, data)
+        self.conn.commit()
+
+    def delete_access(self, temp_id):
+        qt = "DELETE FROM dbo.access WHERE access_id in (?)"
+        self.cursor.execute(qt, temp_id)
+        self.conn.commit()
     #End of Access fn
 
     #Pointlog fn
@@ -105,7 +116,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status):
-        qt = "INSERT INTO dbo.users ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[date], [point_change], [comment], [status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        qt = "INSERT INTO dbo.pointlog ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[date], [point_change], [comment], [status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
         data = (temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status)
         self.cursor.execute(qt, data)
         self.conn.commit()
@@ -117,8 +128,19 @@ class ServerConn:
 
     #End of Pointlog fn
 
-    #Attendee_Points fn
-    def get_attendee_points(self):
-        df = pd.read_sql("SELECT * FROM attendee_points", self.conn)
+    #Attendee_Group_Link fn
+    def get_attendee_group_link(self):
+        df = pd.read_sql("SELECT * FROM attendee_group_link", self.conn)
         return df.to_dict(orient = 'index')
-    #End of Attendee_Points fn
+    
+    def add_attendee_group_link(self, temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points):
+        qt = "INSERT INTO dbo.attendee_group_link ([link_id],[attendee_id],[event_id],[group_id],[total_points]) VALUES (?, ?, ?, ?, ?)"
+        data = (temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points)
+        self.cursor.execute(qt, data)
+        self.conn.commit()
+
+    def delete_attendee_group_link(self, temp_id):
+        qt = "DELETE FROM dbo.attendee_group_link WHERE link_id in (?)"
+        self.cursor.execute(qt, temp_id)
+        self.conn.commit()
+    #End of Attendee_Group_Link fn
