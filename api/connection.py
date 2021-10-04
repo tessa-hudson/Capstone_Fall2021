@@ -76,7 +76,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_event_by_name(self, event_name):
-        qt = "SELECT * FROM groups WHERE event_name = '{event_name}'"
+        qt = "SELECT * FROM events WHERE event_name = '{event_name}'"
         df = pd.read_sql(qt, self.conn)
         return df.to_dict(orient = 'index')
 
@@ -132,7 +132,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_user_by_id(self, user_id):
-        qt = "SELECT * FROM groups WHERE user_id = '{user_id}'"
+        qt = "SELECT * FROM users WHERE user_id = '{user_id}'"
         df = pd.read_sql(qt, self.conn)
         return df.to_dict(orient = 'index')
 
@@ -154,12 +154,12 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_access_by_id(self, access_id):
-        qt = "SELECT * FROM groups WHERE access_id = '{access_id}'"
+        qt = "SELECT * FROM access WHERE access_id = '{access_id}'"
         df = pd.read_sql(qt, self.conn)
         return df.to_dict(orient = 'index')
 
     def get_access_by_desc(self, access_desc):
-        qt = "SELECT * FROM groups WHERE access_desc = '{access_desc}'"
+        qt = "SELECT * FROM access WHERE access_desc = '{access_desc}'"
         df = pd.read_sql(qt, self.conn)
         return df.to_dict(orient = 'index')
 
@@ -211,6 +211,11 @@ class ServerConn:
     #Attendee_Group_Link fn
     def get_attendee_group_link(self):
         df = pd.read_sql("SELECT * FROM attendee_group_link", self.conn)
+        return df.to_dict(orient = 'index')
+
+    def get_attendee_group_link_by_id(self, link_id):
+        qt = "SELECT * FROM attendee_group_link WHERE link_id = '{link_id}'"
+        df = pd.read_sql(qt, self.conn)
         return df.to_dict(orient = 'index')
     
     def add_attendee_group_link(self, temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points):
