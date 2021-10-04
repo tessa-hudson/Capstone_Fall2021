@@ -1,4 +1,4 @@
-from group import GroupListResource, GroupResource
+#from group import GroupListResource, GroupResource
 from attendee import AttendeeListResource, AttendeeResource
 from flask import Flask
 from flask_restful import Api
@@ -14,9 +14,9 @@ api = Api(app)
 ## Actually setup the Api resource routing here
 ##
 api.add_resource(AttendeeListResource, '/attendees')
-api.add_resource(AttendeeResource, '/attendees/<id>')
-api.add_resource(GroupListResource, "/groups")
-api.add_resource(GroupResource, "/groups/<id>")
+api.add_resource(AttendeeResource, '/attendees/<attendee_id>')
+#api.add_resource(GroupListResource, "/groups")
+#api.add_resource(GroupResource, "/groups/<id>")
 
 
 
