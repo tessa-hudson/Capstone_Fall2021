@@ -42,18 +42,18 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_attendees_by_group_id(self, group_id):
-        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id ='{group_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(group_id)})
         return df.to_dict(orient = 'index')
 
     def get_attendees_by_event_id(self, event_id):
-        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id ='{event_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(event_id)})
         return df.to_dict(orient = 'index')
 
     def get_attendee_total_points(self, attendee_id):
-        qt = "SELECT firstname, lastname, total_points FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE attendee_id = '{attendee_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT firstname, lastname, total_points FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE attendee_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(attendee_id)})
         return df.to_dict(orient = 'index')
     
     def add_attendee(self, temp_id, temp_first, temp_last):
@@ -77,8 +77,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_event_by_id(self, event_id):
-        qt = "SELECT * FROM events WHERE event_id = '{event_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM events WHERE event_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(event_id)})
         return df.to_dict(orient = 'index')
 
     def get_event_by_name(self, event_name):
@@ -105,8 +105,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_group_by_id(self, group_id):
-        qt = "SELECT * FROM groups WHERE group_id = '{group_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM groups WHERE group_id = ?"
+        df = pd.read_sql(qt, self.conn,params={str(group_id)})
         return df.to_dict(orient = 'index')
     
     def get_group_by_name(self, group_name):
@@ -115,8 +115,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_groups_by_event_id(self, event_id):
-        qt = "SELECT * FROM groups WHERE event_id = '{event_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM groups WHERE event_id = ?"
+        df = pd.read_sql(qt, self.conn,params={str(event_id)})
         return df.to_dict(orient = 'index')
 
     def add_group(self, temp_group_id, temp_event_id, temp_name, temp_total_points):
@@ -138,8 +138,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_user_by_id(self, user_id):
-        qt = "SELECT * FROM users WHERE user_id = '{user_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM users WHERE user_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(user_id)})
         return df.to_dict(orient = 'index')
 
     def add_user(self, temp_event_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id):
@@ -160,8 +160,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_access_by_id(self, access_id):
-        qt = "SELECT * FROM access WHERE access_id = '{access_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM access WHERE access_id = ?"
+        df = pd.read_sql(qt, self.conn,params={str(access_id)})
         return df.to_dict(orient = 'index')
     
     def get_access_by_desc(self, access_desc):
@@ -187,18 +187,18 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_pointlog_by_user_id(self, user_id):
-        qt = "SELECT * FROM pointlog WHERE user_id = '{user_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM pointlog WHERE user_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(user_id)})
         return df.to_dict(orient = 'index')
 
     def get_pointlog_for_event(self, event_id):
-        qt = "SELECT * FROM pointlog WHERE event_id = '{event_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM pointlog WHERE event_id = ?"
+        df = pd.read_sql(qt, self.conn,params={str(event_id)})
         return df.to_dict(orient = 'index')
 
     def get_pointlog_for_group(self, group_id):
-        qt = "SELECT * FROM pointlog WHERE group_id = '{group_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM pointlog WHERE group_id = ?"
+        df = pd.read_sql(qt, self.conn,params={str(group_id)})
         return df.to_dict(orient = 'index')
 
     def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status):
@@ -220,8 +220,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_attendee_group_link_by_id(self, link_id):
-        qt = "SELECT * FROM attendee_group_link WHERE link_id = '{link_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM attendee_group_link WHERE link_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(link_id)})
         return df.to_dict(orient = 'index')
     
     def add_attendee_group_link(self, temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points):
