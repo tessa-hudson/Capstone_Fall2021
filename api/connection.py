@@ -32,8 +32,8 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_attendee_by_id(self, attendee_id):
-        qt = "SELECT * FROM attendee WHERE attendee_id = '{attendee_id}'"
-        df = pd.read_sql(qt, self.conn)
+        qt = "SELECT * FROM attendee WHERE attendee_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(attendee_id)})
         return df.to_dict(orient = 'index')
 
     def get_attendee_by_name(self, first_name, last_initial):
