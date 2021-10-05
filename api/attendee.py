@@ -32,21 +32,14 @@ attendee_schema = AttendeeSchema()
 # Schema to use when loading/dumping a multiple attendees
 attendees_schema = AttendeeSchema(many=True)
 
-    
-# def get_attendee(attendee_id):
-#     comp = search(attendee_id)
-#     if not comp:
-#         abort(404, message="Camper {} doesn't exist".format(attendee_id))
-#     else:
-#         return comp[0]
 
 # Shows a single attendee and lets you delete an attendee
 class AttendeeResource(Resource):
 
-    # def get(self, attendee_id):
-    #     attendee = get_attendee(attendee_id)
-    #     result = attendee_schema.dump(attendee)
-    #     return result
+    def get(self, attendee_id):
+        attendee = conn.get_attendee_by_id(attendee_id)
+        result = attendee_schema.dump(attendee)
+        return result
     
     def delete(self, attendee_id):
         try:
