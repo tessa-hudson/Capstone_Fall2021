@@ -38,7 +38,8 @@ class AttendeeResource(Resource):
 
     def get(self, attendee_id):
         attendee = conn.get_attendee_by_id(attendee_id)
-        result = attendee_schema.dump(attendee)
+        print(attendee[0])
+        result = attendee_schema.dump(attendee[0])
         return result
     
     def delete(self, attendee_id):
