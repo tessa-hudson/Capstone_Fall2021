@@ -1,8 +1,8 @@
 import uuid
+import pyodbc
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 from flask_restful import abort, Resource, Api
-from bunch import bunchify
 from connection import conn
 
 # Attendee class
@@ -38,16 +38,20 @@ class AttendeeResource(Resource):
 
     def get(self, attendee_id):
         attendee = conn.get_attendee_by_id(attendee_id)
-        print(attendee[0])
-        result = attendee_schema.dump(attendee[0])
-        return result
+        if attendee:
+            result = attendee_schema.dump(attendee[0])
+            return result
+        else: abort(404, message="No attendee with id: {}".format(attendee_id))
     
     def delete(self, attendee_id):
-        try:
-            conn.delete_attendee(attendee_id)
-        except:
-            return 'Error occured while deleting', 422
-        return '', 204
+        attendee = conn.get_attendee_by_id(attendee_id)
+        if attendee:
+            try:
+                conn.delete_attendee(attendee_id)
+                return {"message": "Attendee deleted"}, 204
+            except pyodbc.Error as err:
+                return err, 422
+        else: abort(404, message="No attendee with id: {}".format(attendee_id))
 
 # Shows a list of all attendees and lets you POST to add new attendees
 class AttendeeListResource(Resource):
