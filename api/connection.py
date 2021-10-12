@@ -25,15 +25,21 @@ class ServerConn:
     def close_conn(self):
         self.cursor.close()
         self.conn.close()
+
+    #Login fn
+
+    #End of Login fn
     
     #Attendee fn
     def get_attendees(self):
         df = pd.read_sql("SELECT * FROM attendee", self.conn)
         return df.to_dict(orient = 'index')
+        
 
     def get_attendee_by_id(self, attendee_id):
         qt = "SELECT * FROM attendee WHERE attendee_id = ?"
         df = pd.read_sql(qt, self.conn, params={str(attendee_id)})
+        print("ERROR")
         return df.to_dict(orient = 'index')
 
     def get_attendee_by_name(self, first_name, last_initial):
@@ -59,21 +65,37 @@ class ServerConn:
     def add_attendee(self, temp_id, temp_first, temp_last):
         qt = "INSERT INTO dbo.attendee ([attendee_id],[firstname],[lastname]) VALUES (?, ?, ?)"
         data = (temp_id, temp_first, temp_last)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
     
     #Deleting by just id or by other fields?
     #Just id
     def delete_attendee(self, temp_id):
         qt = "DELETE FROM dbo.attendee WHERE attendee_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def update_attendee(self, temp_id, first_name, last_name):
+        qt = "UPDATE attendee SET firstname = ?, lastname = ? WHERE attendee_id = ?"
+        data = (first_name, last_name, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     
     #End of Attendee fn
 
     #Event fn
     def get_events(self):
-        df = pd.read_sql("SELECT * FROM event", self.conn)
+        df = pd.read_sql("SELECT * FROM events", self.conn)
         return df.to_dict(orient = 'index')
 
     def get_event_by_id(self, event_id):
@@ -87,16 +109,32 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def add_event(self, temp_id, temp_name, temp_start, temp_end, temp_type):
-        qt = "INSERT INTO dbo.event ([event_id],[name],[start_date],[end_date],[type]) VALUES (?, ?, ?, ?, ?)"
+        qt = "INSERT INTO dbo.events ([event_id],[event_name],[start_date],[end_date],[event_type]) VALUES (?, ?, ?, ?, ?)"
         data = (temp_id, temp_name, temp_start, temp_end, temp_type)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
 
     #Deleting by just id or by other fields?
     def delete_event(self, temp_id):
-        qt = "DELETE FROM dbo.event WHERE event_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        qt = "DELETE FROM dbo.events WHERE event_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+    
+    def update_event(self, temp_id, temp_name, temp_start, temp_end, temp_type):
+        qt = "UPDATE events SET event_name = ?, start_date = ?, end_date = ?, event_type = ? WHERE event_id = ?"
+        data = (temp_name, temp_start, temp_end, temp_type, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     #End Event fn
 
     #Groups fn
@@ -122,14 +160,30 @@ class ServerConn:
     def add_group(self, temp_group_id, temp_event_id, temp_name, temp_total_points):
         qt = "INSERT INTO dbo.groups ([group_id],[event_id],[group_name], [total_points]) VALUES (?, ?, ?, ?)"
         data = (temp_group_id, temp_event_id, temp_name, temp_total_points)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
-    
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
     #Deleting by just id or by other fields?
     def delete_group(self, temp_id):
         qt = "DELETE FROM dbo.groups WHERE group_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err) 
+    #With Points, add without
+    def update_group_with_points(self, temp_group_id, temp_event_id, temp_name, temp_total_points):
+        qt = "UPDATE groups SET event_id = ?, group_name = ?, total_points = ? WHERE group_id = ?"
+        data = (temp_event_id, temp_name, temp_total_points, str(temp_group_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     #End of Groups fn
 
     #Users fn
@@ -142,16 +196,32 @@ class ServerConn:
         df = pd.read_sql(qt, self.conn, params={str(user_id)})
         return df.to_dict(orient = 'index')
 
-    def add_user(self, temp_event_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id):
+    def add_user(self, temp_user_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id):
         qt = "INSERT INTO dbo.users ([user_id],[login_name],[user_password],[email],[firstname],[lastname], [access_id]) VALUES (?, ?, ?, ?, ?, ?, ?)"
-        data = (temp_event_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+        data = (temp_user_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id)
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
 
     def delete_user(self, temp_id):
         qt = "DELETE FROM dbo.users WHERE user_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def update_user(self, temp_user_id, temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id):
+        qt = "UPDATE users SET login_name = ?, user_password = ?, email = ?, firstname = ?, lastname = ?, access_id = ? WHERE user_id = ?"
+        data = (temp_login_name, temp_user_password, temp_email, temp_firstname, temp_lastname, temp_access_id, str(temp_user_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     #End of Users fn
 
     #Access fn
@@ -172,13 +242,30 @@ class ServerConn:
     def add_access(self, temp_id, temp_desc, temp_admin_access):
         qt = "INSERT INTO dbo.access ([access_id],[access_desc],[admin_access]) VALUES (?, ?, ?)"
         data = (temp_id, temp_desc, temp_admin_access)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
 
     def delete_access(self, temp_id):
         qt = "DELETE FROM dbo.access WHERE access_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def update_access(self, temp_id, temp_desc, temp_admin_access):
+        qt = "UPDATE users SET access_desc = ?, admin_access = ? WHERE access_id = ?"
+        data = (temp_desc, temp_admin_access, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
+    
     #End of Access fn
 
     #Pointlog fn
@@ -201,16 +288,32 @@ class ServerConn:
         df = pd.read_sql(qt, self.conn,params={str(group_id)})
         return df.to_dict(orient = 'index')
 
-    def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status):
-        qt = "INSERT INTO dbo.pointlog ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[date], [point_change], [comment], [status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        data = (temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_date, temp_point_change,temp_comment, temp_status)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+    def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status):
+        qt = "INSERT INTO dbo.pointlog ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[log_date], [point_type], [point_change], [comment], [point_status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        data = (temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status)
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
     
     def delete_pointlog(self, temp_id):
         qt = "DELETE FROM dbo.pointlog WHERE pointlog_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def update_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status):
+        qt = "UPDATE pointlog SET user_id = ?, event_id = ?, attendee_id = ?, group_id = ?, log_date = ?, point_type, point_change = ?, comment = ?, point_status = ?, WHERE pointlog_id = ?"
+        data = (temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change, temp_comment, temp_status, str(temp_pointlog_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
 
     #End of Pointlog fn
 
@@ -224,16 +327,32 @@ class ServerConn:
         df = pd.read_sql(qt, self.conn, params={str(link_id)})
         return df.to_dict(orient = 'index')
     
-    def add_attendee_group_link(self, temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points):
-        qt = "INSERT INTO dbo.attendee_group_link ([link_id],[attendee_id],[event_id],[group_id],[total_points]) VALUES (?, ?, ?, ?, ?)"
-        data = (temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points)
-        self.cursor.execute(qt, data)
-        self.conn.commit()
+    def add_attendee_group_link(self, temp_total_points, temp_id, temp_attendee_id, temp_event_id, temp_group_id):
+        qt = "INSERT INTO dbo.attendee_group_link ([total_points],[link_id],[attendee_id],[event_id],[group_id]) VALUES (?, ?, ?, ?, ?)"
+        data = (temp_total_points, str(temp_id), str(temp_attendee_id), str(temp_event_id), str(temp_group_id))
+        try:
+            self.cursor.execute(qt, data)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
 
     def delete_attendee_group_link(self, temp_id):
         qt = "DELETE FROM dbo.attendee_group_link WHERE link_id in (?)"
-        self.cursor.execute(qt, temp_id)
-        self.conn.commit()
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def update_attendee_group_link(self, temp_total_points, temp_id, temp_attendee_id, temp_event_id, temp_group_id):
+        qt = "UPDATE users SET event_id = ?, login_name = ?, user_password = ?, email = ?, firstname = ?, lastname = ?, access_id = ? WHERE user_id = ?"
+        data = (temp_total_points, temp_id, temp_attendee_id, temp_event_id, temp_group_id, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     #End of Attendee_Group_Link fn
 
 conn = ServerConn()
