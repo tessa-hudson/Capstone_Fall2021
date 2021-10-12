@@ -64,6 +64,7 @@ class EventListResource(Resource):
         data = conn.get_events()
         result = events_schema.dump(data.values())
         print(result)
+        print ("END RESULT")
         return {"events": result}
 
     def post(self):
