@@ -3,6 +3,5 @@ flask
 flask_restful
 flask_cors
 pyodbc
-datetime
 pandas
 marshmallow
