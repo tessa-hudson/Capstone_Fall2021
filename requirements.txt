@@ -1,0 +1,8 @@
+#Install all required libraries with pip install -r requirements.txt
+flask
+flask_restful
+flask_cors
+pyodbc
+datetime
+pandas
+marshmallow
