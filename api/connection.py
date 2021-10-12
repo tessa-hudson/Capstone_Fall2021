@@ -73,7 +73,7 @@ class ServerConn:
 
     #Event fn
     def get_events(self):
-        df = pd.read_sql("SELECT * FROM event", self.conn)
+        df = pd.read_sql("SELECT * FROM events", self.conn)
         return df.to_dict(orient = 'index')
 
     def get_event_by_id(self, event_id):
@@ -87,14 +87,14 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def add_event(self, temp_id, temp_name, temp_start, temp_end, temp_type):
-        qt = "INSERT INTO dbo.event ([event_id],[name],[start_date],[end_date],[type]) VALUES (?, ?, ?, ?, ?)"
+        qt = "INSERT INTO dbo.events ([event_id],[name],[start_date],[end_date],[type]) VALUES (?, ?, ?, ?, ?)"
         data = (temp_id, temp_name, temp_start, temp_end, temp_type)
         self.cursor.execute(qt, data)
         self.conn.commit()
 
     #Deleting by just id or by other fields?
     def delete_event(self, temp_id):
-        qt = "DELETE FROM dbo.event WHERE event_id in (?)"
+        qt = "DELETE FROM dbo.events WHERE event_id in (?)"
         self.cursor.execute(qt, temp_id)
         self.conn.commit()
     #End Event fn
