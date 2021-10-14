@@ -7,22 +7,22 @@ from connection import conn
 
 # Event class
 class Event():
-    def __init__(self, name, start, end, event_type, event_id = -1):
+    def __init__(self, event_name, start_date, end_date, event_type, event_id = -1):
         self.event_id = event_id
-        self.name = name
-        self.start = start
-        self.end = end
+        self.event_name = event_name
+        self.start_date = start_date
+        self.end_date = end_date
         self.event_type = event_type
 
     def __repr__(self):
-        return "<Event(event_id={self.event_id}, firstname={self.firstname!r}, lastname={self.lastname!r})>".format(self=self)
+        return "<Event(event_id={self.event_id}, event_name={self.event_name!r}, start_date={self.start_date!r}, end_date={self.end_date!r}, event_type={self.event_type!r})>".format(self=self)
 
 # Marshmallow Schema for Event
 class EventSchema(Schema):
     event_id = fields.UUID() # generated when POST request is recieved
-    name = fields.Str(required=True) # must be included in POST request
-    start = fields.Date('iso') #YYYY-MM-DD
-    end =  fields.Date('iso') #YYYY-MM-DD
+    event_name = fields.Str(required=True) # must be included in POST request
+    start_date = fields.Date('iso') #YYYY-MM-DD
+    end_date =  fields.Date('iso') #YYYY-MM-DD
     event_type = fields.Str()
 
     # Once POST request has been validated deserialized, make a new Event with data
@@ -76,7 +76,7 @@ class EventListResource(Resource):
             new_event = event_schema.load(data)
             print(data)
             new_event.event_id = uuid.uuid4()
-            conn.add_event(new_event.event_id, new_event.name, new_event.start, new_event.end, new_event.event_type)
+            conn.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
         except ValidationError as err:
             print(data)
             return err.messages, 422
