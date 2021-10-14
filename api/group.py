@@ -1,21 +1,28 @@
 import uuid
+import pyodbc
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
+from connection import conn
 
 # Group class
 class Group():
-    def __init__(self, name, id = -1):
-        self.id = id
-        self.name = name
+    def __init__(self, event_id, group_name, group_id = -1, total_points = 0):
+        self.group_id = group_id
+        self.event_id = event_id
+        self.group_name = group_name
+        self.total_points = total_points
 
     def __repr__(self):
-        return "<Group(id={self.id}, name={self.name!r}>".format(self=self)
+        return "<Group(group_id={self.group_id}, event_id={self.event_id} group_name={self.group_name!r}, total_points={self.total_points})>".format(self=self)
 
 # Marshmallow Schema for Group
 class GroupSchema(Schema):
-    id = fields.UUID() # generated when Post request is recieved
-    name = fields.Str(required=True) # must be included in POST request
+    group_id = fields.UUID() # generated when POST request is recieved
+    event_id = fields.UUID() # event that the group is participating in
+    group_name = fields.Str(required=True) # must be included in POST request
+    total_points = fields.Int() # defaults to 0 when 
+
 
     # Once POST request has been validated deserialized, make a new Group with data
     @post_load
@@ -25,50 +32,39 @@ class GroupSchema(Schema):
 # Schema to use when loading/dumping a single group
 group_schema = GroupSchema()
 
-# Schema to user when loading/dumping multiple groups
+# Schema to use when loading/dumping a multiple groups
 groups_schema = GroupSchema(many=True)
 
-# WILL BE REPLACED WITH DATA FROM DB
-# list of example groups
-groups = [
-    Group("group1", uuid.uuid4()),
-    Group("group2", uuid.uuid4()),
-    Group("group3", uuid.uuid4())
-]
 
-# list comprehension used in get_group()
-def search(id):
-    return [g for g in groups if str(g.id) == id]
- 
-# WILL BE REPLACED WITH DB FUNCTIONS
-# Returns the group with the given id if one exists
-# aborts with 404 status otherwise
-def get_group(id):
-    comp = search(id)
-    if not comp:
-        abort(404, message="Group {} doesn't exist".format(id))
-    else:
-        return comp[0]
-
-# Shows a single group and lets you delete a group
+# Shows a single group and lets you delete an group
 class GroupResource(Resource):
 
-    def get(self, id):
-        group = get_group(id)
-        result = group_schema.dump(group)
-        return result
+    def get(self, group_id):
+        group = conn.get_group_by_id(group_id)
+        if group:
+            result = group_schema.dump(group[0])
+            return result
+        else: abort(404, message="No group with id: {}".format(group_id))
     
-    def delete(self, id):
-        group = get_group(id)
-        groups.remove(group)
-        return '', 204
+    def delete(self, group_id):
+        group = conn.get_group_by_id(group_id)
+        if group:
+            try:
+                conn.delete_group(group_id)
+                return {"message": "Group deleted"}, 204
+            except pyodbc.Error as err:
+                return err, 422
+        else: abort(404, message="No group with id: {}".format(group_id))
 
-# Shows a list of all campers and lets you POST to add new group
+# Shows a list of all groups and lets you POST to add new groups
 class GroupListResource(Resource):
-    
+
     def get(self):
-            result = groups_schema.dump(groups)
-            return {"groups": result}
+        data = conn.get_groups()
+        result = groups_schema.dump(data.values())
+        print(result)
+        print ("END RESULT")
+        return {"groups": result}
 
     def post(self):
         print(request)
@@ -78,10 +74,9 @@ class GroupListResource(Resource):
         try:
             new_group = group_schema.load(data)
             print(data)
-            new_group.id = uuid.uuid4()
-            groups.append(new_group)
+            new_group.group_id = uuid.uuid4()
+            conn.add_group(new_group.group_id, new_group.event_id, new_group.group_name, new_group.total_points)
         except ValidationError as err:
             print(data)
             return err.messages, 422
-        print(groups)
         return group_schema.dump(new_group), 201
