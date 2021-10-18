@@ -8,7 +8,7 @@ Name | Type  | Description
 ---- | ---- | -----------
 `attendee_id` | UUID | Used to uniquely identify they attendee. Generated upon creation.
 `firstname` | string | The attendee's first name
-`lastname` | string | Single character. First initial of attendee's lastname
+`lastname` | string | Single character. First initial of attendee's lastname.
 
 ## Endpoints
 
@@ -34,11 +34,6 @@ Content-Type: application/vnd.api+json
           "attendee_id": "8C8905B1-52DE-44F6-93AD-046F39C76CF7",
           "lastname": "B",
           "firstname": "Attendee"
-      },
-      {
-          "attendee_id": "C991E917-85D4-4BD3-9C05-0AFFAD807E00",
-          "lastname": "B",
-          "firstname": "Zach"
       },
       {
           "attendee_id": "DE97B22F-7EF0-4FD2-AFAC-1A9E5CFE329A",
