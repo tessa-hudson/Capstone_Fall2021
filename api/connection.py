@@ -318,7 +318,7 @@ class ServerConn:
     #End of Pointlog fn
 
     #Attendee_Group_Link fn
-    def get_attendee_group_link(self):
+    def get_attendee_group_links(self):
         df = pd.read_sql("SELECT * FROM attendee_group_link", self.conn)
         return df.to_dict(orient = 'index')
 
