@@ -1,3 +1,4 @@
+from api.attendee_group_link import AttendeeGroupLinkListResource, AttendeeGroupLinkResource
 from group import GroupListResource, GroupResource
 from event import EventListResource, EventResource
 from attendee import AttendeeListResource, AttendeeResource
@@ -22,6 +23,8 @@ api.add_resource(EventListResource, '/events')
 api.add_resource(EventResource, '/events/<event_id>')
 api.add_resource(GroupListResource, "/groups")
 api.add_resource(GroupResource, "/groups/<group_id>")
+api.add_resource(AttendeeGroupLinkListResource, "/group_members")
+api.add_resource(AttendeeGroupLinkResource, "group_members/<attendee_group_link_id>")
 
 
 
