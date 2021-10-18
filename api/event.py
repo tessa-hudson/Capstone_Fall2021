@@ -21,9 +21,9 @@ class Event():
 class EventSchema(Schema):
     event_id = fields.UUID() # generated when POST request is recieved
     event_name = fields.Str(required=True) # must be included in POST request
-    start_date = fields.Date('iso') #YYYY-MM-DD
-    end_date =  fields.Date('iso') #YYYY-MM-DD
-    event_type = fields.Str()
+    start_date = fields.Date('iso', required=True) #YYYY-MM-DD
+    end_date =  fields.Date('iso', required=True) #YYYY-MM-DD
+    event_type = fields.Str(required=True)
 
     # Once POST request has been validated deserialized, make a new Event with data
     @post_load

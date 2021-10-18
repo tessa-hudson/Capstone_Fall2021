@@ -19,7 +19,7 @@ class Group():
 # Marshmallow Schema for Group
 class GroupSchema(Schema):
     group_id = fields.UUID() # generated when POST request is recieved
-    event_id = fields.UUID() # event that the group is participating in
+    event_id = fields.UUID(required=True) # event that the group is participating in
     group_name = fields.Str(required=True) # must be included in POST request
     total_points = fields.Int() # defaults to 0 when 
 
