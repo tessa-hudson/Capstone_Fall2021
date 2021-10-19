@@ -21,3 +21,6 @@ With an application to assist them, we hope we can allow these counselors an ea
 
 ## Executing the Application
 - [README](https://tessa-hudson.github.io/Capstone_Fall2021/servers)
+
+## Documentation
+- [API Reference](https://tessa-hudson.github.io/Capstone_Fall2021/api)
