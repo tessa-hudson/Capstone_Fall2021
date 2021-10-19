@@ -18,7 +18,7 @@ class ServerConn:
                 self.cursor = self.conn.cursor()
             except:
                 try:
-                    self.conn = pyodbc.connect('Driver={ODBC Driver 13 for SQL Server};Server=tcp:hbda.database.windows.net,1433;Database=hbda_tracking;Uid=trblair;Pwd=Linkedlist4788;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
+                    self.conn = pyodbc.connect('Driver={SQL Server Native Client 11.0};Server=tcp:hbda.database.windows.net,1433;Database=hbda_tracking;Uid=trblair;Pwd=Linkedlist4788;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
                     self.cursor = self.conn.cursor()
                 except pyodbc.OperationalError as err:
                     print(err)
