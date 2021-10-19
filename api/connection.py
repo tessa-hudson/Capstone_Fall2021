@@ -142,7 +142,7 @@ class ServerConn:
     #End Event fn
 
     #Groups fn
-    def get_group(self):
+    def get_groups(self):
         df = pd.read_sql("SELECT * FROM groups", self.conn)
         return df.to_dict(orient = 'index')
 
