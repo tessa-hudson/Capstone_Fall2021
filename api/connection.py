@@ -3,7 +3,7 @@ import pyodbc
 import pandas as pd
 
 class ServerConn:
-    server = 'hbda.database.windows.net'
+    server = 'tcp:hbda.database.windows.net'
     database = 'hbda_tracking'
     username = 'cethorne'
     password = 'Thorne123!'
