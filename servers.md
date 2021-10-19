@@ -1,9 +1,13 @@
 ## Starting the Servers
-- To start the backend server, run the following commands
+- To start the backend server, run the startup script by entering `./startserver.sh`
+  - You may need to give the script permission to run by entering the command `chmod +x startserver.sh`
+  
+  - Alternatively, you can run the commands in the script individually:
+  
   ```
   . venv/bin/activate
-  cd api
-  python router.py
+  pip install -r requirements.txt
+  python api/app.py
   
   ```
 - To start the front end cd into `/score-tracker-frontend` and enter the
