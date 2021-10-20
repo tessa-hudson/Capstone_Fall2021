@@ -36,9 +36,10 @@ With an application to assist them, we hope we can allow these counselors an ea
   - Alternatively, you can run the commands in the script individually:
   
   ```
-  . venv/bin/activate
+  python -m venv venv
+  source venv/bin/activate
   pip install -r requirements.txt
-  python api/app.py
+  flask run
   
   ```
 - To start the front end cd into `/score-tracker-frontend` and enter the command `yarn dev`
