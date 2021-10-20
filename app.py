@@ -1,6 +1,6 @@
-from group import GroupListResource, GroupResource
-from event import EventListResource, EventResource
-from attendee import AttendeeListResource, AttendeeResource
+from api.group import GroupListResource, GroupResource
+from api.event import EventListResource, EventResource
+from api.attendee import AttendeeListResource, AttendeeResource
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
@@ -26,5 +26,5 @@ api.add_resource(GroupResource, "/groups/<group_id>")
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
         
