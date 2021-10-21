@@ -47,7 +47,7 @@ jobs:
         yarn build
         # yarn test --if-present
     - name: 'Deploy to Azure WebApp'
-      uses: azure/webapps-deploy@v2
+      uses: azure/appservice-actions/webapp@master
       with:
         app-name: 'hdba-tracking'
         publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISHING }}
