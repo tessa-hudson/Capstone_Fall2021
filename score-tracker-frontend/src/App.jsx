@@ -4,10 +4,10 @@ import './App.css'
 import HomePage from './Components/HomePage'
 import Groups from './Components/Groups'
 import Campers from './Components/Campers'
-import NavBar from './Components/Navbar'
 import Profile from './Components/Profile'
 import LandingPage from './Components/LandingPage'
 import ProtectedRoute from './auth/ProtectedRoute'
+import NavBar from './Components/NavBar'
 
 function App() {
 
