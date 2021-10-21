@@ -50,5 +50,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'hdba-tracking'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DAE0C11FB705446FADA6EF35985BC6B0 }}
+        publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISHING }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
