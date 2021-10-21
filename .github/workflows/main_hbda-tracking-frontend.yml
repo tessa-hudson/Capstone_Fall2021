@@ -48,8 +48,7 @@ jobs:
         # yarn test --if-present
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
-      id: deploy-to-webapp
       with:
         app-name: 'hbda-tracking'
-        slot-name: 'Production'
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_45CBBF0FD3BF4931A4166274F030B3F3 }}
+        publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISHING }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
