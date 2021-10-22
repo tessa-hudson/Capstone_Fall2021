@@ -19,8 +19,11 @@ class ServerConn:
             except pyodbc.OperationalError as err:
                 print(err)
     
-    def query(self, q):
-        return pd.read_sql(q, self.conn)
+    def query(self, q, data = None):
+        if data is None:
+          return pd.read_sql(q, self.conn)
+        else:
+            return pd.read_sql(q, self.conn, params={data})
 
     def close_conn(self):
         self.cursor.close()
@@ -39,7 +42,6 @@ class ServerConn:
     def get_attendee_by_id(self, attendee_id):
         qt = "SELECT * FROM attendee WHERE attendee_id = ?"
         df = pd.read_sql(qt, self.conn, params={str(attendee_id)})
-        print("ERROR")
         return df.to_dict(orient = 'index')
 
     def get_attendee_by_name(self, first_name, last_initial):
@@ -91,6 +93,20 @@ class ServerConn:
         finally:
             self.conn.commit()
     
+    def add_attendee_to_group(self, temp_link_id, temp_attendee_id, temp_group_id):
+        qt = "SELECT event_id FROM groups WHERE group_id = ?"
+        df = pd.read_sql(qt, self.conn, params={str(temp_group_id)})
+        self.add_attendee_group_link(0, temp_link_id, temp_attendee_id, df.loc[0].at["event_id"], temp_group_id)
+    
+    def update_attendee_points(self, temp_id, temp_points):
+        qt = "UPDATE attendee_group_link SET total_points = ? WHERE attendee_id = ?"
+        data = (temp_points, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
     #End of Attendee fn
 
     #Event fn
@@ -158,7 +174,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def add_group(self, temp_group_id, temp_event_id, temp_name, temp_total_points):
-        qt = "INSERT INTO dbo.groups ([group_id],[event_id],[group_name], [total_points]) VALUES (?, ?, ?, ?)"
+        qt = "INSERT INTO dbo.groups ([group_id],[event_id],[group_name],[total_points]) VALUES (?, ?, ?, ?)"
         data = (temp_group_id, temp_event_id, temp_name, temp_total_points)
         try:
             self.cursor.execute(qt, data)
@@ -175,15 +191,45 @@ class ServerConn:
         except Exception as err:
             print(err) 
     #With Points, add without
-    def update_group_with_points(self, temp_group_id, temp_event_id, temp_name, temp_total_points):
-        qt = "UPDATE groups SET event_id = ?, group_name = ?, total_points = ? WHERE group_id = ?"
-        data = (temp_event_id, temp_name, temp_total_points, str(temp_group_id))
+    def update_group_with_points(self, temp_group_id, temp_event_id, temp_name, temp_total_points = None):
+        if temp_total_points is None:
+            qt = "UPDATE groups SET event_id = ?, group_name = ? WHERE group_id = ?"
+            data = (temp_event_id, temp_name, str(temp_group_id))
+            try:
+                self.cursor.execute(qt, data)
+            except Exception as err:
+                print(err)    
+            finally:
+                self.conn.commit()
+        else:
+            qt = "UPDATE groups SET event_id = ?, group_name = ?, total_points = ? WHERE group_id = ?"
+            data = (temp_event_id, temp_name, temp_total_points, str(temp_group_id))
+            try:
+                self.cursor.execute(qt, data)
+            except Exception as err:
+                print(err)    
+            finally:
+                self.conn.commit()
+
+    def update_group_points(self, temp_id, temp_points):
+        qt = "UPDATE groups SET total_points = ? WHERE group_id = ?"
+        data = (temp_points, str(temp_id))
         try:
             self.cursor.execute(qt, data)
         except Exception as err:
             print(err)    
         finally:
             self.conn.commit()
+
+
+    #def update_group_without_points(self, temp_group_id, temp_event_id, temp_name):
+    #   data = (temp_event_id, temp_name, str(temp_group_id))
+    #    try:
+    #        self.cursor.execute(qt, data)
+     #   except Exception as err:
+      #      print(err)    
+       # finally:
+        #    self.conn.commit()
     #End of Groups fn
 
     #Users fn
@@ -315,6 +361,40 @@ class ServerConn:
         finally:
             self.conn.commit()
 
+    def decline_pointlog(self, temp_id):
+        self.delete_pointlog(temp_id)
+
+    def accept_pointlog_status(self, temp_pointlog_id):
+        qt = "UPDATE pointlog SET point_status = 1 WHERE pointlog_id = ?"
+        data = (str(temp_pointlog_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
+
+    def accept_pointlog(self, temp_pointlog_id, temp_attendee_id = None):
+        if temp_attendee_id is None:
+            qt1 = "SELECT point_change, group_id FROM pointlog WHERE pointlog_id = ?"
+            qt2 = "SELECT total_points FROM groups WHERE group_id = ?"
+            df1 = pd.read_sql(qt1, self.conn, params={str(temp_pointlog_id)})
+            group = df1.loc[0].at["group_id"]
+            df2 = pd.read_sql(qt2, self.conn, params={str(group)})
+            points = df1.loc[0].at["point_change"]
+            points += df2.loc[0].at["total_points"]
+            self.accept_pointlog_status(temp_pointlog_id)
+            qt3 = "UPDATE groups SET total_points = ? where group_id = ?"
+            data = (points, str(group))
+            try:
+                self.cursor.execute(qt3, data)
+            except Exception as err:
+                print(err)    
+            finally:
+                self.conn.commit()
+        else:
+            print()
+
     #End of Pointlog fn
 
     #Attendee_Group_Link fn
@@ -344,9 +424,39 @@ class ServerConn:
         except Exception as err:
             print(err)
 
-    def update_attendee_group_link(self, temp_total_points, temp_id, temp_attendee_id, temp_event_id, temp_group_id):
-        qt = "UPDATE users SET event_id = ?, login_name = ?, user_password = ?, email = ?, firstname = ?, lastname = ?, access_id = ? WHERE user_id = ?"
-        data = (temp_total_points, temp_id, temp_attendee_id, temp_event_id, temp_group_id, str(temp_id))
+    def update_attendee_group_link(self, temp_id, temp_attendee_id, temp_event_id, temp_group_id, temp_total_points = None):
+        if temp_total_points is None:
+            qt = "UPDATE attendee_group_link SET attendee_id = ?, event_id = ?, group_id = ? WHERE link_id = ?"
+            data = (temp_total_points, temp_attendee_id, temp_event_id, temp_group_id, str(temp_id))
+            try:
+                self.cursor.execute(qt, data)
+            except Exception as err:
+                print(err)    
+            finally:
+                self.conn.commit()
+        else:
+            qt = "UPDATE attendee_group_link SET total_points = ?, attendee_id = ?, event_id = ?, group_id = ? WHERE link_id = ?"
+            data = (temp_total_points, temp_attendee_id, temp_event_id, temp_group_id, str(temp_id))
+            try:
+                self.cursor.execute(qt, data)
+            except Exception as err:
+                print(err)    
+            finally:
+                self.conn.commit()
+
+    def change_attendee_group(self, temp_attendee_id, temp_group_id):
+        qt = "UPDATE attendee_group_link SET group_id = ? WHERE attendee_id = ?"
+        data = (str(temp_group_id), str(temp_attendee_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
+
+    def update_pointlog_AGLext(self, temp_id, temp_total_points):
+        qt = "UPDATE attendee_group_link SET total_points = ? WHERE attendee_id = ?"
+        data = (temp_total_points, str(temp_id))
         try:
             self.cursor.execute(qt, data)
         except Exception as err:
