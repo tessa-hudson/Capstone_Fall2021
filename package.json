@@ -1,7 +1,7 @@
 {
   "name": "score-tracker-frontend",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "index.html",
   "repository": "https://github.com/tessa-hudson/Capstone_Fall2021.git",
   "author": "Tessa Tryon <78631551+tessa-nine@users.noreply.github.com>",
   "license": "MIT",
