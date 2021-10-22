@@ -23,7 +23,7 @@ on:
       - main
 
 env:
-  AZURE_WEBAPP_NAME: 'hbda-tracking'    # set this to your application's name
+  AZURE_WEBAPP_NAME: 'hbdatracking'    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '12.x'                # set this to the node version to use
 
@@ -49,6 +49,7 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'hbda-tracking'
+        app-name: 'hbdatracking'
+        slot: 'production'
         publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISHING }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
