@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Box, Container, Grid } from '@mui/material'
+import { Box, Grid } from '@mui/material'
 import AddGroupForm from './Forms/AddGroupForm'
 import GetGroups from './GetGroups'
 

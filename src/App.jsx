@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Route, Switch, NavLink} from "react-router-dom"
-import { BrowserRouter } from 'react-router-dom'
+import React from 'react'
+import { Route, Switch} from "react-router-dom"
 import './App.css'
 import './index.css'
 import HomePage from './Components/HomePage'
@@ -10,8 +9,6 @@ import Profile from './Components/Profile'
 import LandingPage from './Components/LandingPage'
 import ProtectedRoute from './auth/ProtectedRoute'
 import NavBar from './Components/NavBar'
-import { Auth0Provider } from '@auth0/auth0-react'
-import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
 function App() {
   return (

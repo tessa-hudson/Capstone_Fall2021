@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import AuthNav from './AuthNav'
-import Scoreboard from './Scoreboard'
 
 class LandingPage extends Component {
     render() {
