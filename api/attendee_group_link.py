@@ -5,9 +5,10 @@ from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
 from connection import conn
 
+
 # AttendeeGroupLink class
 class AttendeeGroupLink():
-    def __init__(self, attendee_id, event_id, group_id, attendee_group_link_id = -1, total_points = 0):
+    def __init__(self, attendee_id, group_id, attendee_group_link_id = -1, event_id = -1, total_points = 0):
         self.total_points = total_points
         self.attendee_group_link_id = attendee_group_link_id
         self.attendee_id = attendee_id
@@ -23,7 +24,7 @@ class AttendeeGroupLinkSchema(Schema):
    total_points = fields.Int() # defaults to 0 when AttendeeGroupLink is made
    attendee_group_link_id = fields.UUID() # generated when POST request is recieved
    attendee_id = fields.UUID(required=True) # attendee being added to group
-   event_id = fields.UUID(required=True) # event that the group is participating in
+   event_id = fields.UUID() # event that the group is participating in, derived from group
    group_id = fields.UUID(required=True) # group attenddee is being added to 
     
 
@@ -36,11 +37,11 @@ class AttendeeGroupLinkSchema(Schema):
 # Schema to use when loading/dumping a single AttendeeGroupLink
 attendee_group_link_schema = AttendeeGroupLinkSchema()
 
-# Schema to use when loading/dumping a multiple attenbdeeGroupLinks
+# Schema to use when loading/dumping a multiple attenndeeGroupLinks
 attendee_group_links_schema = AttendeeGroupLinkSchema(many=True)
 
 
-# Shows a single attendeeGroupLink and lets you delete an attenbdeeGroupLink
+# Shows a single attendeeGroupLink and lets you delete an attendeeGroupLink
 class AttendeeGroupLinkResource(Resource):
 
     def get(self, attendee_group_link_id):
