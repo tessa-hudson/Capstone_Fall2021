@@ -201,7 +201,7 @@ class ServerConn:
     def delete_group_by_event(self, temp_id):
         qt = "DELETE FROM dbo.groups WHERE event_id in (?)"
         try:
-            self.delete_attendee_group_link_by_group(temp_id)
+            self.delete_attendee_group_link_by_event(temp_id)
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
