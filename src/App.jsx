@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import { Route, Switch, NavLink} from "react-router-dom"
+import React from 'react'
+import { Route, Switch} from "react-router-dom"
 import './App.css'
+import './index.css'
 import HomePage from './Components/HomePage'
 import Groups from './Components/Groups'
 import Campers from './Components/Campers'
@@ -10,11 +11,10 @@ import ProtectedRoute from './auth/ProtectedRoute'
 import NavBar from './Components/NavBar'
 
 function App() {
-
   return (
     <div className="App">
       {
-        location.pathname !== '/' && <NavBar />
+        window.location.pathname !== '/' && <NavBar />
       }
       <Switch>
         <Route exact path="/" component={LandingPage} />
@@ -24,7 +24,7 @@ function App() {
         <ProtectedRoute exact path="/profile" component={Profile} />
       </Switch>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
