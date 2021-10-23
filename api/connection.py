@@ -82,6 +82,7 @@ class ServerConn:
     def delete_attendee(self, temp_id):
         qt = "DELETE FROM dbo.attendee WHERE attendee_id in (?)"
         try:
+            self.delete_attendee_group_link_by_attendee(temp_id)
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
@@ -141,6 +142,7 @@ class ServerConn:
     def delete_event(self, temp_id):
         qt = "DELETE FROM dbo.events WHERE event_id in (?)"
         try:
+            self.delete_group_by_event(temp_id)
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
@@ -190,6 +192,16 @@ class ServerConn:
     def delete_group(self, temp_id):
         qt = "DELETE FROM dbo.groups WHERE group_id in (?)"
         try:
+            self.delete_attendee_group_link_by_group(temp_id)
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err) 
+    #Only used when delete_event is called for cascading delete
+    def delete_group_by_event(self, temp_id):
+        qt = "DELETE FROM dbo.groups WHERE event_id in (?)"
+        try:
+            self.delete_attendee_group_link_by_group(temp_id)
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
@@ -422,6 +434,30 @@ class ServerConn:
 
     def delete_attendee_group_link(self, temp_id):
         qt = "DELETE FROM dbo.attendee_group_link WHERE link_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def delete_attendee_group_link_by_attendee(self, temp_id):
+        qt = "DELETE FROM dbo.attendee_group_link WHERE attendee_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def delete_attendee_group_link_by_group(self, temp_id):
+        qt = "DELETE FROM dbo.attendee_group_link WHERE group_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def delete_attendee_group_link_by_event(self, temp_id):
+        qt = "DELETE FROM dbo.attendee_group_link WHERE event_id in (?)"
         try:
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
