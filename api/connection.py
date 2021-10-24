@@ -54,7 +54,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_attendees_by_group_id(self, group_id):
-        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
+        qt = "SELECT attendee.attendee_id FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
         df = pd.read_sql(qt, self.conn, params={str(group_id)})
         return df.to_dict(orient = 'index')
 
@@ -414,7 +414,7 @@ class ServerConn:
     #End of Pointlog fn
 
     #Attendee_Group_Link fn
-    def get_attendee_group_link(self):
+    def get_attendee_group_links(self):
         df = pd.read_sql("SELECT * FROM attendee_group_link", self.conn)
         return df.to_dict(orient = 'index')
 
