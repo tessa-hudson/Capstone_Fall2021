@@ -42,7 +42,13 @@ With an application to assist them, we hope we can allow these counselors an ea
   flask run
   
   ```
-- To start the front end cd into `/score-tracker-frontend` and enter the command `yarn dev`
+- To start the front end enter the following commands
+
+  ```
+  yarn install
+  yarn start // in development only
+  yarn build // in production only
+  ```
 
 ### Testing and Documentation
 - in progress
