@@ -122,7 +122,7 @@ Content-Type: application/vnd.api+json
 
 **Request Example:**
 ```
-DELETE /attendees/01A46AC4-F7B7-4F98-9DD9-15FABC632AB2
+DELETE /events/01A46AC4-F7B7-4F98-9DD9-15FABC632AB2
 ```
 
 **Response Example:**
