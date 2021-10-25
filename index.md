@@ -1,5 +1,7 @@
 # Score Tracker for Camp Clot Not
 
+[Visit the Site](https://hbdatracking.azurewebsites.net)
+
 ## Motivation
 Camp Clot Not is a camp hosted by HBDA that allows children ranging from 6-18 years old who suffer from various bleeding disorders to enjoy a camp experience they normally would not be able to enjoy.
 
