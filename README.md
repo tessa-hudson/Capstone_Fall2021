@@ -51,4 +51,4 @@ With an application to assist them, we hope we can allow these counselors an ea
   ```
 
 ### Testing and Documentation
-- in progress
+- Documentation for the API can be found on the [project site](https://tessa-hudson.github.io/Capstone_Fall2021/api/) 
