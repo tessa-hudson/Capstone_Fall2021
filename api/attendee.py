@@ -53,26 +53,33 @@ class AttendeeResource(Resource):
                 return err, 422
         else: abort(404, message="No attendee with id: {}".format(attendee_id))
 
+    def post(self, attendee_id):
+        attendee = conn.get_attendee_by_id(attendee_id)
+        if attendee:
+            attendee = attendee[0]
+            data = request.get_json()
+            for key in data:
+                attendee[key] = data[key]
+            result = attendee_schema.dump(attendee)
+            return result
+        else: abort(404, message="No attendee with id: {}".format(attendee_id))
+
 # Shows a list of all attendees and lets you POST to add new attendees
 class AttendeeListResource(Resource):
 
     def get(self):
         data = conn.get_attendees()
         result = attendees_schema.dump(data.values())
-        print(result)
         return {"attendees": result}
 
     def post(self):
-        print(request)
         data = request.get_json()
         if not data:
             return {"message": "No input data provided"}, 400
         try:
             new_attendee = attendee_schema.load(data)
-            print(data)
             new_attendee.attendee_id = uuid.uuid4()
             conn.add_attendee(new_attendee.attendee_id, new_attendee.firstname, new_attendee.lastname)
         except ValidationError as err:
-            print(data)
             return err.messages, 422
         return attendee_schema.dump(new_attendee), 201
