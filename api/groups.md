@@ -10,7 +10,7 @@ Name | Type  | Description
 `event_id` | UUID | The event that the group belongs to and subsequently is competing in.
 `group_name` | string | The name of the group.
 `total_points` | int | The number of points the group has earned in the event. Defaults to 0 upon creation.
-`attendess` | [ UUID ] | *Association* A list of UUIDs representing the attendees in the group. Defaults to `[]` upon creation.
+`attendees` | [ Attendee ] | *Association* - A list of Attendee objects representing the attendees in the group. Defaults to `[]` upon creation.
 
 ## Endpoints
 
@@ -122,15 +122,15 @@ Content-Type: application/vnd.api+json
 
 **Request Example:**
 ```
-POST /groups/2EDC3F13-984C-40F6-AE3B-21F97730F2BF
+POST /groups/AF9E3466-EF75-4AB4-93EC-8B9D4669D6BD
 Content-Type: application/json
 Accept: application/vnd.api+json
 {
-    "total_points": 4,
     "attendees": [
-        "8C8905B1-52DE-44F6-93AD-046F39C76CF7",
-        "DE97B22F-7EF0-4FD2-AFAC-1A9E5CFE329A"
-    ]
+        "DE97B22F-7EF0-4FD2-AFAC-1A9E5CFE329A",
+        "8C8905B1-52DE-44F6-93AD-046F39C76CF7"
+    ],
+    "total_points": 4
 }
 ```
 
@@ -139,14 +139,22 @@ Accept: application/vnd.api+json
 HTTP/1.1 200 OK
 Content-Type: application/vnd.api+json
 {
-    "attendees": [
-        "{'attendee_id': '8C8905B1-52DE-44F6-93AD-046F39C76CF7'}",
-        "{'attendee_id': 'DE97B22F-7EF0-4FD2-AFAC-1A9E5CFE329A'}"
-    ],
-    "group_name": "Group 1",
-    "group_id": "2EDC3F13-984C-40F6-AE3B-21F97730F2BF",
     "total_points": 4,
-    "event_id": "F2DACF22-9D82-4A4B-9853-5FC8DDA47EDB"
+    "event_id": "F2DACF22-9D82-4A4B-9853-5FC8DDA47EDB",
+    "group_name": "Group 2",
+    "group_id": "AF9E3466-EF75-4AB4-93EC-8B9D4669D6BD",
+    "attendees": [
+        {
+            "attendee_id": "DE97B22F-7EF0-4FD2-AFAC-1A9E5CFE329A",
+            "firstname": "Attendee",
+            "lastname": "A"
+        },
+        {
+            "attendee_id": "8C8905B1-52DE-44F6-93AD-046F39C76CF7",
+            "firstname": "Attendee",
+            "lastname": "B"
+        }
+    ]
 }
 ```
 
