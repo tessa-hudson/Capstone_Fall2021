@@ -17,7 +17,7 @@ const Auth0ProviderWithHistory = ({ children }) => {
       domain={domain}
       clientId={clientId}
       //redirectUri={window.location.origin}
-      redirectUri={"https://hbdatracking.azurewebsites.net"}
+      redirectUri={"http://localhost:3000"}
       onRedirectCallback={onRedirectCallback}
     >
       {children}
