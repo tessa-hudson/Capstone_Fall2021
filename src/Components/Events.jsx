@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Box, Grid } from '@mui/material'
 import AddEventForm from './Forms/AddEventForm'
+import GetEvents from './GetEvents'
 
 class Events extends Component {
 
@@ -12,7 +13,7 @@ class Events extends Component {
                         <AddEventForm />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <h1>temp</h1>
+                        <GetEvents />
                     </Grid>
                 </Grid>
             </Box>   

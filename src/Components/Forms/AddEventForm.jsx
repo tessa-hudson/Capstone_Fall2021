@@ -36,29 +36,29 @@ class AddEventForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        let startDate=this.state.startDate.getDate() + "-"+ parseInt(this.state.startDate.getMonth()+1) +"-"+this.state.startDate.getFullYear();
-        let endDate=this.state.endDate.getDate() + "-"+ parseInt(this.state.endDate.getMonth()+1) +"-"+this.state.endDate.getFullYear();
+        let startDate=this.state.startDate.getFullYear() + "-"+ parseInt(this.state.startDate.getMonth()+1) +"-"+this.state.startDate.getDate();
+        let endDate=this.state.endDate.getFullYear() + "-"+ parseInt(this.state.endDate.getMonth()+1) +"-"+this.state.endDate.getDate();
         const obj = {name: this.state.eventName, type: this.state.eventType, startDate: startDate, endDate: endDate}
         const json = JSON.stringify(obj);
         console.log(json);
 
-        // fetch('http://localhost:5000/events', {
-        // method: 'POST',
-        // mode: 'cors',
-        // headers: {
-        //     'Content-Type': 'application/json',
-        //     'Access-Control-Allow-Origin': '*',
-        //     'Accept': '*/*'
-        // },
-        // body: json,
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        // console.log('Success:', data);
-        // })
-        // .catch((error) => {
-        // console.error(error);
-        // });
+        fetch('http://localhost:5000/events', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Accept': '*/*'
+        },
+        body: json,
+        })
+        .then(response => response.json())
+        .then(data => {
+        console.log('Success:', data);
+        })
+        .catch((error) => {
+        console.error(error);
+        });
     }
 
 
@@ -87,7 +87,7 @@ class AddEventForm extends Component {
                         margin="normal"
                     />
                     <br />
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} className="datepicker">
                         <MobileDatePicker
                             label="Start Date"
                             inputFormat="MM/dd/yyyy"
@@ -96,13 +96,14 @@ class AddEventForm extends Component {
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <LocalizationProvider dateAdapter={AdapterDateFns} >
                         <MobileDatePicker
                             label="End Date"
                             inputFormat="MM/dd/yyyy"
                             value={this.state.endDate}
                             onChange={this.handleEndDateChange}
                             renderInput={(params) => <TextField {...params} />}
+                            className="datepicker"
                         />
                     </LocalizationProvider>
                     <br />
