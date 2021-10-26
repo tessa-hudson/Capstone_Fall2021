@@ -42,7 +42,7 @@ class AddEventForm extends Component {
         const json = JSON.stringify(obj);
         console.log(json);
 
-        fetch('https://hbdatracking-backend.azurewebsites.net/events', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/events', {
         method: 'POST',
         mode: 'cors',
         headers: {
