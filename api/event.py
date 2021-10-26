@@ -57,27 +57,33 @@ class EventResource(Resource):
                 return err, 422
         else: abort(404, message="No event with id: {}".format(event_id))
 
+    def post(self, event_id):
+        event = conn.get_event_by_id(event_id)
+        if event:
+            event = event[0]
+            data = request.get_json()
+            for key in data:
+                event[key] = data[key]
+            result = event_schema.dump(event)
+            return result
+        else: abort(404, message="No event with id: {}".format(event_id))
+
 # Shows a list of all events and lets you POST to add new events
 class EventListResource(Resource):
 
     def get(self):
         data = conn.get_events()
         result = events_schema.dump(data.values())
-        print(result)
-        print ("END RESULT")
         return {"events": result}
 
     def post(self):
-        print(request)
         data = request.get_json()
         if not data:
             return {"message": "No input data provided"}, 400
         try:
             new_event = event_schema.load(data)
-            print(data)
             new_event.event_id = uuid.uuid4()
             conn.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
         except ValidationError as err:
-            print(data)
             return err.messages, 422
         return event_schema.dump(new_event), 201
