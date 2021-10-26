@@ -16,7 +16,7 @@ class Scoreboard extends Component {
         
         event.preventDefault() //This prevents the page from refreshing on submit
         
-        fetch('https://hbdatracking-backend.azurewebsites.net/groups', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/groups', {
         method: 'GET',
         mode: 'cors',
         headers: {

@@ -12,7 +12,7 @@ class GetCampers extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('https://hbdatracking-backend.azurewebsites.net/attendees', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/attendees', {
         method: 'GET',
         mode: 'cors',
         headers: {

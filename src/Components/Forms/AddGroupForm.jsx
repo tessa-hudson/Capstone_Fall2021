@@ -21,7 +21,7 @@ class AddGroupForm extends Component {
         const json = JSON.stringify(obj);
         console.log(json);
 
-        fetch('https://hbdatracking-backend.azurewebsites.net/groups', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/groups', {
         method: 'POST',
         mode: 'cors',
         headers: {
