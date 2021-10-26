@@ -112,6 +112,39 @@ Content-Type: application/vnd.api+json
 }
 ```
 
+## POST /events/`event_id`
+
+**Description:** Request to update the event with the given `event_id`. When successful, the server will respond with a status of 200 and the event_id event_name, start_date, end_date, and event_type with the changes made. If no event exists with the given `event_id`, the server will respond with a status of 404 and a message indicating that no event exists with that id. 
+
+**Parameters:** `event_id`
+
+**Allowed fields** `event_name`, `event_type`, `start_date`, `end_date`
+
+**Authentication:**
+
+**Request Example:**
+```
+POST /events/F811FB42-C609-4A13-BDB2-AC6D7499DE71
+Content-Type: application/json
+Accept: application/vnd.api+json
+{
+    "event_name": "Updated"
+}
+```
+
+**Response Example:**
+```
+HTTP/1.1 200 OK
+Content-Type: application/vnd.api+json
+{
+    "event_id": "F811FB42-C609-4A13-BDB2-AC6D7499DE71",
+    "end_date": "2022-06-30",
+    "event_name": "Updated",
+    "event_type": "Camp Clot Not 2022",
+    "start_date": "2022-07-11"
+}
+```
+
 ### DELETE /events/`event_id`
 
 **Description:** Request to delete the event with the given `event_id`. When successful, the server will respond with a status of 200. If no event exists with the given `event_id`, the server will respond with a status of 404 and a message indicating that no event exists with that id. 
