@@ -5,7 +5,7 @@ import '../Styles/GetCampers.css'
 class GetCampers extends Component {
     constructor(props) {
         super(props)
-        this.state = {Campers: ''}
+        this.state = {Campers: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
