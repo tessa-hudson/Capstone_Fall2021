@@ -54,7 +54,7 @@ class ServerConn:
         return df.to_dict(orient = 'index')
 
     def get_attendees_by_group_id(self, group_id):
-        qt = "SELECT attendee.attendee_id FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
+        qt = "SELECT attendee.attendee_id, firstname, lastname FROM attendee FULL JOIN attendee_group_link ON attendee.attendee_id = attendee_group_link.attendee_id WHERE group_id = ?"
         df = pd.read_sql(qt, self.conn, params={str(group_id)})
         return df.to_dict(orient = 'index')
 
