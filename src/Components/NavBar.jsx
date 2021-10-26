@@ -10,6 +10,7 @@ class NavBar extends Component {
                     <NavLink exact activeClassName="active-link" to="/home">Home</NavLink>
                     <NavLink exact activeClassName="active-link" to="/groups">Groups</NavLink>
                     <NavLink exact activeClassName="active-link" to="/campers">Campers</NavLink>
+                    <NavLink exact activeClassName="active-link" to="/events">Events</NavLink>
                     <AuthNav />
                 </nav>
             </div>

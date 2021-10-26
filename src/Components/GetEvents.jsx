@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 import { Button } from '@mui/material'
 import '../Styles/GetCampers.css'
 
-class GetCampers extends Component {
+class GetEvents extends Component {
     constructor(props) {
         super(props)
-        this.state = {Campers: []}
+        this.state = {events: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('https://hbdatracking-backend.azurewebsites.net/attendees', {
+        fetch('https://hbdatracking-backend.azurewebsites.net/events', {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -23,8 +23,8 @@ class GetCampers extends Component {
         })
         .then(response => response.json())
         .then(data => {
-        this.setState({campers: data.attendees});
-        console.log('Success:', data.attendees);
+        this.setState({events: data.events});
+        console.log('Success:', data.events);
         })
         .catch((error) => {
         console.error(error);
@@ -34,16 +34,16 @@ class GetCampers extends Component {
     render() {
         return (
             <div className="GetCampers">
-                <h3>Use this button to get the campers!</h3>
+                <h3>Use this button to get the events!</h3>
                 <form onSubmit={this.handleSubmit}>
                     <Button type="submit" value="Submit" variant="contained">
-                        Get Campers!
+                        Get Events!
                     </Button>
                 </form>
                 {
-                  this.state.campers &&
-                    this.state.campers.map((camper) => 
-                        <h4 key={camper.id}>{camper.firstname} {camper.last_initial}</h4>
+                  this.state.events &&
+                    this.state.events.map((event) => 
+                        <h4 key={event.id}>{event.event_name}</h4>
                     )
                 }
             </div> 
@@ -51,4 +51,4 @@ class GetCampers extends Component {
     }
 }
 
-export default GetCampers
+export default GetEvents
