@@ -5,7 +5,7 @@
   - Alternatively, you can run the commands in the script individually:
   
   ```
-  python -m venv venv
+  python3 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
   flask run
