@@ -6,7 +6,7 @@ import '../Styles/Scoreboard.css'
 class Scoreboard extends Component {
     constructor(props) {
         super(props)
-        this.state = {groups: '', counters: []}
+        this.state = {groups: [], counters: []}
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.valueChanger = this.valueChanger.bind(this);
@@ -68,7 +68,7 @@ class Scoreboard extends Component {
                     {
                     this.state.groups &&
                         this.state.groups.map((group) => 
-                            <Counter key={group.id} name={group.name} id={group.id} decrement={this.decrement} increment={this.increment} count={0}/>
+                            <Counter key={group.id} name={group.group_name} id={group.id} decrement={this.decrement} increment={this.increment} count={0}/>
                         )
                     }
                     </tbody>

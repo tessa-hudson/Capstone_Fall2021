@@ -38,7 +38,7 @@ class AddEventForm extends Component {
         event.preventDefault() //This prevents the page from refreshing on submit
         let startDate=this.state.startDate.getFullYear() + "-"+ parseInt(this.state.startDate.getMonth()+1) +"-"+this.state.startDate.getDate();
         let endDate=this.state.endDate.getFullYear() + "-"+ parseInt(this.state.endDate.getMonth()+1) +"-"+this.state.endDate.getDate();
-        const obj = {name: this.state.eventName, type: this.state.eventType, startDate: startDate, endDate: endDate}
+        const obj = {event_name: this.state.eventName, event_type: this.state.eventType, start_date: startDate, end_date: endDate}
         const json = JSON.stringify(obj);
         console.log(json);
 
