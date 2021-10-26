@@ -5,6 +5,7 @@ from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
 from api.connection import conn
+from api.attendee import AttendeeSchema
 
 # Group class
 class Group():
@@ -24,7 +25,7 @@ class GroupSchema(Schema):
     event_id = fields.UUID(required=True) # event that the group is participating in
     group_name = fields.Str(required=True) # must be included in POST request
     total_points = fields.Int() # defaults to 0 when group is made
-    attendees = fields.List(fields.UUID()) # list of attendees (IDs) in group, defaults to empty list
+    attendees = fields.Nested(AttendeeSchema, many=True) # list of attendees (IDs) in group, defaults to empty list
 
     # Once POST request has been validated deserialized, make a new Group with data
     @post_load
@@ -69,10 +70,9 @@ class GroupResource(Resource):
             data = request.get_json()
             for key in data:
                 if key == "attendees":
-                    for attendee in data[key]:
-                        print(group["attendees"])
-                        if {"attendee_id": attendee} not in group["attendees"]:
-                            conn.add_attendee_to_group(uuid.uuid4(), attendee, group_id)
+                    for attendee_id in data[key]:
+                        if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
+                            conn.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
                 else:
                     group[key] = data[key]
             group["attendees"] = conn.get_attendees_by_group_id(group_id).values()
@@ -88,7 +88,6 @@ class GroupListResource(Resource):
     def get(self):
         data = conn.get_groups()
         result = groups_schema.dump(data.values())
-        print ("END RESULT")
         return {"groups": result}
 
     def post(self):
