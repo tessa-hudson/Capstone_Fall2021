@@ -100,6 +100,37 @@ Content-Type: application/vnd.api+json
 }
 ```
 
+## POST /attendees/`attendee_id`
+
+**Description:** Request to update the attendee with the given `attendee_id`. When successful, the server will respond with a status of 200 and the  attendee_id, firstname, and lastname with the changes made. If no attendee exists with the given `attendee_id`, the server will respond with a status of 404 and a message indicating that no attendee exists with that id. 
+
+**Parameters:** `attendee_id`
+
+**Allowed fields** `firstname`, `lastname`
+
+**Authentication:**
+
+**Request Example:**
+```
+POST /attendee/8C8905B1-52DE-44F6-93AD-046F39C76CF7
+Content-Type: application/json
+Accept: application/vnd.api+json
+{
+    "firstname": "Updated"
+}
+```
+
+**Response Example:**
+```
+HTTP/1.1 200 OK
+Content-Type: application/vnd.api+json
+{ 
+    "attendee_id": "8C8905B1-52DE-44F6-93AD-046F39C76CF7",
+    "lastname": "B",
+    "firstname": "Updated"
+}
+```
+
 ### DELETE /attendees/`attendee_id`
 
 **Description:** Request to delete the attendee with the given `attendee_id`. When successful, the server will respond with a status of 200. If no attendee exists with the given `attendee_id`, the server will respond with a status of 404 and a message indicating that no attendee exists with that id. 
