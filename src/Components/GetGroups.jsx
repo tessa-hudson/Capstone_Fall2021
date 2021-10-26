@@ -12,7 +12,7 @@ class GetGroups extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('http://localhost:5000/groups', {
+        fetch('https://hbdatracking-backend.azurewebsites.net/groups', {
         method: 'GET',
         mode: 'cors',
         headers: {

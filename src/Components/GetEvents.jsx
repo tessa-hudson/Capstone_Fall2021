@@ -12,7 +12,7 @@ class GetEvents extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('http://localhost:5000/events', {
+        fetch('https://hbdatracking-backend.azurewebsites.net/events', {
         method: 'GET',
         mode: 'cors',
         headers: {
