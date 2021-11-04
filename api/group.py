@@ -4,7 +4,7 @@ import pyodbc
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
-from api.connection import conn
+from api.Conns.GroupConn import gc
 from api.attendee import AttendeeSchema
 
 # Group class
@@ -45,37 +45,37 @@ groups_schema = GroupSchema(many=True)
 class GroupResource(Resource):
 
     def get(self, group_id):
-        group = conn.get_group_by_id(group_id)
+        group = gc.get_group_by_id(group_id)
         if group:
-            group[0]["attendees"] = conn.get_attendees_by_group_id(group_id).values()
+            group[0]["attendees"] = gc.get_attendees_by_group_id(group_id).values()
             result = group_schema.dump(group[0])
             return result
         else: abort(404, message="No group with id: {}".format(group_id))
     
     def delete(self, group_id):
-        group = conn.get_group_by_id(group_id)
+        group = gc.get_group_by_id(group_id)
         if group:
             try:
-                conn.delete_group(group_id)
+                gc.delete_group(group_id)
                 return {"message": "Group deleted"}, 204
             except pyodbc.Error as err:
                 return err, 422
         else: abort(404, message="No group with id: {}".format(group_id))
 
     def post(self, group_id):
-        group = conn.get_group_by_id(group_id)
+        group = gc.get_group_by_id(group_id)
         if group:
             group = group[0]
-            group["attendees"] = conn.get_attendees_by_group_id(group_id).values()
+            group["attendees"] = gc.get_attendees_by_group_id(group_id).values()
             data = request.get_json()
             for key in data:
                 if key == "attendees":
                     for attendee_id in data[key]:
                         if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
-                            conn.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
+                            gc.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
                 else:
                     group[key] = data[key]
-            group["attendees"] = conn.get_attendees_by_group_id(group_id).values()
+            group["attendees"] = gc.get_attendees_by_group_id(group_id).values()
             result = group_schema.dump(group)
             return result
         else: abort(404, message="No group with id: {}".format(group_id))
@@ -86,7 +86,7 @@ class GroupResource(Resource):
 class GroupListResource(Resource):
 
     def get(self):
-        data = conn.get_groups()
+        data = gc.get_groups()
         result = groups_schema.dump(data.values())
         return {"groups": result}
 
@@ -97,7 +97,7 @@ class GroupListResource(Resource):
         try:
             new_group = group_schema.load(data)
             new_group.group_id = uuid.uuid4()
-            conn.add_group(new_group.group_id, new_group.event_id, new_group.group_name, new_group.total_points)
+            gc.add_group(new_group.group_id, new_group.event_id, new_group.group_name, new_group.total_points)
         except ValidationError as err:
             return err.messages, 422
         return group_schema.dump(new_group), 201

@@ -3,7 +3,7 @@ import pyodbc
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError
 from flask_restful import abort, Resource, Api
-from api.connection import conn
+from api.Conns.EventConn import ec
 
 # Event class
 class Event():
@@ -41,24 +41,24 @@ events_schema = EventSchema(many=True)
 class EventResource(Resource):
 
     def get(self, event_id):
-        event = conn.get_event_by_id(event_id)
+        event = ec.get_event_by_id(event_id)
         if event:
             result = event_schema.dump(event[0])
             return result
         else: abort(404, message="No event with id: {}".format(event_id))
     
     def delete(self, event_id):
-        event = conn.get_event_by_id(event_id)
+        event = ec.get_event_by_id(event_id)
         if event:
             try:
-                conn.delete_event(event_id)
+                ec.delete_event(event_id)
                 return {"message": "Event deleted"}, 204
             except pyodbc.Error as err:
                 return err, 422
         else: abort(404, message="No event with id: {}".format(event_id))
 
     def post(self, event_id):
-        event = conn.get_event_by_id(event_id)
+        event = ec.get_event_by_id(event_id)
         if event:
             event = event[0]
             data = request.get_json()
@@ -72,7 +72,7 @@ class EventResource(Resource):
 class EventListResource(Resource):
 
     def get(self):
-        data = conn.get_events()
+        data = ec.get_events()
         result = events_schema.dump(data.values())
         return {"events": result}
 
@@ -83,7 +83,7 @@ class EventListResource(Resource):
         try:
             new_event = event_schema.load(data)
             new_event.event_id = uuid.uuid4()
-            conn.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
+            ec.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
         except ValidationError as err:
             return err.messages, 422
         return event_schema.dump(new_event), 201
