@@ -5,14 +5,14 @@ import '../Styles/GetCampers.css'
 class GetCampers extends Component {
     constructor(props) {
         super(props)
-        this.state = {Campers: ''}
+        this.state = {Campers: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('http://localhost:5000/attendees', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/attendees', {
         method: 'GET',
         mode: 'cors',
         headers: {

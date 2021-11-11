@@ -5,14 +5,14 @@ import '../Styles/GetCampers.css'
 class GetEvents extends Component {
     constructor(props) {
         super(props)
-        this.state = {Events: ''}
+        this.state = {events: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('http://localhost:5000/events', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/events', {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -23,7 +23,7 @@ class GetEvents extends Component {
         })
         .then(response => response.json())
         .then(data => {
-        this.setState({campers: data.events});
+        this.setState({events: data.events});
         console.log('Success:', data.events);
         })
         .catch((error) => {

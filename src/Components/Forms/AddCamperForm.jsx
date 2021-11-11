@@ -27,7 +27,7 @@ class AddCamperForm extends Component {
         const json = JSON.stringify(obj);
         console.log(json);
 
-        fetch('http://localhost:5000/attendees', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/attendees', {
         method: 'POST',
         mode: 'cors',
         headers: {

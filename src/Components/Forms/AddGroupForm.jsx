@@ -17,11 +17,11 @@ class AddGroupForm extends Component {
 
     handleSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {name: this.state.groupName}
+        const obj = {group_name: this.state.groupName, event_id: "F811FB42-C609-4A13-BDB2-AC6D7499DE71"}
         const json = JSON.stringify(obj);
         console.log(json);
 
-        fetch('http://localhost:5000/groups', {
+        fetch('https://hbda-tracking-backend.azurewebsites.net/groups', {
         method: 'POST',
         mode: 'cors',
         headers: {
