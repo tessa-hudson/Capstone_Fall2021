@@ -30,6 +30,7 @@ class GetGroups extends Component {
         this.handleChange = this.handleChange.bind(this)
         this.getCampers = this.getCampers.bind(this)
         this.getoptions = this.getOptions.bind(this)
+        this.deleteGroup = this.deleteGroup.bind(this)
     }
 
     handleSubmit(event) {
@@ -51,6 +52,33 @@ class GetGroups extends Component {
         .catch((error) => {
         console.error(error);
         });
+    }
+
+    deleteGroup(group) {
+        if (window.confirm(`Are you sure you want to delete ${group.group_name}`)) {
+            const obj = {group_id: group.group_id}
+            const json = JSON.stringify(obj)
+            fetch('http://localhost:5000/groups', {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': '*/*'
+                },
+                body: json,
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success:', data);
+                })
+                .catch((error) => {
+                console.error(error);
+                });
+            window.location.reload()
+        } else {
+            console.log("Delete prevented")
+        }
     }
 
     handleChange = (selected) => {
@@ -112,7 +140,10 @@ class GetGroups extends Component {
                 {
                   this.state.groups &&
                     this.state.groups.map((group) => 
-                        <h4 key={group.group_id}>{group.group_name}</h4>
+                        <Grid key={group.group_id}>
+                            <h4>{group.group_name}</h4>
+                            <Button onClick={() => {this.deleteGroup(group)}}>Delete</Button>
+                        </Grid>
                     )
                 }
             </div> 

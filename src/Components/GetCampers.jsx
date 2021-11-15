@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
 import '../Styles/GetCampers.css'
 
 class GetCampers extends Component {
@@ -8,6 +8,7 @@ class GetCampers extends Component {
         this.state = {Campers: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.deleteCamper = this.deleteCamper.bind(this)
     }
 
     handleSubmit(event) {
@@ -31,6 +32,33 @@ class GetCampers extends Component {
         });
     }
 
+    deleteCamper(camper) {
+        if (window.confirm(`Are you sure you want to delete ${camper.firstname} ${camper.lastname}`)) {
+            const obj = {camper_id: camper.camper_id}
+            const json = JSON.stringify(obj)
+            fetch('http://localhost:5000/campers', {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': '*/*'
+                },
+                body: json,
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success:', data);
+                })
+                .catch((error) => {
+                console.error(error);
+                });
+            window.location.reload()
+        } else {
+            console.log("Delete prevented")
+        }
+    }
+
     render() {
         return (
             <div className="GetCampers">
@@ -43,7 +71,11 @@ class GetCampers extends Component {
                 {
                   this.state.campers &&
                     this.state.campers.map((camper) => 
-                        <h4 key={camper.id}>{camper.firstname} {camper.last_initial}</h4>
+                        <Grid>
+                            <h4 key={camper.id}>{camper.firstname} {camper.lastname}</h4>
+                            <Button onClick={() => {this.deleteCamper(camper)}}>Delete</Button>
+                        </Grid>
+                        
                     )
                 }
             </div> 
