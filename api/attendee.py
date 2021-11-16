@@ -3,7 +3,7 @@ import pyodbc
 from flask import request
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 from flask_restful import abort, Resource, Api
-from api.connection import conn
+from api.Conns.AttendeeConn import ac
 
 # Attendee class
 class Attendee():
@@ -37,24 +37,24 @@ attendees_schema = AttendeeSchema(many=True)
 class AttendeeResource(Resource):
 
     def get(self, attendee_id):
-        attendee = conn.get_attendee_by_id(attendee_id)
+        attendee = ac.get_attendee_by_id(attendee_id)
         if attendee:
             result = attendee_schema.dump(attendee[0])
             return result
         else: abort(404, message="No attendee with id: {}".format(attendee_id))
     
     def delete(self, attendee_id):
-        attendee = conn.get_attendee_by_id(attendee_id)
+        attendee = ac.get_attendee_by_id(attendee_id)
         if attendee:
             try:
-                conn.delete_attendee(attendee_id)
+                ac.delete_attendee(attendee_id)
                 return {"message": "Attendee deleted"}, 204
             except pyodbc.Error as err:
                 return err, 422
         else: abort(404, message="No attendee with id: {}".format(attendee_id))
 
     def post(self, attendee_id):
-        attendee = conn.get_attendee_by_id(attendee_id)
+        attendee = ac.get_attendee_by_id(attendee_id)
         if attendee:
             attendee = attendee[0]
             data = request.get_json()
@@ -68,7 +68,7 @@ class AttendeeResource(Resource):
 class AttendeeListResource(Resource):
 
     def get(self):
-        data = conn.get_attendees()
+        data = ac.get_attendees()
         result = attendees_schema.dump(data.values())
         return {"attendees": result}
 
@@ -79,7 +79,7 @@ class AttendeeListResource(Resource):
         try:
             new_attendee = attendee_schema.load(data)
             new_attendee.attendee_id = uuid.uuid4()
-            conn.add_attendee(new_attendee.attendee_id, new_attendee.firstname, new_attendee.lastname)
+            ac.add_attendee(new_attendee.attendee_id, new_attendee.firstname, new_attendee.lastname)
         except ValidationError as err:
             return err.messages, 422
         return attendee_schema.dump(new_attendee), 201
