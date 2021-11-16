@@ -64,7 +64,8 @@ class EventResource(Resource):
             data = request.get_json()
             for key in data:
                 event[key] = data[key]
-            result = event_schema.dump(event)
+            ec.update_event(event["event_id"], event["event_name"], event["start_date"], event["end_date"], event["event_type"])
+            result = event_schema.dump(ec.get_event_by_id(event_id)[0])
             return result
         else: abort(404, message="No event with id: {}".format(event_id))
 

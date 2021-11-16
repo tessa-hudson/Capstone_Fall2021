@@ -60,7 +60,8 @@ class AttendeeResource(Resource):
             data = request.get_json()
             for key in data:
                 attendee[key] = data[key]
-            result = attendee_schema.dump(attendee)
+            ac.update_attendee(attendee["attendee_id"], attendee["firstname"], attendee["lastname"])
+            result = attendee_schema.dump(ac.get_attendee_by_id(attendee_id)[0])
             return result
         else: abort(404, message="No attendee with id: {}".format(attendee_id))
 
