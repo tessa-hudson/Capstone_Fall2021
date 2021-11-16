@@ -186,6 +186,33 @@ class ServerConn:
             self.conn.commit()
         except Exception as err:
             print(err)
+
+    def delete_pointlog_by_attendee(self, temp_id):
+        qt = "DELETE FROM dbo.pointlog WHERE attendee_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+    
+    def delete_pointlog_by_group(self, temp_id):
+        qt = "DELETE FROM dbo.pointlog WHERE group_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    
+    def delete_pointlog_by_event(self, temp_id):
+        qt = "DELETE FROM dbo.pointlog WHERE event_id in (?)"
+        try:
+            self.cursor.execute(qt, temp_id)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+    
+
     #End of Cascading Deletion functions
 
 

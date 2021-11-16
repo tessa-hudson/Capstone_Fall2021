@@ -52,6 +52,7 @@ class AttendeeConn(ServerConn):
         qt = "DELETE FROM dbo.attendee WHERE attendee_id in (?)"
         try:
             self.delete_attendee_group_link_by_attendee(temp_id)
+            
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
