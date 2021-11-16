@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Grid } from '@mui/material'
+import { Link } from "react-router-dom"
 import '../Styles/GetCampers.css'
 
 class GetEvents extends Component {
@@ -74,6 +75,9 @@ class GetEvents extends Component {
                         <Grid>
                             <h4 key={event.id}>{event.event_name}</h4>
                             <Button onClick={() => {this.deleteEvent(event)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['event', event]}}>
+                                <Button>Update</Button>
+                            </Link>
                         </Grid>
                         
                     )

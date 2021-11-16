@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Button, Grid } from '@mui/material'
+import { Link } from "react-router-dom"
 import '../Styles/GetCampers.css'
 
 class GetCampers extends Component {
@@ -71,9 +72,12 @@ class GetCampers extends Component {
                 {
                   this.state.campers &&
                     this.state.campers.map((camper) => 
-                        <Grid>
-                            <h4 key={camper.id}>{camper.firstname} {camper.lastname}</h4>
+                        <Grid key={camper.attendee_id}>
+                            <h4>{camper.firstname} {camper.lastname}</h4>
                             <Button onClick={() => {this.deleteCamper(camper)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['camper', camper]}}>
+                                <Button>Update</Button>
+                            </Link>
                         </Grid>
                         
                     )

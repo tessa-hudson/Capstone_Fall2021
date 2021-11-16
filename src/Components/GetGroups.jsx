@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Grid, Popover, Typography } from '@mui/material'
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Link } from "react-router-dom"
 import { default as ReactSelect } from "react-select";
 import { components } from "react-select";
 import '../Styles/GetGroups.css'
@@ -133,7 +134,7 @@ class GetGroups extends Component {
             <div className="GetGroup">
                 <h3>Use this button to get the groups!</h3>
                 <form onSubmit={this.handleSubmit}>
-                    <Button type="submit" value="Submit" variant="contained" onClick={this.getCampers}>
+                    <Button type="submit" value="Submit" variant="contained">
                         Get Groups!
                     </Button>
                 </form>
@@ -143,6 +144,9 @@ class GetGroups extends Component {
                         <Grid key={group.group_id}>
                             <h4>{group.group_name}</h4>
                             <Button onClick={() => {this.deleteGroup(group)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['group', group]}}>
+                                <Button>Update</Button>
+                            </Link>
                         </Grid>
                     )
                 }
