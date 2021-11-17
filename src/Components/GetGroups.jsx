@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
-import { Button, Grid, Popover, Typography } from '@mui/material'
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Button, Grid } from '@mui/material'
+//import { Popover, Typograghy } from '@mui/material'
+//import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import { Link } from "react-router-dom"
-import { default as ReactSelect } from "react-select";
-import { components } from "react-select";
+//import { default as ReactSelect } from "react-select";
+//import { components } from "react-select";
 import '../Styles/GetGroups.css'
 
-const Option = (props) => {
-    return (
-      <div>
-        <components.Option {...props}>
-          <input
-            type="checkbox"
-            checked={props.isSelected}
-            onChange={() => null}
-          />{" "}
-          <label>{props.label}</label>
-        </components.Option>
-      </div>
-    );
-};
+// const Option = (props) => {
+//     return (
+//       <div>
+//         <components.Option {...props}>
+//           <input
+//             type="checkbox"
+//             checked={props.isSelected}
+//             onChange={() => null}
+//           />{" "}
+//           <label>{props.label}</label>
+//         </components.Option>
+//       </div>
+//     );
+// };
 
 class GetGroups extends Component {
     constructor(props) {

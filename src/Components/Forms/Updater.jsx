@@ -142,11 +142,17 @@ class Updater extends Component {
     render() {
         const { state } = this.props.location
 
-        if (state[0]==="group") this.state.groupId = state[1].group_id
+        if (state[0]==="group") {
+            this.setState({ groupId: state[1].group_id })
+        }
 
-        if (state[0]==="event") this.state.eventId = state[1].event_id
+        if (state[0]==="event") { 
+            this.setState({ eventId: state[1].event_id })
+        }
 
-        if (state[0]==="camper") this.state.camperId = state[1].attendee_id
+        if (state[0]==="camper") {
+            this.setState({ camperId: state[1].attendee_id })
+        }
 
         return (
             <div className="AddGroup">
