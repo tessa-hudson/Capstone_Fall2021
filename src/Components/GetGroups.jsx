@@ -57,9 +57,7 @@ class GetGroups extends Component {
 
     deleteGroup(group) {
         if (window.confirm(`Are you sure you want to delete ${group.group_name}`)) {
-            const obj = {group_id: group.group_id}
-            const json = JSON.stringify(obj)
-            fetch('http://localhost:5000/groups', {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${group.group_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -67,7 +65,6 @@ class GetGroups extends Component {
                     'Access-Control-Allow-Origin': '*',
                     'Accept': '*/*'
                 },
-                body: json,
                 })
                 .then(response => response.json())
                 .then(data => {

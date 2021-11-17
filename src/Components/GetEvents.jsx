@@ -35,9 +35,7 @@ class GetEvents extends Component {
 
     deleteEvent(event) {
         if (window.confirm(`Are you sure you want to delete ${event.event_name}`)) {
-            const obj = {event_id: event.event_id}
-            const json = JSON.stringify(obj)
-            fetch('http://localhost:5000/events', {
+            fetch(`http://localhost:5000/events/${event.event_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -45,7 +43,6 @@ class GetEvents extends Component {
                     'Access-Control-Allow-Origin': '*',
                     'Accept': '*/*'
                 },
-                body: json,
                 })
                 .then(response => response.json())
                 .then(data => {

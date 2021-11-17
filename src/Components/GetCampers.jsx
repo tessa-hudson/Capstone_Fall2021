@@ -35,9 +35,7 @@ class GetCampers extends Component {
 
     deleteCamper(camper) {
         if (window.confirm(`Are you sure you want to delete ${camper.firstname} ${camper.lastname}`)) {
-            const obj = {camper_id: camper.camper_id}
-            const json = JSON.stringify(obj)
-            fetch('http://localhost:5000/campers', {
+            fetch(`http://localhost:5000/campers/${camper.camper_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -45,7 +43,6 @@ class GetCampers extends Component {
                     'Access-Control-Allow-Origin': '*',
                     'Accept': '*/*'
                 },
-                body: json,
                 })
                 .then(response => response.json())
                 .then(data => {
