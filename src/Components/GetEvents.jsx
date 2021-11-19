@@ -35,7 +35,7 @@ class GetEvents extends Component {
 
     deleteEvent(event) {
         if (window.confirm(`Are you sure you want to delete ${event.event_name}`)) {
-            fetch(`http://localhost:5000/events/${event.event_id}`, {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${event.event_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -45,13 +45,13 @@ class GetEvents extends Component {
                 },
                 })
                 .then(response => response.json())
-                .then(data => {
-                console.log('Success:', data);
-                })
+                // .then(data => {
+                // console.log('Success:', data);
+                // })
                 .catch((error) => {
                 console.error(error);
                 });
-            window.location.reload()
+            setTimeout(function(){window.location.reload()}, 1000)
         } else {
             console.log("Delete prevented")
         }

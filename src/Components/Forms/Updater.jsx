@@ -19,6 +19,7 @@ class Updater extends Component {
             firstName: '',
             lastName: '',
             camperId: '',
+            element: this.props.location.state,
         }
 
         this.handleGroupChange = this.handleGroupChange.bind(this)
@@ -69,7 +70,7 @@ class Updater extends Component {
         const obj = {group_name: this.state.groupName}
         const json = JSON.stringify(obj);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${this.state.groupId}`, {
+        fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${this.state.element[1].group_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -86,6 +87,8 @@ class Updater extends Component {
         .catch((error) => {
         console.error(error);
         });
+
+        setTimeout(function(){window.location.href= "/groups"}, 1000)
     }
 
     handleEventSubmit(event) {
@@ -95,7 +98,7 @@ class Updater extends Component {
         const obj = {event_name: this.state.eventName, event_type: this.state.eventType, start_date: startDate, end_date: endDate}
         const json = JSON.stringify(obj);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${this.state.eventId}`, {
+        fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${this.state.element[1].event_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -112,15 +115,16 @@ class Updater extends Component {
         .catch((error) => {
         console.error(error);
         });
+
+        setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
     handleCamperSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {first_name: this.state.firstName, last_name: this.state.lastName}
-        const json = JSON.stringify(obj);
-        console.log(json);
+        const obj = {firstname: this.state.firstName, lastname: this.state.lastName}
+        const json = JSON.stringify(obj)
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${this.state.camperId}`, {
+        fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${this.state.element[1].attendee_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -137,22 +141,13 @@ class Updater extends Component {
         .catch((error) => {
         console.error(error);
         });
+
+        setTimeout(function(){window.location.href= "/campers"}, 1000)
+        
     }
 
     render() {
         const { state } = this.props.location
-
-        if (state[0]==="group") {
-            this.setState({ groupId: state[1].group_id })
-        }
-
-        if (state[0]==="event") { 
-            this.setState({ eventId: state[1].event_id })
-        }
-
-        if (state[0]==="camper") {
-            this.setState({ camperId: state[1].attendee_id })
-        }
 
         return (
             <div className="AddGroup">

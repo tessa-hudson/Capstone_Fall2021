@@ -35,7 +35,7 @@ class GetCampers extends Component {
 
     deleteCamper(camper) {
         if (window.confirm(`Are you sure you want to delete ${camper.firstname} ${camper.lastname}`)) {
-            fetch(`http://localhost:5000/campers/${camper.camper_id}`, {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${camper.attendee_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -51,7 +51,7 @@ class GetCampers extends Component {
                 .catch((error) => {
                 console.error(error);
                 });
-            window.location.reload()
+            setTimeout(function(){window.location.reload()}, 1000)
         } else {
             console.log("Delete prevented")
         }
