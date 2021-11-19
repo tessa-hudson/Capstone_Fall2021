@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
+import { Link } from "react-router-dom"
 import '../Styles/GetCampers.css'
 
 class GetCampers extends Component {
@@ -8,6 +9,7 @@ class GetCampers extends Component {
         this.state = {Campers: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.deleteCamper = this.deleteCamper.bind(this)
     }
 
     handleSubmit(event) {
@@ -31,6 +33,30 @@ class GetCampers extends Component {
         });
     }
 
+    deleteCamper(camper) {
+        if (window.confirm(`Are you sure you want to delete ${camper.firstname} ${camper.lastname}`)) {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${camper.attendee_id}`, {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': '*/*'
+                },
+                })
+                .then(response => response.json())
+                .then(data => {
+                console.log('Success:', data);
+                })
+                .catch((error) => {
+                console.error(error);
+                });
+            setTimeout(function(){window.location.reload()}, 1000)
+        } else {
+            console.log("Delete prevented")
+        }
+    }
+
     render() {
         return (
             <div className="GetCampers">
@@ -43,7 +69,14 @@ class GetCampers extends Component {
                 {
                   this.state.campers &&
                     this.state.campers.map((camper) => 
-                        <h4 key={camper.id}>{camper.firstname} {camper.last_initial}</h4>
+                        <Grid key={camper.attendee_id}>
+                            <h4>{camper.firstname} {camper.lastname}</h4>
+                            <Button onClick={() => {this.deleteCamper(camper)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['camper', camper]}}>
+                                <Button>Update</Button>
+                            </Link>
+                        </Grid>
+                        
                     )
                 }
             </div> 

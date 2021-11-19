@@ -10,6 +10,7 @@ import Profile from './Components/Profile'
 import LandingPage from './Components/LandingPage'
 import ProtectedRoute from './auth/ProtectedRoute'
 import NavBar from './Components/NavBar'
+import Updater from './Components/Forms/Updater'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <ProtectedRoute exact path="/campers" component={Campers} />
         <ProtectedRoute exact path="/events" component ={Events} />
         <ProtectedRoute exact path="/profile" component={Profile} />
+        <ProtectedRoute exact path="/update" component={Updater} />
       </Switch>
     </div>
   );
