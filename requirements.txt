@@ -6,3 +6,4 @@ pyodbc
 pandas
 marshmallow
 apscheduler
+python-dotenv
