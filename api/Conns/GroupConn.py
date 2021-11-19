@@ -66,15 +66,7 @@ class GroupConn(ServerConn):
             finally:
                 self.conn.commit()
 
-    def update_group_points(self, temp_id, temp_points):
-        qt = "UPDATE groups SET total_points = ? WHERE group_id = ?"
-        data = (temp_points, str(temp_id))
-        try:
-            self.cursor.execute(qt, data)
-        except Exception as err:
-            print(err)    
-        finally:
-            self.conn.commit()
+    
 
 
     #def update_group_without_points(self, temp_group_id, temp_event_id, temp_name):

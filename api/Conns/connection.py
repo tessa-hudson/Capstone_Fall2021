@@ -161,6 +161,17 @@ class ServerConn:
             self.conn.commit()
     #End of Attendee_Group_Link fn
 
+    #Easy update for pointlog
+    def update_group_points(self, temp_id, temp_points):
+        qt = "UPDATE groups SET total_points = ? WHERE group_id = ?"
+        data = (temp_points, str(temp_id))
+        try:
+            self.cursor.execute(qt, data)
+        except Exception as err:
+            print(err)    
+        finally:
+            self.conn.commit()
+
     #Cascading Deletion functions
     def delete_group_by_event(self, temp_id):
         qt = "DELETE FROM dbo.groups WHERE event_id in (?)"

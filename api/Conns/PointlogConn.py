@@ -25,9 +25,9 @@ class PointlogConn(ServerConn):
         df = pd.read_sql(qt, self.conn,params={str(group_id)})
         return df.to_dict(orient = 'index')
 
-    def add_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status):
-        qt = "INSERT INTO dbo.pointlog ([pointlog_id],[user_id],[event_id],[attendee_id],[group_id],[log_date], [point_type], [point_change], [comment], [point_status]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-        data = (temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status)
+    def add_pointlog(self, temp_pointlog_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status, temp_username):
+        qt = "INSERT INTO dbo.pointlog ([pointlog_id],[event_id],[attendee_id],[group_id],[log_date], [point_type], [point_change], [comment], [point_status], [user_name]) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        data = (temp_pointlog_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status, temp_username)
         try:
             self.cursor.execute(qt, data)
             self.conn.commit()
@@ -42,9 +42,9 @@ class PointlogConn(ServerConn):
         except Exception as err:
             print(err)
 
-    def update_pointlog(self, temp_pointlog_id, temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status):
-        qt = "UPDATE pointlog SET user_id = ?, event_id = ?, attendee_id = ?, group_id = ?, log_date = ?, point_type, point_change = ?, comment = ?, point_status = ?, WHERE pointlog_id = ?"
-        data = (temp_user_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change, temp_comment, temp_status, str(temp_pointlog_id))
+    def update_pointlog(self, temp_pointlog_id, temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change,temp_comment, temp_status, temp_username):
+        qt = "UPDATE pointlog SET event_id = ?, attendee_id = ?, group_id = ?, log_date = ?, point_type, point_change = ?, comment = ?, point_status = ?, user_name = ?, WHERE pointlog_id = ?"
+        data = (temp_event_id, temp_attendee_id, temp_group_id, temp_log_date, temp_point_type, temp_point_change, temp_comment, temp_status, temp_username, str(temp_pointlog_id))
         try:
             self.cursor.execute(qt, data)
         except Exception as err:
@@ -75,15 +75,18 @@ class PointlogConn(ServerConn):
             points = df1.loc[0].at["point_change"]
             points += df2.loc[0].at["total_points"]
             self.accept_pointlog_status(temp_pointlog_id)
-            qt3 = "UPDATE groups SET total_points = ? where group_id = ?"
-            data = (points, str(group))
-            try:
-                self.cursor.execute(qt3, data)
-            except Exception as err:
-                print(err)    
-            finally:
-                self.conn.commit()
+            self.update_group_points(group, int(points))
         else:
-            print()
+            qt1 = "SELECT point_change, attendee_id FROM pointlog WHERE pointlog_id = ?"
+            qt2 = "SELECT total_points FROM attendee_group_link WHERE attendee_id = ?"
+            df1 = pd.read_sql(qt1, self.conn, params={str(temp_pointlog_id)})
+            attendee = df1.loc[0].at["attendee_id"]
+            df2 = pd.read_sql(qt2, self.conn, params={str(attendee)})
+            points = df1.loc[0].at["point_change"]
+            points += df2.loc[0].at["total_points"]
+            self.accept_pointlog_status(temp_pointlog_id)
+            self.update_pointlog_AGLext(attendee, int(points))
 
     #End of Pointlog fn
+
+pc = PointlogConn()
