@@ -12,6 +12,7 @@ venv/
 # testing
 /coverage
 /startBackendDev.ps1
+/startBackendDev.sh
 /startReactDev.ps1
 /StartReactDev.sh
 
