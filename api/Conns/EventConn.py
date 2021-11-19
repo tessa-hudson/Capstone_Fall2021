@@ -34,6 +34,7 @@ class EventConn(ServerConn):
         qt = "DELETE FROM dbo.events WHERE event_id in (?)"
         try:
             self.delete_group_by_event(temp_id)
+            self.delete_pointlog_by_event(temp_id)
             self.cursor.execute(qt, temp_id)
             self.conn.commit()
         except Exception as err:
