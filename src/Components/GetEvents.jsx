@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
+import { Link } from "react-router-dom"
 import '../Styles/GetCampers.css'
 
 class GetEvents extends Component {
@@ -8,6 +9,7 @@ class GetEvents extends Component {
         this.state = {events: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.deleteEvent = this.deleteEvent.bind(this)
     }
 
     handleSubmit(event) {
@@ -31,6 +33,30 @@ class GetEvents extends Component {
         });
     }
 
+    deleteEvent(event) {
+        if (window.confirm(`Are you sure you want to delete ${event.event_name}`)) {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${event.event_id}`, {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': '*/*'
+                },
+                })
+                .then(response => response.json())
+                // .then(data => {
+                // console.log('Success:', data);
+                // })
+                .catch((error) => {
+                console.error(error);
+                });
+            setTimeout(function(){window.location.reload()}, 1000)
+        } else {
+            console.log("Delete prevented")
+        }
+    }
+
     render() {
         return (
             <div className="GetCampers">
@@ -43,7 +69,14 @@ class GetEvents extends Component {
                 {
                   this.state.events &&
                     this.state.events.map((event) => 
-                        <h4 key={event.id}>{event.event_name}</h4>
+                        <Grid>
+                            <h4 key={event.id}>{event.event_name}</h4>
+                            <Button onClick={() => {this.deleteEvent(event)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['event', event]}}>
+                                <Button>Update</Button>
+                            </Link>
+                        </Grid>
+                        
                     )
                 }
             </div> 

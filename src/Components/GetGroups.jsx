@@ -1,6 +1,26 @@
 import React, { Component } from 'react'
-import { Button } from '@mui/material'
+import { Button, Grid } from '@mui/material'
+//import { Popover, Typograghy } from '@mui/material'
+//import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import { Link } from "react-router-dom"
+//import { default as ReactSelect } from "react-select";
+//import { components } from "react-select";
 import '../Styles/GetGroups.css'
+
+// const Option = (props) => {
+//     return (
+//       <div>
+//         <components.Option {...props}>
+//           <input
+//             type="checkbox"
+//             checked={props.isSelected}
+//             onChange={() => null}
+//           />{" "}
+//           <label>{props.label}</label>
+//         </components.Option>
+//       </div>
+//     );
+// };
 
 class GetGroups extends Component {
     constructor(props) {
@@ -8,6 +28,11 @@ class GetGroups extends Component {
         this.state = {groups: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+        this.getCampers = this.getCampers.bind(this)
+        this.getoptions = this.getOptions.bind(this)
+        this.deleteGroup = this.deleteGroup.bind(this)
     }
 
     handleSubmit(event) {
@@ -31,6 +56,77 @@ class GetGroups extends Component {
         });
     }
 
+    deleteGroup(group) {
+        if (window.confirm(`Are you sure you want to delete ${group.group_name}`)) {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${group.group_id}`, {
+                method: 'DELETE',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': '*/*'
+                },
+                })
+                .then(response => response.json())
+                // .then(data => {
+                // console.log('Success:', data);
+                // })
+                .catch((error) => {
+                console.error(error);
+                });
+            setTimeout(function(){window.location.reload()}, 1000)
+        } else {
+            console.log("Delete prevented")
+        }
+    }
+
+    handleChange = (selected) => {
+        this.setState({
+          optionSelected: selected
+        });
+    };
+
+    getCampers() {
+        fetch('http://localhost:5000/attendees', {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': '*/*'
+            },
+            })
+            .then(response => response.json())
+            .then(data => {
+            this.setState({campers: data.attendees});
+            //console.log('Success:', data.attendees);
+            })
+            .catch((error) => {
+            console.error(error);
+            });
+    }
+
+    getOptions() {
+        //this.getCampers
+        let campers = this.state.campers
+        let options = []
+        for (var i=0; i<campers.length; i++) {
+            options.push({value: campers[i].firstname + ' ' + campers[i].last_initial, label: campers[i].firstname + ' ' + campers[i].last_initial, id: campers[i].id})
+        }
+        return options
+    }
+
+    handleGroupSubmit(event) {
+        event.preventDefault() //This prevents the page from refreshing on submit
+        //const obj = {name: this.state.eventName, type: this.state.eventType, startDate: startDate, endDate: endDate}
+        let ids = []
+        for (var i=0; i<this.state.optionSelected.length; i++) {
+            ids.push(this.state.optionSelected[i].id)
+        }
+        //const json = JSON.stringify(obj);
+        console.log( {attendees: ids} )
+    }
+
     render() {
         return (
             <div className="GetGroup">
@@ -43,7 +139,13 @@ class GetGroups extends Component {
                 {
                   this.state.groups &&
                     this.state.groups.map((group) => 
-                        <h4 key={group.group_id}>{group.group_name}</h4>
+                        <Grid key={group.group_id}>
+                            <h4>{group.group_name}</h4>
+                            <Button onClick={() => {this.deleteGroup(group)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['group', group]}}>
+                                <Button>Update</Button>
+                            </Link>
+                        </Grid>
                     )
                 }
             </div> 
