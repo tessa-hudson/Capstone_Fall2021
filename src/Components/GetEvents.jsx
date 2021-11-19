@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
-import '../Styles/GetCampers.css'
+import '../Styles/GetAttendees.css'
 
 class GetEvents extends Component {
     constructor(props) {
@@ -59,7 +59,7 @@ class GetEvents extends Component {
 
     render() {
         return (
-            <div className="GetCampers">
+            <div className="GetAttendees">
                 <h3>Use this button to get the events!</h3>
                 <form onSubmit={this.handleSubmit}>
                     <Button type="submit" value="Submit" variant="contained">
@@ -69,8 +69,8 @@ class GetEvents extends Component {
                 {
                   this.state.events &&
                     this.state.events.map((event) => 
-                        <Grid>
-                            <h4 key={event.id}>{event.event_name}</h4>
+                        <Grid key={event.event_id}>
+                            <h4>{event.event_name}</h4>
                             <Button onClick={() => {this.deleteEvent(event)}}>Delete</Button>
                             <Link to={{pathname:"/update", state: ['event', event]}}>
                                 <Button>Update</Button>

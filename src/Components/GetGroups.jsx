@@ -30,7 +30,7 @@ class GetGroups extends Component {
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
-        this.getCampers = this.getCampers.bind(this)
+        this.getAttendees = this.getAttendees.bind(this)
         this.getoptions = this.getOptions.bind(this)
         this.deleteGroup = this.deleteGroup.bind(this)
     }
@@ -86,7 +86,7 @@ class GetGroups extends Component {
         });
     };
 
-    getCampers() {
+    getAttendees() {
         fetch('http://localhost:5000/attendees', {
             method: 'GET',
             mode: 'cors',
@@ -98,7 +98,7 @@ class GetGroups extends Component {
             })
             .then(response => response.json())
             .then(data => {
-            this.setState({campers: data.attendees});
+            this.setState({attendees: data.attendees});
             //console.log('Success:', data.attendees);
             })
             .catch((error) => {
@@ -107,11 +107,11 @@ class GetGroups extends Component {
     }
 
     getOptions() {
-        //this.getCampers
-        let campers = this.state.campers
+        //this.getAttendees
+        let attendees = this.state.attendees
         let options = []
-        for (var i=0; i<campers.length; i++) {
-            options.push({value: campers[i].firstname + ' ' + campers[i].last_initial, label: campers[i].firstname + ' ' + campers[i].last_initial, id: campers[i].id})
+        for (var i=0; i<attendees.length; i++) {
+            options.push({value: attendees[i].firstname + ' ' + attendees[i].last_initial, label: attendees[i].firstname + ' ' + attendees[i].last_initial, id: attendees[i].id})
         }
         return options
     }
@@ -180,12 +180,12 @@ export default GetGroups
 // class GetGroups extends Component {
 //     constructor(props) {
 //         super(props)
-//         this.state = {groups: '', optionSelected: null, campers: []}
+//         this.state = {groups: '', optionSelected: null, attendees: []}
 
 //         this.handleSubmit = this.handleSubmit.bind(this)
 //         this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
 //         this.handleChange = this.handleChange.bind(this)
-//         this.getCampers = this.getCampers.bind(this)
+//         this.getAttendees = this.getAttendees.bind(this)
 //         this.getoptions = this.getOptions.bind(this)
 //     }
 
@@ -216,7 +216,7 @@ export default GetGroups
 //         });
 //     };
 
-//     getCampers() {
+//     getAttendees() {
 //         fetch('http://localhost:5000/attendees', {
 //             method: 'GET',
 //             mode: 'cors',
@@ -228,7 +228,7 @@ export default GetGroups
 //             })
 //             .then(response => response.json())
 //             .then(data => {
-//             this.setState({campers: data.attendees});
+//             this.setState({attendees: data.attendees});
 //             //console.log('Success:', data.attendees);
 //             })
 //             .catch((error) => {
@@ -237,11 +237,11 @@ export default GetGroups
 //     }
 
 //     getOptions() {
-//         //this.getCampers
-//         let campers = this.state.campers
+//         //this.getAttendees
+//         let attendees = this.state.attendees
 //         let options = []
-//         for (var i=0; i<campers.length; i++) {
-//             options.push({value: campers[i].firstname + ' ' + campers[i].last_initial, label: campers[i].firstname + ' ' + campers[i].last_initial, id: campers[i].id})
+//         for (var i=0; i<attendees.length; i++) {
+//             options.push({value: attendees[i].firstname + ' ' + attendees[i].last_initial, label: attendees[i].firstname + ' ' + attendees[i].last_initial, id: attendees[i].id})
 //         }
 //         return options
 //     }
@@ -262,7 +262,7 @@ export default GetGroups
 //             <div className="GetGroup">
 //                 <h3>Use this button to get the groups!</h3>
 //                 <form onSubmit={this.handleSubmit}>
-//                     <Button type="submit" value="Submit" variant="contained" onClick={this.getCampers}>
+//                     <Button type="submit" value="Submit" variant="contained" onClick={this.getAttendees}>
 //                         Get Groups!
 //                     </Button>
 //                 </form>
@@ -278,7 +278,7 @@ export default GetGroups
 //                                 {(popupState) => (
 //                                     <div>
 //                                     <Button variant="contained" {...bindTrigger(popupState)}>
-//                                         Add Campers
+//                                         Add Attendees
 //                                     </Button>
 //                                     <Popover
 //                                         {...bindPopover(popupState)}

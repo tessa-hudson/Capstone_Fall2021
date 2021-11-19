@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { Button, TextField } from '@mui/material'
-import '../../Styles/AddCamperForm.css'
+import '../../Styles/AddAttendeeForm.css'
 
-class AddCamperForm extends Component {
+class AddAttendeeForm extends Component {
     constructor(props) {
         super(props)
         this.state = {firstName: '', lastNameInitial: ''}
@@ -48,8 +48,8 @@ class AddCamperForm extends Component {
 
     render() {
         return (
-            <div className="AddCamper">
-                <h3>Use this form to add a camper!</h3>
+            <div className="AddAttendee">
+                <h3>Use this form to add an attendee!</h3>
                 <form onSubmit={this.handleSubmit}>
                     <TextField 
                         id="firstName" 
@@ -80,4 +80,4 @@ class AddCamperForm extends Component {
     }
 }
 
-export default AddCamperForm
+export default AddAttendeeForm

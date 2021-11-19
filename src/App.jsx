@@ -4,7 +4,7 @@ import './App.css'
 import './index.css'
 import HomePage from './Components/HomePage'
 import Groups from './Components/Groups'
-import Campers from './Components/Campers'
+import Attendees from './Components/Attendees'
 import Events from './Components/Events'
 import Profile from './Components/Profile'
 import LandingPage from './Components/LandingPage'
@@ -22,7 +22,7 @@ function App() {
         <Route exact path="/" component={LandingPage} />
         <ProtectedRoute exact path="/home" component={HomePage} />
         <ProtectedRoute exact path="/groups" component={Groups} />
-        <ProtectedRoute exact path="/campers" component={Campers} />
+        <ProtectedRoute exact path="/attendees" component={Attendees} />
         <ProtectedRoute exact path="/events" component ={Events} />
         <ProtectedRoute exact path="/profile" component={Profile} />
         <ProtectedRoute exact path="/update" component={Updater} />

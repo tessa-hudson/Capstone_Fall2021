@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
-import '../Styles/GetCampers.css'
+import '../Styles/GetAttendees.css'
 
-class GetCampers extends Component {
+class GetAttendees extends Component {
     constructor(props) {
         super(props)
-        this.state = {Campers: []}
+        this.state = {Attendees: []}
 
         this.handleSubmit = this.handleSubmit.bind(this)
-        this.deleteCamper = this.deleteCamper.bind(this)
+        this.deleteAttendee = this.deleteAttendee.bind(this)
     }
 
     handleSubmit(event) {
@@ -25,7 +25,7 @@ class GetCampers extends Component {
         })
         .then(response => response.json())
         .then(data => {
-        this.setState({campers: data.attendees});
+        this.setState({Attendees: data.attendees});
         console.log('Success:', data.attendees);
         })
         .catch((error) => {
@@ -33,9 +33,9 @@ class GetCampers extends Component {
         });
     }
 
-    deleteCamper(camper) {
-        if (window.confirm(`Are you sure you want to delete ${camper.firstname} ${camper.lastname}`)) {
-            fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${camper.attendee_id}`, {
+    deleteAttendee(attendee) {
+        if (window.confirm(`Are you sure you want to delete ${attendee.firstname} ${attendee.lastname}`)) {
+            fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${attendee.attendee_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
@@ -59,20 +59,20 @@ class GetCampers extends Component {
 
     render() {
         return (
-            <div className="GetCampers">
-                <h3>Use this button to get the campers!</h3>
+            <div className="GetAttendees">
+                <h3>Use this button to get the attendees!</h3>
                 <form onSubmit={this.handleSubmit}>
                     <Button type="submit" value="Submit" variant="contained">
-                        Get Campers!
+                        Get Attendees!
                     </Button>
                 </form>
                 {
-                  this.state.campers &&
-                    this.state.campers.map((camper) => 
-                        <Grid key={camper.attendee_id}>
-                            <h4>{camper.firstname} {camper.lastname}</h4>
-                            <Button onClick={() => {this.deleteCamper(camper)}}>Delete</Button>
-                            <Link to={{pathname:"/update", state: ['camper', camper]}}>
+                  this.state.Attendees &&
+                    this.state.Attendees.map((attendee) => 
+                        <Grid key={attendee.attendee_id}>
+                            <h4>{attendee.firstname} {attendee.lastname}</h4>
+                            <Button onClick={() => {this.deleteAttendee(attendee)}}>Delete</Button>
+                            <Link to={{pathname:"/update", state: ['attendee', attendee]}}>
                                 <Button>Update</Button>
                             </Link>
                         </Grid>
@@ -84,4 +84,4 @@ class GetCampers extends Component {
     }
 }
 
-export default GetCampers
+export default GetAttendees

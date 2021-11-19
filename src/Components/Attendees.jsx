@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import { Box, Grid } from '@mui/material'
-import AddCamperForm from './Forms/AddCamperForm'
-import GetCampers from './GetCampers'
+import AddAttendeeForm from './Forms/AddAttendeeForm'
+import GetAttendees from './GetAttendees'
 
-class Campers extends Component {
+class Attendees extends Component {
 
     render() {
         return (
             <Box sx={{flexgrow: 1}}>
                 <Grid container spacing={6}>
                     <Grid item xs={12} md={6}>
-                        <AddCamperForm />
+                        <AddAttendeeForm />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <GetCampers />
+                        <GetAttendees />
                     </Grid>
                 </Grid>
             </Box>   
@@ -21,4 +21,4 @@ class Campers extends Component {
     }
 }
 
-export default Campers
+export default Attendees

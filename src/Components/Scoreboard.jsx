@@ -68,7 +68,7 @@ class Scoreboard extends Component {
                     {
                     this.state.groups &&
                         this.state.groups.map((group) => 
-                            <Counter key={group.id} name={group.group_name} id={group.id} decrement={this.decrement} increment={this.increment} count={0}/>
+                            <Counter name={group.group_name} id={group.group_id} decrement={this.decrement} increment={this.increment} count={0}/>
                         )
                     }
                     </tbody>
