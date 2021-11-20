@@ -10,11 +10,13 @@ class ServerConn:
 
     def __init__(self):
         try:
+            print(os.environ.get('DB_CONNECTION'))
             self.conn = pyodbc.connect(os.environ.get('DB_CONNECTION'))
             self.cursor = self.conn.cursor()
-        except pyodbc.InterfaceError as err:
+        except pyodbc.OperationalError as err:
             print(err)
-            print(os.environ.get('DB_CONNECTION'))
+            return -1
+            
     
     def query(self, q, data = None):
         if data is None:
