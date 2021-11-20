@@ -33,6 +33,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     steps:
+    - name: Create env file
+        run: |
+          touch .env
+          echo REACT_APP_AUTH0_DOMAIN = dev-otvasfs9.us.auth0.com >> .env
+          echo REACT_APP_AUTH0_CLIENT_ID = O3hRtUNwGGqbcLBBesrbLEbZAKZChfht >> .env
+          echo REACT_APP_DOMAIN = https://hbdatracking.azurewebsites.net/home >> .env
+          cat .env
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ env.NODE_VERSION }}
       uses: actions/setup-node@v2
