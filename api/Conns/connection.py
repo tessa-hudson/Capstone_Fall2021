@@ -11,7 +11,6 @@ class ServerConn:
 
     def __init__(self):
         try:
-            print(pyodbc.drivers())
             self.conn = pyodbc.connect(os.environ.get('DB_CONNECTION'))
             self.cursor = self.conn.cursor()
         except pyodbc.OperationalError as err:
