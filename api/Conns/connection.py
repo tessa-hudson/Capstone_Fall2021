@@ -1,6 +1,7 @@
 from datetime import datetime
 import pyodbc
 import pandas as pd
+import os
 
 class ServerConn:
     server = 'tcp:hbda.database.windows.net'
@@ -10,18 +11,10 @@ class ServerConn:
 
     def __init__(self):
         try:
-            self.conn = pyodbc.connect('DRIVER={SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+ self.password)
+            self.conn = pyodbc.connect(os.environ.get('DB_CONNECTION'))
             self.cursor = self.conn.cursor()
-        except:
-            try:
-                self.conn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+self.server+';DATABASE='+self.database+';UID='+self.username+';PWD='+ self.password)
-                self.cursor = self.conn.cursor()
-            except:
-                try:
-                    self.conn = pyodbc.connect('Driver={SQL Server Native Client 11.0};Server=tcp:hbda.database.windows.net,1433;Database=hbda_tracking;Uid=trblair;Pwd=Linkedlist4788;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30')
-                    self.cursor = self.conn.cursor()
-                except pyodbc.OperationalError as err:
-                    print(err)
+        except pyodbc.OperationalError as err:
+            print(err)
     
     def query(self, q, data = None):
         if data is None:
