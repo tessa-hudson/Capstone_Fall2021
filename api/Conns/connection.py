@@ -9,14 +9,13 @@ load_dotenv()
 class ServerConn:
 
     def __init__(self):
-        print(os.environ["DB_CONNECTION"])
-        self.conn = pyodbc.connect(os.environ["DB_CONNECTION"])
-        self.cursor = self.conn.cursor()
-        # try:
-            
-        # except pyodbc.OperationalError as err:
-        #     print(err)
-        #     return -1
+        DRIVER = "{" + str(pyodbc.drivers()[0]) + "}"
+        
+        try:
+            self.conn = pyodbc.connect("DRIVER={};{}".format(DRIVER,os.environ["DB_CONNECTION"]))
+            self.cursor = self.conn.cursor()
+        except pyodbc.OperationalError as err:
+            print(err)
             
     
     def query(self, q, data = None):
