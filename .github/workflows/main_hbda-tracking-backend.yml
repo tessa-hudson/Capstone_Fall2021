@@ -33,6 +33,8 @@ jobs:
       
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v2
+        env:
+          DB_CONNECTION: ${{ secrets.PROD_CONNECTION_STRING }}
         with:
           name: python-app
           path: |
