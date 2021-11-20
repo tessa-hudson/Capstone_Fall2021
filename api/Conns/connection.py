@@ -14,6 +14,7 @@ class ServerConn:
             self.cursor = self.conn.cursor()
         except pyodbc.OperationalError as err:
             print(err)
+            print(os.environ.get('DB_CONNECTION'))
     
     def query(self, q, data = None):
         if data is None:
