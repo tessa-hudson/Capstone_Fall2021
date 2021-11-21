@@ -18,7 +18,7 @@ class Updater extends Component {
             endDate: new Date(),
             firstName: '',
             lastName: '',
-            camperId: '',
+            attendeeId: '',
             element: this.props.location.state,
         }
 
@@ -26,10 +26,10 @@ class Updater extends Component {
         this.handleEventChange = this.handleEventChange.bind(this)
         this.handleStartDateChange = this.handleStartDateChange.bind(this)
         this.handleEndDateChange = this.handleEndDateChange.bind(this)
-        this.handleCamperChange = this.handleCamperChange.bind(this)
+        this.handleAttendeeChange = this.handleAttendeeChange.bind(this)
         this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
         this.handleEventSubmit = this.handleEventSubmit.bind(this)
-        this.handleCamperSubmit = this.handleCamperSubmit.bind(this)
+        this.handleAttendeeSubmit = this.handleAttendeeSubmit.bind(this)
     }
     
 
@@ -55,7 +55,7 @@ class Updater extends Component {
         this.setState({endDate: event})
     }
 
-    handleCamperChange(event) {
+    handleAttendeeChange(event) {
         const target = event.target
         const value = target.value
         const name = target.name
@@ -119,7 +119,7 @@ class Updater extends Component {
         setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
-    handleCamperSubmit(event) {
+    handleAttendeeSubmit(event) {
         event.preventDefault() //This prevents the page from refreshing on submit
         const obj = {firstname: this.state.firstName, lastname: this.state.lastName}
         const json = JSON.stringify(obj)
@@ -142,7 +142,7 @@ class Updater extends Component {
         console.error(error);
         });
 
-        setTimeout(function(){window.location.href= "/campers"}, 1000)
+        setTimeout(function(){window.location.href= "/attendees"}, 1000)
         
     }
 
@@ -219,17 +219,17 @@ class Updater extends Component {
                         </form>
                     </div>
                 }
-                {state[0]==="camper" &&
+                {state[0]==="attendee" &&
                     <div>
-                        <h3>Please update the fields for the camper: {state[1].firstname} {state[1].lastname}!</h3>
-                        <form onSubmit={this.handleCamperSubmit}>
+                        <h3>Please update the fields for the attendee: {state[1].firstname} {state[1].lastname}!</h3>
+                        <form onSubmit={this.handleAttendeeSubmit}>
                             <TextField 
                                 id="firstName" 
                                 name="firstName"
                                 label="First Name" 
                                 variant="outlined" 
                                 value={this.state.firstName} 
-                                onChange={this.handleCamperChange} 
+                                onChange={this.handleAttendeeChange} 
                                 margin="normal"
                             />
                             <br />
@@ -239,7 +239,7 @@ class Updater extends Component {
                                 label="Last Initial" 
                                 variant="outlined" 
                                 value={this.state.lastName} 
-                                onChange={this.handleCamperChange} 
+                                onChange={this.handleAttendeeChange} 
                                 margin="normal"
                             />
                             <br />
