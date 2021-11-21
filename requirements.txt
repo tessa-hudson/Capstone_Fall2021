@@ -5,5 +5,4 @@ flask_cors
 pyodbc
 pandas
 marshmallow
-apscheduler
 python-dotenv

@@ -4,10 +4,6 @@ import pandas as pd
 import os
 
 class ServerConn:
-    server = 'tcp:hbda.database.windows.net'
-    database = 'hbda_tracking'
-    username = 'cethorne'
-    password = 'Thorne123!'
 
     def __init__(self):
         try:

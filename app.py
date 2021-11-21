@@ -5,15 +5,7 @@ from api.Conns.EventConn import ec
 from flask import Flask
 from flask_restful import Api
 from flask_cors import CORS
-from apscheduler.schedulers.background import BackgroundScheduler
 from flask import Flask
-
-def keep_alive():
-    ec.get_events()
-
-scheduler = BackgroundScheduler()
-scheduler.add_job(keep_alive, 'interval', minutes=30)
-scheduler.start()
 
 
 app = Flask(__name__)
