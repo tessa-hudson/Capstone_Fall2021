@@ -6,3 +6,5 @@ pyodbc
 pandas
 marshmallow
 python-dotenv
+python-jose
+six

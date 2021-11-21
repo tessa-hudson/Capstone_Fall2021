@@ -1,9 +1,11 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
 import '../Styles/GetAttendees.css'
 
 class GetAttendees extends Component {
+    
+
     constructor(props) {
         super(props)
         this.state = {Attendees: []}
@@ -20,7 +22,8 @@ class GetAttendees extends Component {
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
+            'Accept': '*/*',
+            //'Authentication': `Bearer ${this.props.accessToken}`
         },
         })
         .then(response => response.json())

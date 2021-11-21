@@ -1,24 +1,26 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Box, Grid } from '@mui/material'
 import AddAttendeeForm from './Forms/AddAttendeeForm'
 import GetAttendees from './GetAttendees'
+import {useAuth0} from "@auth0/auth0-react"
 
-class Attendees extends Component {
+const Attendees = () => {
+    // const {getAccessTokenSilently} = useAuth0()
+    // const accessToken = getAccessTokenSilently()
 
-    render() {
+    
         return (
             <Box sx={{flexgrow: 1}}>
                 <Grid container spacing={6}>
                     <Grid item xs={12} md={6}>
-                        <AddAttendeeForm />
+                        <AddAttendeeForm /*accessToken={accessToken}*//>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <GetAttendees />
+                        <GetAttendees /*accessToken={accessToken}*//>
                     </Grid>
                 </Grid>
             </Box>   
         )
-    }
 }
 
 export default Attendees
