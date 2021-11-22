@@ -1,11 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Box, Grid } from '@mui/material'
 import AddAttendeeForm from './Forms/AddAttendeeForm'
 import GetAttendees from './GetAttendees'
 
-class Attendees extends Component {
-
-    render() {
+const Attendees = () => {
+    
         return (
             <Box sx={{flexgrow: 1}}>
                 <Grid container spacing={6}>
@@ -18,7 +17,6 @@ class Attendees extends Component {
                 </Grid>
             </Box>   
         )
-    }
 }
 
 export default Attendees

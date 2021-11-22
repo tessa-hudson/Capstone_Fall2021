@@ -1,9 +1,12 @@
 import uuid
 import pyodbc
-from flask import request
-from marshmallow import Schema, fields, post_load, ValidationError
-from flask_restful import abort, Resource, Api
+from datetime import date
+from flask import request, Blueprint, jsonify
+from flask_cors import cross_origin
+from marshmallow import Schema, fields, post_load, ValidationError, validate
+
 from api.Conns.EventConn import ec
+from api.handlers import requires_auth, requires_scope, CustomError
 
 # Event class
 class Event():
@@ -37,54 +40,95 @@ event_schema = EventSchema()
 events_schema = EventSchema(many=True)
 
 
-# Shows a single event and lets you delete an event
-class EventResource(Resource):
+# BEGIN ROUTES
+eventbp = Blueprint('event', __name__)
+cors_config = {
+  "methods": ["OPTIONS", "GET", "POST","DELETE"],
+  "allow_headers": ["Authorization", "Content-Type"]
+}
 
-    def get(self, event_id):
+@eventbp.route("/events", defaults={"event_id":""},methods=["GET", "POST", "OPTIONS"])
+@eventbp.route("/events/<event_id>",methods=["GET", "POST", "OPTIONS","DELETE"])
+@cross_origin(cors_config)
+@requires_auth
+def route(event_id):
+    if(request.method == 'GET'):
+        requires_scope("read:events")
+        if event_id == "":
+            # Shows all events
+            data = ec.get_events()
+            result = events_schema.dump(data.values())
+            return {"events": result}
+
+        # Show event with given event_id
         event = ec.get_event_by_id(event_id)
         if event:
             result = event_schema.dump(event[0])
             return result
-        else: abort(404, message="No event with id: {}".format(event_id))
-    
-    def delete(self, event_id):
-        event = ec.get_event_by_id(event_id)
-        if event:
-            try:
-                ec.delete_event(event_id)
-                return {"message": "Event deleted"}, 204
-            except pyodbc.Error as err:
-                return err, 422
-        else: abort(404, message="No event with id: {}".format(event_id))
+        else: raise CustomError({
+            "code": "Not Found",
+            "description": "No eventwith id: {}".format(event_id)
+        }, 404)
 
-    def post(self, event_id):
-        event = ec.get_event_by_id(event_id)
-        if event:
-            event = event[0]
+    if request.method == 'POST':
+        if event_id == "":
+            # Add new events
+            requires_scope("create:events")
             data = request.get_json()
-            for key in data:
-                event[key] = data[key]
-            ec.update_event(event["event_id"], event["event_name"], event["start_date"], event["end_date"], event["event_type"])
-            result = event_schema.dump(ec.get_event_by_id(event_id)[0])
-            return result
-        else: abort(404, message="No event with id: {}".format(event_id))
-
-# Shows a list of all events and lets you POST to add new events
-class EventListResource(Resource):
-
-    def get(self):
-        data = ec.get_events()
-        result = events_schema.dump(data.values())
-        return {"events": result}
-
-    def post(self):
+            if not data:
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No input data provided"
+                }, 400)
+            try:
+                new_event = event_schema.load(data)
+                new_event.event_id = uuid.uuid4()
+                ec.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
+            except ValidationError as err:
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": err.messages
+                }, 400)
+            return event_schema.dump(new_event), 201
+        
+        # Update event with the given event_id
+        requires_scope("update:events")
+        event = ec.get_event_by_id(event_id)
+        if not event:
+            raise CustomError({
+                "code": "Not Found",
+                "description": "No event with id: {}".format(event_id)
+            }, 404)
+        event = event[0]
         data = request.get_json()
-        if not data:
-            return {"message": "No input data provided"}, 400
+        for key in data:
+            if key in ['start_date', 'end_date']:
+                event[key] = date.fromisoformat(data[key])
+            else: event[key] = data[key]
         try:
-            new_event = event_schema.load(data)
-            new_event.event_id = uuid.uuid4()
-            ec.add_event(new_event.event_id, new_event.event_name, new_event.start_date, new_event.end_date, new_event.event_type)
+            result = event_schema.dump(event)
+            ec.update_event(event["event_id"], event["event_name"], event["start_date"], event["end_date"], event["event_type"])
+            return result
         except ValidationError as err:
-            return err.messages, 422
-        return event_schema.dump(new_event), 201
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": err.messages
+                }, 400)
+        
+    if request.method == 'DELETE':
+        # Deletes the event with the given event_id
+        requires_scope("delete:events")
+        event = ec.get_event_by_id(event_id)
+        if not event:
+            raise CustomError({
+                "code": "Not Found",
+                "description": "No event with id: {}".format(event_id)
+            }, 404)
+        try:
+            ec.delete_event(event_id)
+            return jsonify(message="Event Deleted")
+        except pyodbc.Error as err:
+            raise CustomError({
+                "code": "Unprocessable Entity (WebDAV; RFC 4918)",
+                "description": err
+            }, 422)

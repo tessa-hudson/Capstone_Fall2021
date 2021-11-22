@@ -1,85 +1,43 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import '../../Styles/AddGroupForm.css'
+import { useAuth0 } from '@auth0/auth0-react'
 
-class Updater extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            groupName: '',
-            groupId: '',
-            eventName: '',
-            EventId: '',
-            eventType: '',
-            startDate: new Date(),
-            endDate: new Date(),
-            firstName: '',
-            lastName: '',
-            attendeeId: '',
-            element: this.props.location.state,
-        }
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
-        this.handleGroupChange = this.handleGroupChange.bind(this)
-        this.handleEventChange = this.handleEventChange.bind(this)
-        this.handleStartDateChange = this.handleStartDateChange.bind(this)
-        this.handleEndDateChange = this.handleEndDateChange.bind(this)
-        this.handleAttendeeChange = this.handleAttendeeChange.bind(this)
-        this.handleGroupSubmit = this.handleGroupSubmit.bind(this)
-        this.handleEventSubmit = this.handleEventSubmit.bind(this)
-        this.handleAttendeeSubmit = this.handleAttendeeSubmit.bind(this)
-    }
+function Updater(props) {
+    const [groupName, setGroupName] = useState('')
+    const [eventName, setEventName] = useState('')
+    const [eventType, setEventType] = useState('')
+    const [startDate, setStartDate] = useState(new Date())
+    const [endDate, setEndDate] = useState(new Date())
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setlastName] = useState('')
+    const element = useState(props.location.state)
+    
+    const {getAccessTokenSilently} = useAuth0()
     
 
-    handleGroupChange(event) {
-        this.setState({groupName: event.target.value})
-    }
-
-    handleEventChange(event) {
-        const target = event.target
-        const value = target.value
-        const name = target.name
-
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleStartDateChange(event) {
-        this.setState({startDate: event})
-    }
-
-    handleEndDateChange(event) {
-        this.setState({endDate: event})
-    }
-
-    handleAttendeeChange(event) {
-        const target = event.target
-        const value = target.value
-        const name = target.name
-        
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleGroupSubmit(event) {
+    const handleGroupSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {group_name: this.state.groupName}
+        const obj = {group_name: groupName}
         const json = JSON.stringify(obj);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${this.state.element[1].group_id}`, {
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/groups/${element[0][1].group_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
+            'Accept': '*/*',
+            'Authorization': `Bearer ${accessToken}`
         },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -91,23 +49,26 @@ class Updater extends Component {
         setTimeout(function(){window.location.href= "/groups"}, 1000)
     }
 
-    handleEventSubmit(event) {
+    const handleEventSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        let startDate=this.state.startDate.getFullYear() + "-"+ parseInt(this.state.startDate.getMonth()+1) +"-"+this.state.startDate.getDate();
-        let endDate=this.state.endDate.getFullYear() + "-"+ parseInt(this.state.endDate.getMonth()+1) +"-"+this.state.endDate.getDate();
-        const obj = {event_name: this.state.eventName, event_type: this.state.eventType, start_date: startDate, end_date: endDate}
+        let formattedStartDate=startDate.getFullYear() + "-"+ parseInt(startDate.getMonth()+1) +"-"+startDate.getDate();
+        let formattedEndDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
+        const obj = {event_name: eventName, event_type: eventType, start_date: formattedStartDate, end_date: formattedEndDate}
         const json = JSON.stringify(obj);
+        console.log(json);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${this.state.element[1].event_id}`, {
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/events/${element[0][1].event_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
+            'Accept': '*/*',
+            'Authorization': `Bearer ${accessToken}`
         },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -119,21 +80,22 @@ class Updater extends Component {
         setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
-    handleAttendeeSubmit(event) {
+    const handleAttendeeSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {firstname: this.state.firstName, lastname: this.state.lastName}
+        const obj = {firstname: firstName, lastname: lastName}
         const json = JSON.stringify(obj)
-
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${this.state.element[1].attendee_id}`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
-        },
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/attendees/${element[0][1].attendee_id}`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': '*/*',
+                'Authorization': `Bearer ${accessToken}`
+            },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -146,21 +108,19 @@ class Updater extends Component {
         
     }
 
-    render() {
-        const { state } = this.props.location
 
         return (
             <div className="AddGroup">
-                {state[0]==="group" &&
+                {element[0][0]==="group" &&
                     <div>
-                        <h3>Please update the fields for the group: {state[1].group_name}!</h3>
-                        <form onSubmit={this.handleGroupSubmit}>
+                        <h3>Please update the fields for the group: {element[0][1].group_name}!</h3>
+                        <form onSubmit={handleGroupSubmit}>
                             <TextField 
                                 id="name" 
                                 label="Group Name" 
                                 variant="outlined" 
-                                value={this.state.groupName} 
-                                onChange={this.handleGroupChange} 
+                                value={groupName} 
+                                onChange={(e) => setGroupName(e.target.value)} 
                                 margin="normal"
                             />
                             <br />
@@ -170,17 +130,17 @@ class Updater extends Component {
                         </form>
                     </div>
                 }
-                {state[0]==="event" &&
+                {element[0][0]==="event" &&
                     <div>
-                        <h3>Please update the fields for the event: {state[1].event_name}!</h3>
-                        <form onSubmit={this.handleEventSubmit}>
+                        <h3>Please update the fields for the event: {element[0][1].event_name}!</h3>
+                        <form onSubmit={handleEventSubmit}>
                             <TextField 
                                 id="eventName" 
                                 name="eventName"
                                 label="Event Name" 
                                 variant="outlined" 
-                                value={this.state.eventName} 
-                                onChange={this.handleEventChange} 
+                                value={eventName} 
+                                onChange={(e) => setEventName(e.target.value)} 
                                 margin="normal"
                             />
                             <TextField 
@@ -188,8 +148,8 @@ class Updater extends Component {
                                 name="eventType" 
                                 label="Event Type" 
                                 variant="outlined" 
-                                value={this.state.eventType} 
-                                onChange={this.handleEventChange} 
+                                value={eventType} 
+                                onChange={(e) => setEventType(e.target.value)} 
                                 margin="normal"
                             />
                             <br />
@@ -197,8 +157,8 @@ class Updater extends Component {
                                 <MobileDatePicker
                                     label="Start Date"
                                     inputFormat="MM/dd/yyyy"
-                                    value={this.state.startDate}
-                                    onChange={this.handleStartDateChange}
+                                    value={startDate}
+                                    onChange={e => setStartDate(e)}
                                     renderInput={(params) => <TextField {...params} />}
                                 />
                             </LocalizationProvider>
@@ -206,8 +166,8 @@ class Updater extends Component {
                                 <MobileDatePicker
                                     label="End Date"
                                     inputFormat="MM/dd/yyyy"
-                                    value={this.state.endDate}
-                                    onChange={this.handleEndDateChange}
+                                    value={endDate}
+                                    onChange={e => setEndDate(e)}
                                     renderInput={(params) => <TextField {...params} />}
                                     className="datepicker"
                                 />
@@ -219,17 +179,17 @@ class Updater extends Component {
                         </form>
                     </div>
                 }
-                {state[0]==="attendee" &&
+                {element[0][0]==="attendee" &&
                     <div>
-                        <h3>Please update the fields for the attendee: {state[1].firstname} {state[1].lastname}!</h3>
-                        <form onSubmit={this.handleAttendeeSubmit}>
+                        <h3>Please update the fields for the attendee: {element[0][1].firstname} {element[0][1].lastname}!</h3>
+                        <form onSubmit={handleAttendeeSubmit}>
                             <TextField 
                                 id="firstName" 
                                 name="firstName"
                                 label="First Name" 
                                 variant="outlined" 
-                                value={this.state.firstName} 
-                                onChange={this.handleAttendeeChange} 
+                                value={firstName} 
+                                onChange={e => setFirstName(e.target.value)} 
                                 margin="normal"
                             />
                             <br />
@@ -238,8 +198,8 @@ class Updater extends Component {
                                 name="lastName"
                                 label="Last Initial" 
                                 variant="outlined" 
-                                value={this.state.lastName} 
-                                onChange={this.handleAttendeeChange} 
+                                value={lastName} 
+                                onChange={e => setlastName(e.target.value)} 
                                 margin="normal"
                             />
                             <br />
@@ -251,7 +211,6 @@ class Updater extends Component {
                 }
             </div>
         )
-    }
 }
 
 export default Updater
