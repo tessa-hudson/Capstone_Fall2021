@@ -2,7 +2,7 @@ from flask import Flask
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(APP, support_credentials=True)
+CORS(app, support_credentials=True)
 
 if __name__ == '__main__':
     from api.attendee import attendeebp
