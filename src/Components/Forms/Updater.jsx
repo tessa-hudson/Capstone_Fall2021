@@ -55,17 +55,20 @@ function Updater(props) {
         let formattedEndDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
         const obj = {event_name: eventName, event_type: eventType, start_date: formattedStartDate, end_date: formattedEndDate}
         const json = JSON.stringify(obj);
+        console.log(json);
 
-        fetch(`${request_url}/${element[0][1].event_id}`, {
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/events/${element[0][1].event_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
+            'Accept': '*/*',
+            'Authorization': `Bearer ${accessToken}`
         },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -74,7 +77,7 @@ function Updater(props) {
         console.error(error);
         });
 
-        setTimeout(function(){window.location.href= "/events"}, 1000)
+        //setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
     const handleAttendeeSubmit = (event) => {
@@ -105,14 +108,12 @@ function Updater(props) {
         
     }
 
-    
-        const { state } = props.location
 
         return (
             <div className="AddGroup">
-                {state[0]==="group" &&
+                {element[0][0]==="group" &&
                     <div>
-                        <h3>Please update the fields for the group: {state[1].group_name}!</h3>
+                        <h3>Please update the fields for the group: {element[0][1].group_name}!</h3>
                         <form onSubmit={handleGroupSubmit}>
                             <TextField 
                                 id="name" 
@@ -129,9 +130,9 @@ function Updater(props) {
                         </form>
                     </div>
                 }
-                {state[0]==="event" &&
+                {element[0][0]==="event" &&
                     <div>
-                        <h3>Please update the fields for the event: {state[1].event_name}!</h3>
+                        <h3>Please update the fields for the event: {element[0][1].event_name}!</h3>
                         <form onSubmit={handleEventSubmit}>
                             <TextField 
                                 id="eventName" 
@@ -178,9 +179,9 @@ function Updater(props) {
                         </form>
                     </div>
                 }
-                {state[0]==="attendee" &&
+                {element[0][0]==="attendee" &&
                     <div>
-                        <h3>Please update the fields for the attendee: {state[1].firstname} {state[1].lastname}!</h3>
+                        <h3>Please update the fields for the attendee: {element[0][1].firstname} {element[0][1].lastname}!</h3>
                         <form onSubmit={handleAttendeeSubmit}>
                             <TextField 
                                 id="firstName" 
