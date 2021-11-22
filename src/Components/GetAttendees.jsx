@@ -24,11 +24,11 @@ function GetAttendees(props) {
             'Authorization': `Bearer ${accessToken}`
         },
         }))
-        .then(response => console.log(response.json()))
-        // .then(data => {
-        // setAttendees(data.attendees)
-        // console.log('Success:', data.attendees);
-        // })
+        .then(response => response.json())
+        .then(data => {
+        setAttendees(data.attendees)
+        console.log('Success:', data.attendees);
+        })
         .catch((error) => {
         console.error(error);
         });

@@ -9,6 +9,9 @@ const Auth0ProviderWithHistory = ({ children }) => {
   const clientId = "O3hRtUNwGGqbcLBBesrbLEbZAKZChfht";
 
   const history = useHistory();
+  const scope = "read:attendees update:attendees create:attendees delete:attendees " +
+                "read:groups update:groups create:groups delete:groups " +
+                "read:events update:events create:events delete:events"
 
   const onRedirectCallback = (appState) => {
     history.push(appState?.returnTo || window.location.pathname);
@@ -22,7 +25,7 @@ const Auth0ProviderWithHistory = ({ children }) => {
       //redirectUri={"https://hbdatracking.azurewebsites.net/home"}
       redirectUri={"http://localhost:3000/home"}
       audience={"https://hbda-tracking-backend.azurewebsites.net"}
-      scope={"read:attendees"}
+      scope={scope}
       onRedirectCallback={onRedirectCallback}
     >
       {children}

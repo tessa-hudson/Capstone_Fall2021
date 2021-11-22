@@ -46,12 +46,12 @@ def path_append(path):
 attendeebp = Blueprint('attendees', __name__)
 cors_config = {
 "origins": ["http://localhost:5000"],
-  "methods": ["OPTIONS", "GET", "POST"],
+  "methods": ["OPTIONS", "GET", "POST","DELETE"],
   "allow_headers": ["Authorization", "Content-Type"]
 }
 
-@attendeebp.route("/attendees", defaults={"attendee_id":""})
-@attendeebp.route("/attendees/<attendee_id>")
+@attendeebp.route("/attendees", defaults={"attendee_id":""},methods=["GET", "POST", "OPTIONS"])
+@attendeebp.route("/attendees/<attendee_id>",methods=["GET", "POST", "OPTIONS","DELETE"])
 @cross_origin(cors_config)
 @requires_auth
 def route(attendee_id):
