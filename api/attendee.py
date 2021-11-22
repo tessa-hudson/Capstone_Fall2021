@@ -1,11 +1,12 @@
+import json
 import uuid
 import pyodbc
-from flask import request, Blueprint
+from flask import request, Blueprint, jsonify
 from flask_cors import cross_origin
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 
 from api.Conns.AttendeeConn import ac
-from api.handlers import requires_auth, requires_scope, CustomError
+from api.handlers import requires_auth, requires_scope, CustomError, is_valid_uuid
 
 # Attendee class
 class Attendee():
@@ -43,14 +44,20 @@ def path_append(path):
 
 # BEGIN ROUTES
 attendeebp = Blueprint('attendees', __name__)
-@attendeebp.route("/attendees/<attendee_id>", defaults={"attendee_id":""}, methods=['GET', 'POST', 'DELETE'])
-@cross_origin(headers=["Content-Type", "Authorization"])
+cors_config = {
+"origins": ["http://localhost:5000"],
+  "methods": ["OPTIONS", "GET", "POST"],
+  "allow_headers": ["Authorization", "Content-Type"]
+}
+
+@attendeebp.route("/attendees", defaults={"attendee_id":""})
+@attendeebp.route("/attendees/<attendee_id>")
+@cross_origin(cors_config)
 @requires_auth
 def route(attendee_id):
-    
     if(request.method == 'GET'):
         requires_scope("read:attendees")
-        if attendee_id == "":
+        if not is_valid_uuid(attendee_id):
             # Shows all attendees
             data = ac.get_attendees()
             result = attendees_schema.dump(data.values())
@@ -60,7 +67,9 @@ def route(attendee_id):
         attendee = ac.get_attendee_by_id(attendee_id)
         if attendee:
             result = attendee_schema.dump(attendee[0])
-            return result
+            response = "Hello from a public endpoint! You don't need to be authenticated to see this."
+            return jsonify(message=response)
+            #return result
         else: raise CustomError({
             "code": "Not Found",
             "description": "No attendee with id: {}".format(attendee_id)

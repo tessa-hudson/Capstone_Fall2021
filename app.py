@@ -2,7 +2,7 @@
 
 from flask import Flask
 # from flask_restful import Api
-# from flask_cors import CORS
+from flask_cors import CORS
 
 # from api.group import GroupListResource, GroupResource
 # from api.event import EventListResource, EventResource
@@ -11,7 +11,7 @@ from flask import Flask
 
 
 APP = Flask(__name__)
-# CORS(APP)
+CORS(APP, support_credentials=True)
 # api = Api(APP)
 
 from api.attendee import attendeebp

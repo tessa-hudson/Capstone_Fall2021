@@ -1,42 +1,41 @@
-import React, {Component} from 'react'
+import React, {useState} from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
 import '../Styles/GetAttendees.css'
+import Attendees from './Attendees'
+import { useAuth0 } from '@auth0/auth0-react'
 
-class GetAttendees extends Component {
-    
+function GetAttendees(props) {
+    const [attendees, setAttendees] = useState([]);
+    const {getAccessTokenSilently} = useAuth0()
 
-    constructor(props) {
-        super(props)
-        this.state = {Attendees: []}
-
-        this.handleSubmit = this.handleSubmit.bind(this)
-        this.deleteAttendee = this.deleteAttendee.bind(this)
-    }
-
-    handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        fetch('https://hbda-tracking-backend.azurewebsites.net/attendees', {
+        
+        getAccessTokenSilently()
+        .then((accessToken) =>
+            fetch('http://localhost:5000/attendees', {
         method: 'GET',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Accept': '*/*',
-            //'Authentication': `Bearer ${this.props.accessToken}`
+            'Authorization': `Bearer ${accessToken}`
         },
-        })
-        .then(response => response.json())
-        .then(data => {
-        this.setState({Attendees: data.attendees});
-        console.log('Success:', data.attendees);
-        })
+        }))
+        .then(response => console.log(response.json()))
+        // .then(data => {
+        // setAttendees(data.attendees)
+        // console.log('Success:', data.attendees);
+        // })
         .catch((error) => {
         console.error(error);
         });
+    
     }
 
-    deleteAttendee(attendee) {
+    const deleteAttendee = (attendee) => {
         if (window.confirm(`Are you sure you want to delete ${attendee.firstname} ${attendee.lastname}`)) {
             fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${attendee.attendee_id}`, {
                 method: 'DELETE',
@@ -60,31 +59,30 @@ class GetAttendees extends Component {
         }
     }
 
-    render() {
-        return (
-            <div className="GetAttendees">
-                <h3>Use this button to get the attendees!</h3>
-                <form onSubmit={this.handleSubmit}>
-                    <Button type="submit" value="Submit" variant="contained">
-                        Get Attendees!
-                    </Button>
-                </form>
-                {
-                  this.state.Attendees &&
-                    this.state.Attendees.map((attendee) => 
-                        <Grid key={attendee.attendee_id}>
-                            <h4>{attendee.firstname} {attendee.lastname}</h4>
-                            <Button onClick={() => {this.deleteAttendee(attendee)}}>Delete</Button>
-                            <Link to={{pathname:"/update", state: ['attendee', attendee]}}>
-                                <Button>Update</Button>
-                            </Link>
-                        </Grid>
-                        
-                    )
-                }
-            </div> 
-        )
-    }
+    
+    return (
+        <div className="GetAttendees">
+            <h3>Use this button to get the attendees!</h3>
+            <form onSubmit={handleSubmit}>
+                <Button type="submit" value="Submit" variant="contained">
+                    Get Attendees!
+                </Button>
+            </form>
+            {
+                attendees &&
+                attendees.map((attendee) => 
+                    <Grid key={attendee.attendee_id}>
+                        <h4>{attendee.firstname} {attendee.lastname}</h4>
+                        <Button onClick={() => {deleteAttendee(attendee)}}>Delete</Button>
+                        <Link to={{pathname:"/update", state: ['attendee', attendee]}}>
+                            <Button>Update</Button>
+                        </Link>
+                    </Grid>
+                    
+                )
+            }
+        </div> 
+    )
 }
 
 export default GetAttendees

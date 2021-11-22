@@ -1,4 +1,5 @@
 import json
+import uuid
 from six.moves.urllib.request import urlopen
 from functools import wraps
 from jose import jwt
@@ -116,3 +117,13 @@ def requires_scope(required_scope):
         "code": "Unauthorized",
         "description": "You don't have access to this resource"
     }, 403)
+
+    import uuid
+ 
+ 
+def is_valid_uuid(value):
+    try:
+        uuid.UUID(value)
+        return True
+    except ValueError:
+        return False

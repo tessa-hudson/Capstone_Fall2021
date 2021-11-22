@@ -18,9 +18,11 @@ const Auth0ProviderWithHistory = ({ children }) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      redirectUri={reactAppDomain}
+      //redirectUri={reactAppDomain}
       //redirectUri={"https://hbdatracking.azurewebsites.net/home"}
-      //redirectUri={"http://localhost:3000/home"}
+      redirectUri={"http://localhost:3000/home"}
+      audience={"https://hbda-tracking-backend.azurewebsites.net"}
+      scope={"read:attendees"}
       onRedirectCallback={onRedirectCallback}
     >
       {children}
