@@ -6,7 +6,7 @@ const reactAppDomain = process.env.REACT_APP_DOMAIN;
 
 const Auth0ProviderWithHistory = ({ children }) => {
   const domain = process.env.REACT_APP_AUTH0_DOMAIN;
-  const clientId = process.env.REACT_APP_CLIENT_ID;
+  const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
 
   const history = useHistory();
   const scope = "read:attendees update:attendees create:attendees delete:attendees " +

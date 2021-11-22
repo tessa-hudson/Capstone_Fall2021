@@ -1,12 +1,15 @@
-import uuid
 import json
+import uuid
 import pyodbc
-from flask import request
-from marshmallow import Schema, fields, post_load, ValidationError
-from flask_restful import abort, Resource, Api
+from flask import request, Blueprint, jsonify
+from flask_cors import cross_origin
+from marshmallow import Schema, fields, post_load, ValidationError, validate
+
 from api.Conns.GroupConn import gc
 from api.Conns.AttendeeConn import ac
+from api.Conns.EventConn import ec
 from api.attendee import AttendeeSchema
+from api.handlers import requires_auth, requires_scope, CustomError
 
 # Group class
 class Group():
@@ -33,72 +36,115 @@ class GroupSchema(Schema):
     def make_group(self, data, **kwargs):
         return Group(**data)
 
-
-    
-
 # Schema to use when loading/dumping a single group
 group_schema = GroupSchema()
 
 # Schema to use when loading/dumping a multiple groups
 groups_schema = GroupSchema(many=True)
 
-# Shows a single group and lets you delete an group
-class GroupResource(Resource):
 
-    def get(self, group_id):
+# BEGIN ROUTES
+groupbp = Blueprint('groups', __name__)
+cors_config = {
+  "methods": ["OPTIONS", "GET", "POST","DELETE"],
+  "allow_headers": ["Authorization", "Content-Type"]
+}
+
+@groupbp.route("/groups", defaults={"group_id":""},methods=["GET", "POST", "OPTIONS"])
+@groupbp.route("/groups/<group_id>",methods=["GET", "POST", "OPTIONS","DELETE"])
+@cross_origin(cors_config)
+@requires_auth
+def route(group_id):
+    if(request.method == 'GET'):
+        requires_scope("read:groups")
+        if group_id == "":
+            # Shows all groups
+            data = gc.get_groups()
+            result = groups_schema.dump(data.values())
+            return {"groups": result}
+        
         group = gc.get_group_by_id(group_id)
         if group:
             group[0]["attendees"] = ac.get_attendees_by_group_id(group_id).values()
             result = group_schema.dump(group[0])
             return result
-        else: abort(404, message="No group with id: {}".format(group_id))
-    
-    def delete(self, group_id):
-        group = gc.get_group_by_id(group_id)
-        if group:
-            try:
-                gc.delete_group(group_id)
-                return {"message": "Group deleted"}, 204
-            except pyodbc.Error as err:
-                return err, 422
-        else: abort(404, message="No group with id: {}".format(group_id))
+        else: raise CustomError({
+            "code": "Not Found",
+            "description": "No group with id: {}".format(group_id)
+        }, 404)
 
-    def post(self, group_id):
-        group = gc.get_group_by_id(group_id)
-        if group:
-            group = group[0]
-            group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+    if request.method == 'POST':
+        if group_id == "":
+        # Add new group
+            requires_scope("create:groups")
             data = request.get_json()
-            for key in data:
-                if key == "attendees":
-                    for attendee_id in data[key]:
-                        if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
-                            gc.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
-                else:
-                    group[key] = data[key]
-            gc.update_group_with_points(group["group_id"], group["event_id"], group["group_name"], group["total_points"])
-            result = group_schema.dump(gc.get_group_by_id(group_id)[0])
-            return result
-        else: abort(404, message="No group with id: {}".format(group_id))
-
-
-
-# Shows a list of all groups and lets you POST to add new groups
-class GroupListResource(Resource):
-
-    def get(self):
-        data = gc.get_groups()
-        result = groups_schema.dump(data.values())
-        return {"groups": result}
-
-    def post(self):
-        data = request.get_json()
-        if not data:
-            return {"message": "No input data provided"}, 400
-        try:
-            new_group = group_schema.load(data)
+            if not data:
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No input data provided"
+                }, 400)
+            try:
+                new_group = group_schema.load(data)
+            except ValidationError as err:
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": err.messages
+                }, 400)
             new_group.group_id = uuid.uuid4()
+            event = ec.get_event_by_id(new_group.event_id)
+            if not data:
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No event with that id"
+                }, 400)
             gc.add_group(new_group.group_id, new_group.event_id, new_group.group_name, new_group.total_points)
+            return group_schema.dump(new_group), 201
+
+        # Update group with given group_id
+        requires_scope("update:groups")
+        group = gc.get_group_by_id(group_id)
+        if not group:
+            raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No input data provided"
+                }, 400)
+        group = group[0]
+        group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+        data = request.get_json()
+        for key in data:
+            if key == "attendees":
+                for attendee_id in data[key]:
+                    if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
+                        gc.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
+            else:
+                group[key] = data[key]
+        group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+        try:
+            result = group_schema.dump(group)
+            gc.update_group_with_points(group["group_id"], group["event_id"], group["group_name"], group["total_points"])
+            return result
         except ValidationError as err:
-            return err.messages, 422
-        return group_schema.dump(new_group), 201
+            raise CustomError({
+                "code": "Bad Request",
+                "description": err.messages
+            }, 400)
+
+    if request.method == 'DELETE':
+        # Deletes the group with the given group_id
+        requires_scope("delete:groups")
+        group = gc.get_group_by_id(group_id)
+        if not group:
+            raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No input data provided"
+                }, 400)
+        try:
+            gc.delete_group(group_id)
+            return jsonify(message="Group Deleted"), 204
+        except pyodbc.Error as err:
+            raise CustomError({
+                "code": "Unprocessable Entity (WebDAV; RFC 4918)",
+                "description": err
+            }, 422)
+
+        

@@ -26,16 +26,18 @@ function Updater(props) {
         const obj = {group_name: groupName}
         const json = JSON.stringify(obj);
 
-        fetch(`${request_url}/groups/${element[0][1].group_id}`, {
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/groups/${element[0][1].group_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
+            'Accept': '*/*',
+            'Authorization': `Bearer ${accessToken}`
         },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);

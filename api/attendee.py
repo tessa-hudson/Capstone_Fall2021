@@ -6,7 +6,7 @@ from flask_cors import cross_origin
 from marshmallow import Schema, fields, post_load, ValidationError, validate
 
 from api.Conns.AttendeeConn import ac
-from api.handlers import requires_auth, requires_scope, CustomError, is_valid_uuid
+from api.handlers import requires_auth, requires_scope, CustomError
 
 # Attendee class
 class Attendee():
@@ -35,17 +35,9 @@ attendee_schema = AttendeeSchema()
 # Schema to use when loading/dumping a multiple attendees
 attendees_schema = AttendeeSchema(many=True)
 
-
-def path_append(path):
-    if path == '/attendees':
-        path += '/all'
-    elif path == '/attendees/':
-        path += 'all'
-
 # BEGIN ROUTES
 attendeebp = Blueprint('attendees', __name__)
 cors_config = {
-"origins": ["http://localhost:5000"],
   "methods": ["OPTIONS", "GET", "POST","DELETE"],
   "allow_headers": ["Authorization", "Content-Type"]
 }
@@ -57,7 +49,7 @@ cors_config = {
 def route(attendee_id):
     if(request.method == 'GET'):
         requires_scope("read:attendees")
-        if not is_valid_uuid(attendee_id):
+        if attendee_id == "":
             # Shows all attendees
             data = ac.get_attendees()
             result = attendees_schema.dump(data.values())
@@ -67,9 +59,7 @@ def route(attendee_id):
         attendee = ac.get_attendee_by_id(attendee_id)
         if attendee:
             result = attendee_schema.dump(attendee[0])
-            response = "Hello from a public endpoint! You don't need to be authenticated to see this."
-            return jsonify(message=response)
-            #return result
+            return result
         else: raise CustomError({
             "code": "Not Found",
             "description": "No attendee with id: {}".format(attendee_id)
@@ -82,7 +72,10 @@ def route(attendee_id):
             requires_scope("create:attendees")
             data = request.get_json()
             if not data:
-                return {"message": "No input data provided"}, 400
+                raise CustomError({
+                    "code": "Bad Request",
+                    "description": "No input data provided"
+                }, 400)
             try:
                 new_attendee = attendee_schema.load(data)
                 new_attendee.attendee_id = uuid.uuid4()
