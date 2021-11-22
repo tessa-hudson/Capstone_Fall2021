@@ -11,14 +11,14 @@ AUTH0_DOMAIN = env["REACT_APP_AUTH0_DOMAIN"]
 API_AUDIENCE = env["API_AUDIENCE"]
 ALGORITHMS = ["RS256"]
 
-from app import APP
+from app import app
 # Error handler
 class CustomError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
-@APP.errorhandler(CustomError)
+@app.errorhandler(CustomError)
 def handle_custom_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code
