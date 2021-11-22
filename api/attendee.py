@@ -118,7 +118,7 @@ def route(attendee_id):
 
     if request.method == 'DELETE':
         # Deletes the attendee with the given attendee_id
-        requires_scope("delete:attendee_id")
+        requires_scope("delete:attendees")
         attendee = ac.get_attendee_by_id(attendee_id)
         if not attendee: 
             raise CustomError({
@@ -127,7 +127,7 @@ def route(attendee_id):
             }, 404)
         try:
             ac.delete_attendee(attendee_id)
-            return {"message": "Attendee deleted"}, 204
+            return jsonify(message="Attendee Deleted")
         except pyodbc.Error as err:
             raise CustomError({
                 "code": "Unprocessable Entity (WebDAV; RFC 4918)",

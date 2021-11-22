@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
 import '../Styles/GetAttendees.css'
-import Attendees from './Attendees'
 import { useAuth0 } from '@auth0/auth0-react'
 
 function GetAttendees(props) {
@@ -37,15 +36,18 @@ function GetAttendees(props) {
 
     const deleteAttendee = (attendee) => {
         if (window.confirm(`Are you sure you want to delete ${attendee.firstname} ${attendee.lastname}`)) {
-            fetch(`https://hbda-tracking-backend.azurewebsites.net/attendees/${attendee.attendee_id}`, {
+
+            getAccessTokenSilently()
+            .then((accessToken) => fetch(`http://localhost:5000/attendees/${attendee.attendee_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                     'Access-Control-Allow-Origin': '*',
-                    'Accept': '*/*'
+                    'Accept': '*/*',
+                    'Authorization': `Bearer ${accessToken}`
                 },
-                })
+                }))
                 .then(response => response.json())
                 .then(data => {
                 console.log('Success:', data);
