@@ -3,7 +3,7 @@ import uuid
 from six.moves.urllib.request import urlopen
 from functools import wraps
 from jose import jwt
-from flask import request, jsonify, _request_ctx_stack
+from flask import request, jsonify, _request_ctx_stack, Blueprint
 from dotenv import dotenv_values
 
 env = dotenv_values(".env")
@@ -11,14 +11,15 @@ AUTH0_DOMAIN = env["REACT_APP_AUTH0_DOMAIN"]
 API_AUDIENCE = env["API_AUDIENCE"]
 ALGORITHMS = ["RS256"]
 
-from app import APP
+handlerbp = Blueprint('errors', __name__)
+
 # Error handler
 class CustomError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
-@APP.errorhandler(CustomError)
+@handlerbp.app_errorhandler(CustomError)
 def handle_custom_error(ex):
     response = jsonify(ex.error)
     response.status_code = ex.status_code
