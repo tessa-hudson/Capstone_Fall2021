@@ -1,5 +1,4 @@
 import uuid
-from datetime import strptime
 import pyodbc
 from flask import request, Blueprint, jsonify
 from flask_cors import cross_origin
@@ -103,7 +102,7 @@ def route(event_id):
         data = request.get_json()
         for key in data:
             if key in ['start_date', 'end_date']:
-                event[key] = datetime.strptime(data[key], '%Y-%m-%d')
+                event[key] = data[key] #datetime.strptime(data[key], '%Y-%m-%d')
             else: event[key] = data[key]
         try:
             result = event_schema.dump(event)
