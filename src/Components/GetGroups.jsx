@@ -73,7 +73,7 @@ function GetGroups(props) {
                         <Grid key={group.group_id}>
                             <h4>{group.group_name}</h4>
                             <Button onClick={() => {deleteGroup(group)}}>Delete</Button>
-                            <Link to={{pathname:"/update", state: ['group', group]}}>
+                            <Link to={{pathname:"/update/groups", state: ['group', group]}}>
                                 <Button>Update</Button>
                             </Link>
                         </Grid>

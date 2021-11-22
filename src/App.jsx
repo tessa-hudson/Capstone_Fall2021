@@ -10,7 +10,9 @@ import Profile from './Components/Profile'
 import LandingPage from './Components/LandingPage'
 import ProtectedRoute from './auth/ProtectedRoute'
 import NavBar from './Components/NavBar'
-import Updater from './Components/Forms/Updater'
+import GroupUpdateForm from './Components/Forms/GroupUpdateForm'
+import AttendeeUpdateForm from './Components/Forms/AttendeeUpdateForm'
+import EventUpdateForm from './Components/Forms/EventUpdateForm'
 
 function App() {
   return (
@@ -25,7 +27,9 @@ function App() {
         <ProtectedRoute exact path="/attendees" component={Attendees} />
         <ProtectedRoute exact path="/events" component ={Events} />
         <ProtectedRoute exact path="/profile" component={Profile} />
-        <ProtectedRoute exact path="/update" component={Updater} />
+        <ProtectedRoute exact path="/update/groups" component={GroupUpdateForm} />
+        <ProtectedRoute exact path="/update/events" component={EventUpdateForm} />
+        <ProtectedRoute exact path="/update/attendees" component={AttendeeUpdateForm} />
       </Switch>
     </div>
   );
