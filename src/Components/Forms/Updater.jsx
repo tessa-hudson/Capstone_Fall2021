@@ -77,7 +77,7 @@ function Updater(props) {
         console.error(error);
         });
 
-        //setTimeout(function(){window.location.href= "/events"}, 1000)
+        setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
     const handleAttendeeSubmit = (event) => {
