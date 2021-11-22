@@ -72,7 +72,7 @@ function GetEvents (props) {
                     <Grid key={event.event_id}>
                         <h4>{event.event_name}</h4>
                         <Button onClick={() => {deleteEvent(event)}}>Delete</Button>
-                        <Link to={{pathname:"/update", state: ['event', event]}}>
+                        <Link to={{pathname:"/update/events", state: ['event', event]}}>
                             <Button>Update</Button>
                         </Link>
                     </Grid>
