@@ -3,6 +3,8 @@ import { Button, TextField } from '@mui/material'
 import '../../Styles/AddAttendeeForm.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
+
 function AddAttendeeForm(props) {
     const [firstname, setFirstname] = useState("")
     const [lastname, setLastname] = useState("")
@@ -15,7 +17,7 @@ function AddAttendeeForm(props) {
         console.log(json);
 
         getAccessTokenSilently()
-        .then(accessToken => fetch('http://localhost:5000/attendees', {
+        .then(accessToken => fetch(`${request_url}/attendees`, {
             method: 'POST',
             mode: 'cors',
             headers: {

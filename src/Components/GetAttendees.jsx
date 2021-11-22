@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import '../Styles/GetAttendees.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
+
 function GetAttendees(props) {
     const [attendees, setAttendees] = useState([]);
     const {getAccessTokenSilently} = useAuth0()
@@ -13,7 +15,7 @@ function GetAttendees(props) {
         
         getAccessTokenSilently()
         .then((accessToken) =>
-            fetch('http://localhost:5000/attendees', {
+            fetch(`${request_url}/attendees`, {
         method: 'GET',
         mode: 'cors',
         headers: {
@@ -38,7 +40,7 @@ function GetAttendees(props) {
         if (window.confirm(`Are you sure you want to delete ${attendee.firstname} ${attendee.lastname}`)) {
 
             getAccessTokenSilently()
-            .then((accessToken) => fetch(`http://localhost:5000/attendees/${attendee.attendee_id}`, {
+            .then((accessToken) => fetch(`${request_url}/attendees/${attendee.attendee_id}`, {
                 method: 'DELETE',
                 mode: 'cors',
                 headers: {

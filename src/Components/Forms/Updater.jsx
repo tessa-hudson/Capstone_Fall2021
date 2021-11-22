@@ -6,6 +6,8 @@ import MobileDatePicker from '@mui/lab/MobileDatePicker';
 import '../../Styles/AddGroupForm.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
+
 function Updater(props) {
     const [groupName, setGroupName] = useState('')
     const [eventName, setEventName] = useState('')
@@ -24,7 +26,7 @@ function Updater(props) {
         const obj = {group_name: groupName}
         const json = JSON.stringify(obj);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/groups/${element[0][1].group_id}`, {
+        fetch(`${request_url}/groups/${element[0][1].group_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -47,12 +49,12 @@ function Updater(props) {
 
     const handleEventSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        let startDate=startDate.getFullYear() + "-"+ parseInt(startDate.getMonth()+1) +"-"+startDate.getDate();
-        let endDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
-        const obj = {event_name: eventName, event_type: eventType, start_date: startDate, end_date: endDate}
+        let formattedStartDate=startDate.getFullYear() + "-"+ parseInt(startDate.getMonth()+1) +"-"+startDate.getDate();
+        let formattedEndDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
+        const obj = {event_name: eventName, event_type: eventType, start_date: formattedStartDate, end_date: formattedEndDate}
         const json = JSON.stringify(obj);
 
-        fetch(`https://hbda-tracking-backend.azurewebsites.net/events/${element[0][1].event_id}`, {
+        fetch(`${request_url}/${element[0][1].event_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -78,7 +80,7 @@ function Updater(props) {
         const obj = {firstname: firstName, lastname: lastName}
         const json = JSON.stringify(obj)
         getAccessTokenSilently()
-        .then(accessToken => fetch(`http://localhost:5000/attendees/${element[0][1].attendee_id}`, {
+        .then(accessToken => fetch(`${request_url}/attendees/${element[0][1].attendee_id}`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -162,7 +164,7 @@ function Updater(props) {
                                     label="End Date"
                                     inputFormat="MM/dd/yyyy"
                                     value={endDate}
-                                    onChange={e => setStartDate(e)}
+                                    onChange={e => setEndDate(e)}
                                     renderInput={(params) => <TextField {...params} />}
                                     className="datepicker"
                                 />

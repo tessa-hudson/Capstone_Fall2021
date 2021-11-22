@@ -5,8 +5,8 @@ import { Auth0Provider } from "@auth0/auth0-react";
 const reactAppDomain = process.env.REACT_APP_DOMAIN;
 
 const Auth0ProviderWithHistory = ({ children }) => {
-  const domain = "dev-otvasfs9.us.auth0.com";
-  const clientId = "O3hRtUNwGGqbcLBBesrbLEbZAKZChfht";
+  const domain = process.env.REACT_APP_AUTH0_DOMAIN;
+  const clientId = process.env.REACT_APP_CLIENT_ID;
 
   const history = useHistory();
   const scope = "read:attendees update:attendees create:attendees delete:attendees " +
@@ -21,9 +21,9 @@ const Auth0ProviderWithHistory = ({ children }) => {
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      //redirectUri={reactAppDomain}
+      redirectUri={reactAppDomain}
       //redirectUri={"https://hbdatracking.azurewebsites.net/home"}
-      redirectUri={"http://localhost:3000/home"}
+      //redirectUri={"http://localhost:3000/home"}
       audience={"https://hbda-tracking-backend.azurewebsites.net"}
       scope={scope}
       onRedirectCallback={onRedirectCallback}

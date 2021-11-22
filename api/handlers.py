@@ -7,7 +7,7 @@ from flask import request, jsonify, _request_ctx_stack
 from dotenv import dotenv_values
 
 env = dotenv_values(".env")
-AUTH0_DOMAIN = env["AUTH0_DOMAIN"]
+AUTH0_DOMAIN = env["REACT_APP_AUTH0_DOMAIN"]
 API_AUDIENCE = env["API_AUDIENCE"]
 ALGORITHMS = ["RS256"]
 
