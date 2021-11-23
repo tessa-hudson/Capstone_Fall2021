@@ -6,6 +6,6 @@
   - This script may also need permission to run
  
  
- These script contain secrets and important enviroment variables needed for the servers to run. Contact Tyler Blair (trblair@crimson.ua.edu) to recieve a copy of the scripts.
+ These scripts contain secrets and important enviroment variables needed for the servers to run. Contact Tyler Blair (trblair@crimson.ua.edu) to recieve a copy of the scripts.
   
 
