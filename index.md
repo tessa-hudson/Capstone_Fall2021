@@ -2,6 +2,8 @@
 
 [Visit the Site](https://hbdatracking.azurewebsites.net)
 
+[Sprint Deliverables](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables)
+
 ## Motivation
 Camp Clot Not is a camp hosted by HBDA that allows children ranging from 6-18 years old who suffer from various bleeding disorders to enjoy a camp experience they normally would not be able to enjoy.
 
@@ -27,11 +29,6 @@ With an application to assist them, we hope we can allow these counselors an ea
 
 ## Documentation
 - [API Reference](https://tessa-hudson.github.io/Capstone_Fall2021/api)
-
-## Sprint Deliverables
-- [Sprint 1](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint1)
-- [Sprint 2](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint2)
-- [Sprint 3](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint3)
 
 ## App Demo
 - Video in Progress
