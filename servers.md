@@ -1,3 +1,8 @@
+
+## Requirements for Dev Environment
+- python3
+- yarn
+
 ## Starting the Servers
 - To start the backend server, run the startup script by entering `./startBackendDev.sh`
   - You may need to give the script permission to run by entering the command `chmod +x startBackendDev.sh`
