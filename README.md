@@ -11,11 +11,12 @@ With an application to assist them, we hope we can allow these counselors an ea
 
 ## Core Features
 
-- An easy-to-read leaderboard
+- An easy-to-read leaderboard for each event
 - A secure login system for camp counselors and administrators
-- Point addition and subtraction requests available to authorized users
-- Point tracking via attendee and/or group
-- Attendance Tracking
+- Full add/update/delete functionality for Attendees, Groups, and Events availiable to administators
+- Point addition and subtraction available to authorized users
+- Point tracking for groups of attendees
+- Restricted views based on user roles
 
 ## Workflow/Standards
 
@@ -34,29 +35,20 @@ With an application to assist them, we hope we can allow these counselors an ea
 - Branch names for each team member follow the format `firstname/issuename`
 - Before merging a branch into main, a pull request should be made and reviewed by at least 2 other team members
 
-## Starting the Servers
+### Requirements for Dev Environment
 
-- To start the backend server, run the startup script by entering `./startserver.sh`
+- python3
+- yarn
 
-  - You may need to give the script permission to run by entering the command `chmod +x startserver.sh`
+### Starting the Servers
 
-  - Alternatively, you can run the commands in the script individually:
+- To start the backend server, run the startup script by entering ./startBackendDev.sh
+  - You may need to give the script permission to run by entering the command chmod +x startBackendDev.sh
 
-  ```
-  python3 -m venv venv
-  source venv/bin/activate
-  pip install -r requirements.txt
-  flask run
+- To start the front end run the startup script by entering ./startReactDev.sh
+  - This script may also need permission to run
 
-  ```
-
-- To start the front end enter the following commands
-
-  ```
-  yarn install
-  yarn start // in development only
-  yarn build // in production only
-  ```
+These scripts contain secrets and important enviroment variables needed for the servers to run. Contact Tyler Blair (trblair@crimson.ua.edu) to recieve a copy of the scripts.
 
 ### Testing and Documentation
 

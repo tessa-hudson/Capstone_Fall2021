@@ -78,7 +78,7 @@ function GetAttendees(props) {
                     <Grid key={attendee.attendee_id}>
                         <h4>{attendee.firstname} {attendee.lastname}</h4>
                         <Button onClick={() => {deleteAttendee(attendee)}}>Delete</Button>
-                        <Link to={{pathname:"/update", state: ['attendee', attendee]}}>
+                        <Link to={{pathname:"/update/attendees", state: ['attendee', attendee]}}>
                             <Button>Update</Button>
                         </Link>
                     </Grid>
