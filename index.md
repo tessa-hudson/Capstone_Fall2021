@@ -9,11 +9,12 @@ During the camp, counselors hold activities for the children and keep track of 
 With an application to assist them, we hope we can allow these counselors an easy and intuitive way to keep track of scoring so they can focus on the needs and enjoyment of the children at the camp.​
 
 ## Core Features
-- An easy-to-read leaderboard
+- An easy-to-read leaderboard for each event
 - A secure login system for camp counselors and administrators
-- Point addition and subtraction requests available to authorized users
-- Point tracking via camper and/or group
-- Attendance Tracking
+- Full add/update/delete functionality for Attendees, Groups, and Events availiable to administators
+- Point addition and subtraction available to authorized users
+- Point tracking for groups of attendees
+- Restricted views based on user roles
 
 ## Meet the Devs
 - [Tessa](https://tessa-hudson.github.io/Capstone_Fall2021/tessa)
@@ -26,3 +27,11 @@ With an application to assist them, we hope we can allow these counselors an ea
 
 ## Documentation
 - [API Reference](https://tessa-hudson.github.io/Capstone_Fall2021/api)
+
+## Sprint Deliverables
+- [Sprint 1](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint1)
+- [Sprint 2](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint2)
+- [Sprint 3](https://tessa-hudson.github.io/Capstone_Fall2021/deliverables/sprint3)
+
+## App Demo
+- Video in Progress
