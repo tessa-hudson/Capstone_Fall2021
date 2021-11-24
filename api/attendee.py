@@ -56,7 +56,11 @@ def route(attendee_id):
             return {"attendees": result}
             
         # Show attendee with given attendee_id
-        attendee = ac.get_attendee_by_id(attendee_id)
+        try:
+            id = uuid.UUID(attendee_id, version=4)
+            attendee = ac.get_attendee_by_id(id)
+        except ValueError:
+            attendee = None
         if attendee:
             result = attendee_schema.dump(attendee[0])
             return result
@@ -89,7 +93,11 @@ def route(attendee_id):
 
         # Update attendee with the given attendee_id
         requires_scope("update:attendees")
-        attendee = ac.get_attendee_by_id(attendee_id)
+        try:
+            id = uuid.UUID(attendee_id, version=4)
+            attendee = ac.get_attendee_by_id(id)
+        except ValueError:
+            attendee = None
         if not attendee:
             raise CustomError({
                 "code": "Not Found",
@@ -112,7 +120,11 @@ def route(attendee_id):
     if request.method == 'DELETE':
         # Deletes the attendee with the given attendee_id
         requires_scope("delete:attendees")
-        attendee = ac.get_attendee_by_id(attendee_id)
+        try:
+            id = uuid.UUID(attendee_id, version=4)
+            attendee = ac.get_attendee_by_id(id)
+        except ValueError:
+            attendee = None
         if not attendee: 
             raise CustomError({
                 "code": "Not Found",

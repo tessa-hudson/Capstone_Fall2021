@@ -6,9 +6,11 @@ from api.attendee import attendeebp
 from api.event import eventbp
 from api.group import groupbp
 
-class ApiTest(unittest.TestCase):
+from api.Conns.connection import conn
 
-   def setUp(self):
+class ApiTest(unittest.TestCase):
+   @classmethod
+   def setUpClass(self):
       APP = Flask(__name__)
       APP.testing = True
       APP.register_blueprint(handlerbp)
@@ -17,6 +19,8 @@ class ApiTest(unittest.TestCase):
       APP.register_blueprint(groupbp)
 
       self.app = APP.test_client()
+
+      conn.delete_all_attendees()
 
 if __name__ == '__main__':
    unittest.main()

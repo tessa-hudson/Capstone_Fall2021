@@ -204,5 +204,13 @@ class ServerConn:
 
     #End of Cascading Deletion functions
 
+    def delete_all_attendees(self):
+        qt = "DELETE FROM dbo.attendee"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
 
 conn = ServerConn()
