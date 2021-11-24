@@ -27,8 +27,8 @@ jobs:
         
       - name: Run tests with unittest
         env: 
-          "DB_CONNECTION": "{{ secrets.TEST_DB_CONNECTION }}"
-          "AUTH_REQUEST_DATA": "{{ secrets.TEST_AUTH_REQUEST_DATA }}"
+          DB_CONNECTION: ${{ secrets.TEST_DB_CONNECTION }}
+          AUTH_REQUEST_DATA: ${{ secrets.TEST_AUTH_REQUEST_DATA }}
         run: |
           python -m unittest api/tests/attendee_test.py
       
