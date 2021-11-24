@@ -1,4 +1,4 @@
-name: Build Python app without deploying
+name: Build Python and Test Python App
 
 on:
   push:
@@ -24,7 +24,10 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-        
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
       - name: Run tests with unittest
         env: 
           DB_CONNECTION: ${{ secrets.TEST_DB_CONNECTION }}
@@ -32,10 +35,3 @@ jobs:
         run: |
           python -m unittest api/tests/attendee_test.py
       
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
-        with:
-          name: python-app
-          path: |
-            . 
-            !venv/
