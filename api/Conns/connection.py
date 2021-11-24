@@ -6,6 +6,7 @@ import os
 class ServerConn:
 
     def __init__(self):
+        print(pyodbc.drivers())
         try:
             self.conn = pyodbc.connect(os.environ.get('DB_CONNECTION'))
             self.cursor = self.conn.cursor()
