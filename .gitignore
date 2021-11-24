@@ -15,6 +15,7 @@ venv/
 /startBackendDev.sh
 /startReactDev.ps1
 /StartReactDev.sh
+/startTests.sh
 
 # production
 /build
