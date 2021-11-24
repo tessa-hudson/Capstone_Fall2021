@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,10 +24,7 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-  test:
-    runs-on: ubuntu-latest
-    
-    steps:
+ 
       - name: Run tests with unittest
         env: 
           DB_CONNECTION: ${{ secrets.TEST_DB_CONNECTION }}
