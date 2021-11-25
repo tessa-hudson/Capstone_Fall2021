@@ -21,7 +21,6 @@ class ApiTest(unittest.TestCase):
       self.app = APP.test_client()
 
       conn.delete_all_attendees()
-      conn.delete_all_groups()
 
 if __name__ == '__main__':
    unittest.main()
