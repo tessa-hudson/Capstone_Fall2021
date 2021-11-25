@@ -113,12 +113,8 @@ def route(group_id):
         data = request.get_json()
         for key in data:
             if key == "attendees":
-                for attendee_id in data[key]:
-                    if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
-                        gc.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
-            else:
-                group[key] = data[key]
-        group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+                continue
+            group[key] = data[key]
         try:
             result = group_schema.dump(group)
             gc.update_group_with_points(group["group_id"], group["event_id"], group["group_name"], group["total_points"])
@@ -135,9 +131,9 @@ def route(group_id):
         group = gc.get_group_by_id(group_id)
         if not group:
             raise CustomError({
-                    "code": "Bad Request",
-                    "description": "No input data provided"
-                }, 400)
+            "code": "Not Found",
+            "description": "No group with id: {}".format(group_id)
+        }, 404)
         try:
             gc.delete_group(group_id)
             return jsonify(message="Group Deleted"), 204
@@ -146,5 +142,55 @@ def route(group_id):
                 "code": "Unprocessable Entity (WebDAV; RFC 4918)",
                 "description": err
             }, 422)
+
+@groupbp.route("/groups/<group_id>/attendees",methods=["POST", "OPTIONS","DELETE"])
+@requires_auth
+def attendee_update(group_id):
+    requires_scope("update:groups")
+    group = gc.get_group_by_id(group_id)
+    if not group:
+        raise CustomError({
+                "code": "Not Found",
+                "description": "No group with id: {}".format(group_id)
+            }, 404)
+    group = group[0]
+    group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+    data = request.get_json()  
+    if data["method"] == "add":
+        for attendee_id in data["attendees"]:
+            try:
+                id = uuid.UUID(attendee_id, version=4)
+            except Exception:
+                continue
+
+            # check if attendee exists
+            temp = ac.get_attendee_by_id(id)
+            if not temp: continue
+
+            # check if attendee already exists in group
+            if not any (attendee_id in attendee.values() for attendee in group["attendees"]):
+                ac.add_attendee_to_group(uuid.uuid4(), attendee_id, group_id)
+
+    elif data["method"] == "delete":
+        for attendee_id in data["attendees"]:
+            if any (attendee_id in attendee.values() for attendee in group["attendees"]):
+                ac.remove_attendee_from_group(attendee_id, group_id)
+    else:
+        raise CustomError({
+                    "code": "Bad Request",
+                    "description": "Invalid argument for field method"
+                }, 400)
+    group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
+    try:
+        result = group_schema.dump(group)
+        return result
+    except ValidationError as err:
+        raise CustomError({
+            "code": "Bad Request",
+            "description": err.messages
+        }, 400)
+
+
+
 
         
