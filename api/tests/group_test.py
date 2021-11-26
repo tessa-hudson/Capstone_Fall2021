@@ -196,36 +196,41 @@ class GroupTest(ApiTest):
       body = response.get_json()
       assert(body['event_id'] == "417136c4-39c0-4d35-a568-6c0877c267f9")
 
-   # def test_update_total_points(self):
-   #    payload = json.dumps({
-   #          "total_ponts": 10
-   #      })
+   def test_update_total_points(self):
+      payload = json.dumps({
+            "total_points": "10"
+        })
    
-   #    response = self.app.post(
-   #       "/groups/655f82ee-5014-477e-9b14-48765d5f0404",
-   #       headers={"Authorization": f"Bearer {SUPER_ADMIN_BEARER_TOKEN}","Content-type": "application/json"},
-   #       data=payload
-   #    )
+      response = self.app.post(
+         "/groups/655f82ee-5014-477e-9b14-48765d5f0404",
+         headers={"Authorization": f"Bearer {SUPER_ADMIN_BEARER_TOKEN}","Content-type": "application/json"},
+         data=payload
+      )
       
-   #    assert(response.status_code == 200)
+      assert(response.status_code == 200)
 
-   #    body = response.get_json()
-   #    print(body['total_points'])
+      body = response.get_json()
+      assert(body['total_points'] == 10)
 
-   # def test_update_one(self):
-   #    payload = json.dumps({
-   #          "firstname": "Updated",
-   #          "lastname": "U"
-   #      })
-   #    response = self.app.get("/groups", headers={"Authorization": f"Bearer {SUPER_ADMIN_BEARER_TOKEN}"})
-   #    group = response.get_json()['groups'][0]
+   def test_update_one(self):
+      payload = json.dumps({
+            "group_name": "UPDATE",
+            "event_id": "bc2cb23b-4b78-41ac-8794-12e1050bb428",
+            "total_points": 15
+        })
    
-   #    response = self.app.post(f"/groups/{group['group_id']}", headers={"Authorization": f"Bearer {SUPER_ADMIN_BEARER_TOKEN}","Content-type": "application/json"}, data=payload)
-   #    assert(response.status_code == 200)
+      response = self.app.post(
+         "/groups/655f82ee-5014-477e-9b14-48765d5f0404",
+         headers={"Authorization": f"Bearer {SUPER_ADMIN_BEARER_TOKEN}","Content-type": "application/json"},
+         data=payload
+      )
 
-   #    body = response.get_json()
-   #    assert(body['firstname'] == "Updated")
-   #    assert(body['lastname'] == "U")
+      assert(response.status_code == 200)
+
+      body = response.get_json()
+      assert(body['group_name'] == "UPDATE")
+      assert(body['event_id'] == "bc2cb23b-4b78-41ac-8794-12e1050bb428")
+      assert(body['total_points'] == 15)
    
    def test_delete_one_no_auth_header(self):
       response = self.app.delete("/groups/0cca813e-8209-42a2-9d8e-dc586473e360")
