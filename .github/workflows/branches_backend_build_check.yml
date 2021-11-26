@@ -31,4 +31,6 @@ jobs:
           AUTH_REQUEST_DATA: ${{ secrets.TEST_AUTH_REQUEST_DATA }}
         run: |
           python -m unittest api/tests/attendee_test.py
+          python -m unittest api/tests/event_test.py
+          python -m unittest api/tests/group_test.py
       
