@@ -63,7 +63,11 @@ def route(group_id):
             result = groups_schema.dump(data.values())
             return {"groups": result}
         
-        group = gc.get_group_by_id(group_id)
+        try:
+            id = uuid.UUID(group_id, version=4)
+            group = gc.get_group_by_id(id)
+        except ValueError:
+            group = None
         if group:
             group[0]["attendees"] = ac.get_attendees_by_group_id(group_id).values()
             result = group_schema.dump(group[0])
@@ -92,7 +96,7 @@ def route(group_id):
                 }, 400)
             new_group.group_id = uuid.uuid4()
             event = ec.get_event_by_id(new_group.event_id)
-            if not data:
+            if not event:
                 raise CustomError({
                     "code": "Bad Request",
                     "description": "No event with that id"
@@ -102,12 +106,16 @@ def route(group_id):
 
         # Update group with given group_id
         requires_scope("update:groups")
-        group = gc.get_group_by_id(group_id)
+        try:
+            id = uuid.UUID(group_id, version=4)
+            group = gc.get_group_by_id(id)
+        except ValueError:
+            group = None
         if not group:
             raise CustomError({
-                    "code": "Bad Request",
-                    "description": "No input data provided"
-                }, 400)
+                "code": "Not Found",
+                "description": "No group with id: {}".format(group_id)
+            }, 404)
         group = group[0]
         group["attendees"] = ac.get_attendees_by_group_id(group_id).values()
         data = request.get_json()
@@ -132,12 +140,16 @@ def route(group_id):
     if request.method == 'DELETE':
         # Deletes the group with the given group_id
         requires_scope("delete:groups")
-        group = gc.get_group_by_id(group_id)
+        try:
+            id = uuid.UUID(group_id, version=4)
+            group = gc.get_group_by_id(id)
+        except ValueError:
+            group = None
         if not group:
             raise CustomError({
-                    "code": "Bad Request",
-                    "description": "No input data provided"
-                }, 400)
+                "code": "Not Found",
+                "description": "No group with id: {}".format(group_id)
+            }, 404)
         try:
             gc.delete_group(group_id)
             return jsonify(message="Group Deleted"), 204
