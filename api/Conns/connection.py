@@ -205,7 +205,36 @@ class ServerConn:
     #End of Cascading Deletion functions
 
     def delete_all_attendees(self):
+        qt = "DELETE FROM dbo.attendee_group_link"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
         qt = "DELETE FROM dbo.attendee"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def delete_all_groups(self):
+        qt = "DELETE FROM dbo.attendee_group_link"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+        qt = "DELETE FROM dbo.groups"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
+    def delete_all_events(self):
+        self.delete_all_groups()
+        qt = "DELETE FROM dbo.events"
         try:
             self.cursor.execute(qt)
             self.conn.commit()
