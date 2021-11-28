@@ -73,6 +73,13 @@ class AttendeeConn(ServerConn):
         df = pd.read_sql(qt, self.conn, params={str(temp_group_id)})
         self.add_attendee_group_link(0, temp_link_id, temp_attendee_id, df.loc[0].at["event_id"], temp_group_id)
 
+    def remove_attendee_from_group(self, temp_attendee_id, temp_group_id):
+         qt = "SELECT link_id FROM attendee_group_link WHERE attendee_id = ? AND group_id = ?"
+         df = pd.read_sql(qt, self.conn, params={str(temp_attendee_id), str(temp_group_id)})
+         data = df.to_dict(orient="index")
+         if data:
+            self.delete_attendee_group_link(data[0]["link_id"])
+
     def add_attendees(self, temp_ids, temp_firsts, temp_lasts):
         for (a, b, c) in zip(temp_ids, temp_firsts, temp_lasts):
             self.add_attendee(a, b, c)

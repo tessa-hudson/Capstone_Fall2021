@@ -212,5 +212,13 @@ class ServerConn:
         except Exception as err:
             print(err)
 
+    def delete_all_groups(self):
+        qt = "DELETE FROM dbo.groups"
+        try:
+            self.cursor.execute(qt)
+            self.conn.commit()
+        except Exception as err:
+            print(err)
+
 
 conn = ServerConn()
