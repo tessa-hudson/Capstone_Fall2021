@@ -61,13 +61,17 @@ def route(event_id):
             return {"events": result}
 
         # Show event with given event_id
-        event = ec.get_event_by_id(event_id)
+        try:
+            id = uuid.UUID(event_id, version=4)
+            event = ec.get_event_by_id(id)
+        except ValueError:
+            event = None
         if event:
             result = event_schema.dump(event[0])
             return result
         else: raise CustomError({
             "code": "Not Found",
-            "description": "No eventwith id: {}".format(event_id)
+            "description": "No event with id: {}".format(event_id)
         }, 404)
 
     if request.method == 'POST':
@@ -93,7 +97,11 @@ def route(event_id):
         
         # Update event with the given event_id
         requires_scope("update:events")
-        event = ec.get_event_by_id(event_id)
+        try:
+            id = uuid.UUID(event_id, version=4)
+            event = ec.get_event_by_id(id)
+        except ValueError:
+            event = None
         if not event:
             raise CustomError({
                 "code": "Not Found",
@@ -118,7 +126,11 @@ def route(event_id):
     if request.method == 'DELETE':
         # Deletes the event with the given event_id
         requires_scope("delete:events")
-        event = ec.get_event_by_id(event_id)
+        try:
+            id = uuid.UUID(event_id, version=4)
+            event = ec.get_event_by_id(id)
+        except ValueError:
+            event = None
         if not event:
             raise CustomError({
                 "code": "Not Found",

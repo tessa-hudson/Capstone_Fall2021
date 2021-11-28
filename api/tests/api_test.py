@@ -1,6 +1,7 @@
 from flask import Flask
 import unittest
 
+import api.tests.test_seeds as test_seeds
 from api.handlers import handlerbp
 from api.attendee import attendeebp
 from api.event import eventbp
@@ -21,6 +22,16 @@ class ApiTest(unittest.TestCase):
       self.app = APP.test_client()
 
       conn.delete_all_attendees()
+      conn.delete_all_events()
+
+      test_seeds.create_attendees()
+      test_seeds.create_events()
+      test_seeds.create_groups()
+
+   @classmethod
+   def tearDownClass(self):
+      conn.delete_all_attendees()
+      conn.delete_all_events()
 
 if __name__ == '__main__':
    unittest.main()
