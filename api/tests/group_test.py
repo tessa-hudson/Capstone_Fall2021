@@ -6,7 +6,7 @@ from api.tests.test_config import SUPER_ADMIN_BEARER_TOKEN
 
 class GroupTest(ApiTest):
 
-   #GET /group
+   #GET /groups
 
    # Should return 401: Unauthorized Status if no Authorization header is included
    def test_get_all_no_auth_header(self):
@@ -22,6 +22,8 @@ class GroupTest(ApiTest):
       assert(response.status_code == 200)
       assert('groups' in response.get_json().keys())
       assert(type(response.get_json()['groups']) == list)
+
+   # POST /groups
 
    def test_add_group_no_auth_header(self):
       payload = json.dumps({
@@ -103,6 +105,8 @@ class GroupTest(ApiTest):
       assert(body['event_id'] == "b261f907-0379-4a3a-8be0-048673721c2e")
       assert(body['total_points'] == 5)
 
+   # GET /groups/<group_id>
+
    def test_get_one_no_auth_header(self):
       response = self.app.get("/groups/9b994231-63fa-46c0-9782-8ee4425fbd42")
       assert(response.status_code == 401)
@@ -130,6 +134,7 @@ class GroupTest(ApiTest):
       assert(body['event_id'] == 'BC2CB23B-4B78-41AC-8794-12E1050BB428')
       assert(body['total_points'] == 0)
 
+   # POST /groups/group_id
    def test_update_one_no_auth_header(self):
       payload = json.dumps({
          "group_name": "Updated",
@@ -232,6 +237,7 @@ class GroupTest(ApiTest):
       assert(body['event_id'] == "bc2cb23b-4b78-41ac-8794-12e1050bb428")
       assert(body['total_points'] == 15)
    
+   # DELETE /groups/<group_id>
    def test_delete_one_no_auth_header(self):
       response = self.app.delete("/groups/0cca813e-8209-42a2-9d8e-dc586473e360")
       assert(response.status_code == 401)
