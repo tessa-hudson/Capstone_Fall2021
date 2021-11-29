@@ -60,33 +60,6 @@ function GetEvents (props) {
         }
     }
 
-<<<<<<< HEAD
-    render() {
-        return (
-            <div className="GetAttendees">
-                <h3>Use this button to get the events!</h3>
-                <form onSubmit={this.handleSubmit}>
-                    <Button type="submit" value="Submit" variant="contained">
-                        Get Events!
-                    </Button>
-                </form>
-                {
-                  this.state.events &&
-                    this.state.events.map((event) => 
-                        <Grid key={event.event_id}>
-                            <h4>{event.event_name}</h4>
-                            <Button onClick={() => {this.deleteEvent(event)}}>Delete</Button>
-                            <Link to={{pathname:"/update", state: ['event', event]}}>
-                                <Button>Update</Button>
-                            </Link>
-                        </Grid>
-                        
-                    )
-                }
-            </div> 
-        )
-    }
-=======
     
     return (
         <div className="GetAttendees">
@@ -112,7 +85,6 @@ function GetEvents (props) {
         </div> 
     )
     
->>>>>>> f3f95f88def85be96afb9511bd6e6300f7903154
 }
 
 export default GetEvents
