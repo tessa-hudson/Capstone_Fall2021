@@ -3,23 +3,26 @@ import { Button, TextField } from '@mui/material'
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import MobileDatePicker from '@mui/lab/MobileDatePicker';
-import '../../Styles/AddEventForm.css'
+import '../../Styles/AddGroupForm.css'
 import { useAuth0 } from '@auth0/auth0-react'
+import { useLocation } from 'react-router';
 
 const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
-function AddEventForm(props) {
-
-    const [eventName, setEventName] = useState('')
-    const [eventType, setEventType] = useState('')
-    const [startDate, setStartDate] = useState(new Date())
-    const [endDate, setEndDate] = useState(new Date())
-
+export default function EventUpdateForm(props) {
+   const location = useLocation()
+   const event = location.state[1]
+   const [eventName, setEventName] = useState(event.event_name)
+   const [eventType, setEventType] = useState(event.event_type)
+   const [startDate, setStartDate] = useState(new Date())
+   const [endDate, setEndDate] = useState(new Date())
+   
+   console.log(event.event_id)
+    
     const {getAccessTokenSilently} = useAuth0()
 
-
-    const handleSubmit = (event) => {
-        event.preventDefault() //This prevents the page from refreshing on submit
+    const handleEventSubmit = (e) => {
+        e.preventDefault() //This prevents the page from refreshing on submit
         let formattedStartDate=startDate.getFullYear() + "-"+ parseInt(startDate.getMonth()+1) +"-"+startDate.getDate();
         let formattedEndDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
         const obj = {event_name: eventName, event_type: eventType, start_date: formattedStartDate, end_date: formattedEndDate}
@@ -27,7 +30,7 @@ function AddEventForm(props) {
         console.log(json);
 
         getAccessTokenSilently()
-        .then(accessToken => fetch(`${request_url}/events`, {
+        .then(accessToken => fetch(`${request_url}/events/${event.event_id}`, {
         method: 'POST',
         mode: 'cors',
         headers: {
@@ -45,15 +48,14 @@ function AddEventForm(props) {
         .catch((error) => {
         console.error(error);
         });
+
+        setTimeout(function(){window.location.href= "/events"}, 1000)
     }
 
-
-
-
-    return (
-        <div className="AddEvent">
-            <h3>Use this form to add a new event!</h3>
-            <form onSubmit={handleSubmit}>
+        return (
+            <div className="AddGroup">
+               <h3>Please update the fields for the event: {event.event_name}!</h3>
+               <form onSubmit={handleEventSubmit}>
                 <TextField 
                     id="eventName" 
                     name="eventName"
@@ -97,9 +99,7 @@ function AddEventForm(props) {
                     Submit
                 </Button>
             </form>
-        </div>
-    )
-    
+            </div>
+        )
 }
 
-export default AddEventForm 

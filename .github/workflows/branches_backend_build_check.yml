@@ -1,4 +1,4 @@
-name: Build Python app without deploying
+name: Build Python and Test Python App
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,13 +24,13 @@ jobs:
       
       - name: Install dependencies
         run: pip install -r requirements.txt
-        
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+ 
+      - name: Run tests with unittest
+        env: 
+          DB_CONNECTION: ${{ secrets.TEST_DB_CONNECTION }}
+          AUTH_REQUEST_DATA: ${{ secrets.TEST_AUTH_REQUEST_DATA }}
+        run: |
+          python -m unittest api/tests/attendee_test.py
+          python -m unittest api/tests/event_test.py
+          python -m unittest api/tests/group_test.py
       
-      - name: Upload artifact for deployment jobs
-        uses: actions/upload-artifact@v2
-        with:
-          name: python-app
-          path: |
-            . 
-            !venv/

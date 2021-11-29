@@ -1,36 +1,33 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
 import '../../Styles/AddGroupForm.css'
+import { useAuth0 } from '@auth0/auth0-react'
 
-class AddGroupForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {groupName: ''}
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
+function AddGroupForm(props) {
+    const [groupName, setGroupName] = useState("")
+    const [eventId, setEventId] = useState("")
 
-    handleChange(event) {
-        this.setState({groupName: event.target.value})
-    }
+    const {getAccessTokenSilently} = useAuth0()
 
-    handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {group_name: this.state.groupName, event_id: "F811FB42-C609-4A13-BDB2-AC6D7499DE71"}
+        const obj = {group_name: groupName, event_id: eventId}
         const json = JSON.stringify(obj);
-        console.log(json);
 
-        fetch('https://hbda-tracking-backend.azurewebsites.net/groups', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
-        },
-        body: json,
-        })
+        getAccessTokenSilently()
+        .then((accessToken) => fetch(`${request_url}/groups`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': '*/*',
+                'Authorization': `Bearer ${accessToken}`
+            },
+            body: json,
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -40,27 +37,35 @@ class AddGroupForm extends Component {
         });
     }
 
-    render() {
-        return (
-            <div className="AddGroup">
-                <h3>Use this form to add a new group!</h3>
-                <form onSubmit={this.handleSubmit}>
-                    <TextField 
-                        id="name" 
-                        label="Group Name" 
-                        variant="outlined" 
-                        value={this.state.groupName} 
-                        onChange={this.handleChange} 
-                        margin="normal"
-                    />
-                    <br />
-                    <Button type="submit" value="Submit" variant="contained"> 
-                        Submit
-                    </Button>
-                </form>
-            </div>
-        )
-    }
+    return (
+        <div className="AddGroup">
+            <h3>Use this form to add a new group!</h3>
+            <form onSubmit={handleSubmit}>
+                <TextField 
+                    id="name" 
+                    label="Group Name" 
+                    variant="outlined" 
+                    value={groupName} 
+                    onChange={e => setGroupName(e.target.value)} 
+                    margin="normal"
+                />
+                <br />
+                <TextField 
+                    id="name" 
+                    label="Event ID" 
+                    variant="outlined" 
+                    value={eventId} 
+                    onChange={e => setEventId(e.target.value)} 
+                    margin="normal"
+                />
+                <br />
+                <Button type="submit" value="Submit" variant="contained"> 
+                    Submit
+                </Button>
+            </form>
+        </div>
+    )
+    
 }
 
 export default AddGroupForm

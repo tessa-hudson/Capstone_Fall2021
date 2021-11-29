@@ -1,8 +1,9 @@
 #Install all required libraries with pip install -r requirements.txt
 flask
-flask_restful
 flask_cors
 pyodbc
 pandas
 marshmallow
-apscheduler
+python-dotenv
+python-jose
+six
