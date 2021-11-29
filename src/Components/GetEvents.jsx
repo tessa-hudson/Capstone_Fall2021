@@ -2,10 +2,7 @@ import React, { useState } from 'react'
 import { Button, Grid } from '@mui/material'
 import { Link } from "react-router-dom"
 import '../Styles/GetAttendees.css'
-<<<<<<< HEAD
-=======
 import { useAuth0 } from '@auth0/auth0-react'
->>>>>>> f3f95f88def85be96afb9511bd6e6300f7903154
 
 const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
