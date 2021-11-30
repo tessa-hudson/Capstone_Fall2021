@@ -53,7 +53,7 @@ export default function EventUpdateForm(props) {
     }
 
         return (
-            <div className="AddGroup">
+            <div className="AddGroup" style={{maxWidth:'80%', margin:'0 auto'}}>
                <h3>Please update the fields for the event: {event.event_name}!</h3>
                <form onSubmit={handleEventSubmit}>
                 <TextField 

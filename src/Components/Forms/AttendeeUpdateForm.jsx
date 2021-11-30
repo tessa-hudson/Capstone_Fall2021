@@ -46,7 +46,7 @@ export default function AttendeeUpdateForm(props) {
         return (
             
                 
-            <div className="AddGroup">
+            <div className="AddGroup" style={{maxWidth:'80%', margin:'0 auto'}}> 
                         <h3>Please update the fields for the attendee: {attendee.firstname} {attendee.lastname}!</h3>
                         <form onSubmit={handleAttendeeSubmit}>
                             <TextField 

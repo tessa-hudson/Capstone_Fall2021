@@ -14,6 +14,8 @@ import GroupUpdateForm from './Components/Forms/GroupUpdateForm'
 import AttendeeUpdateForm from './Components/Forms/AttendeeUpdateForm'
 import EventUpdateForm from './Components/Forms/EventUpdateForm'
 import AttendeeToGroup from './Components/Forms/AttendeeToGroup'
+import RemoveAttendees from './Components/Forms/RemoveAttendees'
+import ViewAttendees from './Components/ViewAttendees'
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
         <ProtectedRoute exact path="/update/events" component={EventUpdateForm} />
         <ProtectedRoute exact path="/update/attendees" component={AttendeeUpdateForm} />
         <ProtectedRoute exact path="/add-attendees-to-groups" component={AttendeeToGroup} />
+        <ProtectedRoute exact path="/view-attendees" component={ViewAttendees} />
+        <ProtectedRoute exact path="/remove-attendees" component={RemoveAttendees} />
       </Switch>
     </div>
   );
