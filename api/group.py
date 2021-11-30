@@ -155,10 +155,13 @@ def route(group_id):
                 "description": err
             }, 422)
 
-@groupbp.route("/groups/<group_id>/attendees",methods=["POST", "OPTIONS","DELETE"])
+@groupbp.route("/groups/<group_id>/attendees",methods=["GET", "POST", "OPTIONS"])
+@cross_origin(cors_config)
 @requires_auth
 def attendee_update(group_id):
-    if request.method == 'POST':
+    if request.method == 'GET':
+        {"message": "Hello World"}
+    if request.method == "POST":
         requires_scope("update:groups")
         group = gc.get_group_by_id(group_id)
         if not group:
@@ -202,7 +205,6 @@ def attendee_update(group_id):
                 "code": "Bad Request",
                 "description": err.messages
             }, 400)
-
 
 
 

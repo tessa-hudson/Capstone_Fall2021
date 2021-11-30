@@ -1,42 +1,32 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
-import '../../Styles/AddAttendeeForm.css'
+import '../../Styles/AddGroupForm.css'
+import { useAuth0 } from '@auth0/auth0-react'
 
-class AddAttendeeForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {firstName: '', lastNameInitial: ''}
+const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
-        this.handleChange = this.handleChange.bind(this)
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
+export default function AttendeeUpdateForm(props) {
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setlastName] = useState("")
+    
+    const {getAccessTokenSilently} = useAuth0()
 
-    handleChange(event) {
-        const target = event.target
-        const value = target.value
-        const name = target.name
-        
-        this.setState({
-            [name]: value
-        })
-    }
-
-    handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {firstname: this.state.firstName, lastname: this.state.lastNameInitial}
-        const json = JSON.stringify(obj);
-        console.log(json);
-
-        fetch('https://hbda-tracking-backend.azurewebsites.net/attendees', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Accept': '*/*'
-        },
+        const obj = {firstname: firstName, lastname: lastName}
+        const json = JSON.stringify(obj)
+        getAccessTokenSilently()
+        .then(accessToken => fetch(`${request_url}/attendees`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Accept': '*/*',
+                'Authorization': `Bearer ${accessToken}`
+            },
         body: json,
-        })
+        }))
         .then(response => response.json())
         .then(data => {
         console.log('Success:', data);
@@ -46,28 +36,29 @@ class AddAttendeeForm extends Component {
         });
     }
 
-    render() {
-        return (
-            <div className="AddAttendee">
-                <h3>Use this form to add an attendee!</h3>
-                <form onSubmit={this.handleSubmit}>
+
+            
+                
+    return (
+        <div className="AddGroup">
+            <div>
+                <h3>Use this form to add a new attendee!</h3>
+                <form onSubmit={handleSubmit}>
                     <TextField 
-                        id="firstName" 
-                        name="firstName"
+                        id="firstname" 
                         label="First Name" 
                         variant="outlined" 
-                        value={this.state.firstName} 
-                        onChange={this.handleChange} 
+                        value={firstName} 
+                        onChange={e => setFirstName(e.target.value)} 
                         margin="normal"
                     />
                     <br />
                     <TextField 
-                        id="lastInitial" 
-                        name="lastNameInitial"
+                        id="firstname" 
                         label="Last Initial" 
                         variant="outlined" 
-                        value={this.state.lastNameInitial} 
-                        onChange={this.handleChange} 
+                        value={lastName} 
+                        onChange={e => setlastName(e.target.value)} 
                         margin="normal"
                     />
                     <br />
@@ -76,8 +67,7 @@ class AddAttendeeForm extends Component {
                     </Button>
                 </form>
             </div>
-        )
-    }
+        </div>
+    )
+    
 }
-
-export default AddAttendeeForm

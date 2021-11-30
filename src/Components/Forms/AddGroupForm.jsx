@@ -43,9 +43,8 @@ function AddGroupForm(props) {
         event.preventDefault() //This prevents the page from refreshing on submit
         const obj = {group_name: groupName, event_id: eventId}
         const json = JSON.stringify(obj);
-        console.log(json)
 
-        
+        getAccessTokenSilently()
         .then((accessToken) => fetch(`${request_url}/groups`, {
             method: 'POST',
             mode: 'cors',
