@@ -1,5 +1,7 @@
 # Score Tracker for Camp Clot Not
 
+[Checkout the App](https://hbdatracking.azurewebsites.net)
+
 [Visit Our Website](https://tessa-hudson.github.io/Capstone_Fall2021/)
 
 ## Motivation
