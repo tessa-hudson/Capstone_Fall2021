@@ -189,8 +189,7 @@ def attendee_update(group_id):
 
         elif data["method"] == "delete":
             for attendee_id in data["attendees"]:
-                if any (attendee_id in attendee.values() for attendee in group["attendees"]):
-                    ac.remove_attendee_from_group(attendee_id, group_id)
+                ac.remove_attendee_from_group(attendee_id, group_id)
         else:
             raise CustomError({
                         "code": "Bad Request",

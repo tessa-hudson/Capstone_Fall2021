@@ -23,8 +23,8 @@ export default function EventUpdateForm(props) {
 
     const handleEventSubmit = (e) => {
         e.preventDefault() //This prevents the page from refreshing on submit
-        let formattedStartDate=startDate.getFullYear() + "-"+ parseInt(startDate.getMonth()+1) +"-"+startDate.getDate();
-        let formattedEndDate=endDate.getFullYear() + "-"+ parseInt(endDate.getMonth()+1) +"-"+endDate.getDate();
+        let formattedStartDate=startDate.toISOString().substring(0, 10);
+        let formattedEndDate=endDate.toISOString().substring(0, 10);
         const obj = {event_name: eventName, event_type: eventType, start_date: formattedStartDate, end_date: formattedEndDate}
         const json = JSON.stringify(obj);
         console.log(json);
