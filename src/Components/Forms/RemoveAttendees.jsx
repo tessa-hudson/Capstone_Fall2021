@@ -16,7 +16,7 @@ function getOptions(attendees) {
     return optionArray
 }
 
-function AddGroupForm(props) {
+function RemoveAttendees(props) {
     const [attendees, setAttendees] = useState([])
     const [status, setStatus] = useState("")
     const [optionSelected, setOptionSelected] = useState(null)
@@ -59,7 +59,7 @@ function AddGroupForm(props) {
         for (var i=0; i<optionSelected.length; i++) {
             attendees.push(optionSelected[i].id)
         }
-        const obj = {attendees: attendees, method: 'add'}
+        const obj = {attendees: attendees, method: 'delete'}
         const json = JSON.stringify(obj)
 
         console.log(json)
@@ -112,7 +112,7 @@ function AddGroupForm(props) {
             {status === 'Error' && <div>There are no attendees yet</div>}
             {status === 'Success' &&
             <div>
-                <h3>Use this form to add attendees to {group.group_name}!</h3>
+                <h3>Use this form to remove attendees from {group.group_name}!</h3>
                 <form onSubmit={handleSubmit}>
                     <ReactSelect
                         options={getOptions(attendees)}
@@ -126,7 +126,7 @@ function AddGroupForm(props) {
                         allowSelectAll={false}
                         value={optionSelected}
                     />
-                    <Button type="submit" value="Submit" variant="contained" style={{marginTop:'10px'}}> 
+                    <Button type="submit" value="Submit" variant="contained" style={{marginTop:"10px"}}> 
                         Submit
                     </Button>
                 </form>
@@ -137,4 +137,4 @@ function AddGroupForm(props) {
     
 }
 
-export default AddGroupForm
+export default RemoveAttendees

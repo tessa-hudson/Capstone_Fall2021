@@ -88,7 +88,7 @@ function AddGroupForm(props) {
                         label="Event"
                         select
                         onChange={e => setEventId(e.target.value)}
-                        style={{width: '195px'}}
+                        style={{width: '195px', marginBottom: '10px'}}
                     >
                         {   events &&
                             events.map((event) => {

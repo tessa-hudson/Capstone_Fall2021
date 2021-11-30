@@ -79,6 +79,12 @@ function GetGroups(props) {
                             <Link to={{pathname:"/add-attendees-to-groups", state: ['group', group]}}>
                                 <Button>Add Attendees</Button>
                             </Link>
+                            <Link to={{pathname:"/remove-attendees", state: ['group', group]}}>
+                                <Button>Remove Attendees</Button>
+                            </Link>
+                            <Link to={{pathname:"/view-attendees", state: ['group', group]}}>
+                                <Button>View Attendees</Button>
+                            </Link>
                         </Grid>
                     )
                 }

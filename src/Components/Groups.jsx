@@ -7,7 +7,7 @@ class Groups extends Component {
 
     render() {
         return (
-            <Box sx={{flexgrow: 1}}>
+            <Box sx={{flexgrow: 1}} style={{maxWidth: '80%', margin: '0 auto'}}>
                 <Grid container spacing={6}>
                     <Grid item xs={12} md={6}>
                         <AddGroupForm />

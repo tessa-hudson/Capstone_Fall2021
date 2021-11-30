@@ -6,7 +6,7 @@ import GetAttendees from './GetAttendees'
 const Attendees = () => {
     
         return (
-            <Box sx={{flexgrow: 1}}>
+            <Box sx={{flexgrow: 1}} style={{maxWidth:'80%', margin:'0 auto'}}>
                 <Grid container spacing={6}>
                     <Grid item xs={12} md={6}>
                         <AddAttendeeForm />

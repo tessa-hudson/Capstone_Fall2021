@@ -37,7 +37,7 @@ function Scoreboard(props) {
     }
    
         return (
-            <div className="GetGroup">
+            <div className="GetGroup" style={{margin: '20px auto', maxWidth: '80%'}}>
                 <h3>{props.event.event_name}</h3>
                 <form onSubmit={handleSubmit}>
                     <Button type="submit" value="Submit" variant="contained">
