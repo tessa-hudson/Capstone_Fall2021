@@ -76,6 +76,9 @@ function GetGroups(props) {
                             <Link to={{pathname:"/update/groups", state: ['group', group]}}>
                                 <Button>Update</Button>
                             </Link>
+                            <Link to={{pathname:"/add-attendees-to-groups", state: ['group', group]}}>
+                                <Button>Add Attendees</Button>
+                            </Link>
                         </Grid>
                     )
                 }

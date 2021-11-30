@@ -1,21 +1,20 @@
 import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
-import '../../Styles/AddAttendeeForm.css'
+import '../../Styles/AddGroupForm.css'
 import { useAuth0 } from '@auth0/auth0-react'
 
 const request_url = process.env.REACT_APP_API_REQUEST_URL;
 
-function AddAttendeeForm(props) {
-    const [firstname, setFirstname] = useState("")
-    const [lastname, setLastname] = useState("")
+export default function AttendeeUpdateForm(props) {
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setlastName] = useState("")
+    
     const {getAccessTokenSilently} = useAuth0()
 
     const handleSubmit = (event) => {
         event.preventDefault() //This prevents the page from refreshing on submit
-        const obj = {firstname: firstname, lastname: lastname}
-        const json = JSON.stringify(obj);
-        console.log(json);
-
+        const obj = {firstname: firstName, lastname: lastName}
+        const json = JSON.stringify(obj)
         getAccessTokenSilently()
         .then(accessToken => fetch(`${request_url}/attendees`, {
             method: 'POST',
@@ -37,28 +36,29 @@ function AddAttendeeForm(props) {
         });
     }
 
-    
-        return (
-            <div className="AddAttendee">
-                <h3>Use this form to add an attendee!</h3>
+
+            
+                
+    return (
+        <div className="AddGroup">
+            <div>
+                <h3>Use this form to add a new attendee!</h3>
                 <form onSubmit={handleSubmit}>
                     <TextField 
-                        id="firstName" 
-                        name="firstname"
+                        id="firstname" 
                         label="First Name" 
                         variant="outlined" 
-                        value={firstname} 
-                        onChange={(e) => setFirstname(e.target.value)} 
+                        value={firstName} 
+                        onChange={e => setFirstName(e.target.value)} 
                         margin="normal"
                     />
                     <br />
                     <TextField 
-                        id="lastInitial" 
-                        name="lastNameInitial"
+                        id="firstname" 
                         label="Last Initial" 
                         variant="outlined" 
-                        value={lastname} 
-                        onChange={(e) => setLastname(e.target.value)} 
+                        value={lastName} 
+                        onChange={e => setlastName(e.target.value)} 
                         margin="normal"
                     />
                     <br />
@@ -67,8 +67,7 @@ function AddAttendeeForm(props) {
                     </Button>
                 </form>
             </div>
-        )
+        </div>
+    )
     
 }
-
-export default AddAttendeeForm

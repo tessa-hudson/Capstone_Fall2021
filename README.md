@@ -43,6 +43,7 @@ With an application to assist them, we hope we can allow these counselors an ea
 ### Starting the Servers
 
 - To start the backend server, run the startup script by entering ./startBackendDev.sh
+
   - You may need to give the script permission to run by entering the command chmod +x startBackendDev.sh
 
 - To start the front end run the startup script by entering ./startReactDev.sh
