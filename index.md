@@ -31,4 +31,4 @@ With an application to assist them, we hope we can allow these counselors an ea
 - [API Reference](https://tessa-hudson.github.io/Capstone_Fall2021/api)
 
 ## App Demo
-- Video in Progress
+- [Video Link](https://www.loom.com/share/8e0ba9ff62d342308bf8c58f45046e26)
